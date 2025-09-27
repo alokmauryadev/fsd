@@ -1,0 +1,217 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+#logo{
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 1.5rem;
+    margin: 18px;
+    width: 100%;
+    font-weight: 600;
+}
+#navbar{
+    margin: 18px;
+}
+#navbar ul{
+    list-style-type: none;
+    display: flex;
+}
+#navbar ul li{
+    padding: 10px;
+}
+#navbar ul li a{
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+}
+#navbar ul li a:hover{
+    text-decoration: none;
+    color: #2563eb;
+}
+        #home{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('../bg.jpg') no-repeat center center/cover;
+    text-align: center;
+    gap: 10px;
+}
+#home p:first-child{
+    color: white;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgb(255, 208, 67);
+    width: fit-content;
+    letter-spacing: 2px;
+    word-spacing: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+#myname{
+    color: rgb(255, 208, 67);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: capitalize;
+}
+#desc{
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    word-spacing: 3px;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+
+        .subhead{
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #111827;
+    margin-top: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    padding: 30px;
+
+}
+.skills ul {
+  /* display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+    margin: 20px;
+}
+
+.skills ul li {
+    background: #f3f4f6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-weight: 400;
+    padding: 12px;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+.skills ul li:hover {
+  transform: translateY(-5px);
+  background: #e5e7eb;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+#projects{
+    margin: 20px;
+    text-align: center;
+}
+        .projects{
+    display: grid;
+    gap: 1rem;
+    padding: 20px;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+#projects .projects div{
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+#projects .projects div:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  border-color: #2563eb;
+  transition: all 0.3s ease;
+}
+
+#projects .projects div h2{
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+#projects .projects div p{
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 15px;
+}
+
+#projects .projects div a{
+    text-decoration: none;
+    /* font-weight: 300; */
+    color: #2563eb;
+    font-weight: 500;
+}
+#projects .projects div a:hover{
+    text-decoration: none;
+    color: #3b82f6;
+}
+
+.pname{
+    color: #2563eb;
+    font-weight: 600;
+}
+#contactme{
+    display: grid;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    
+}
+#contactme input, textarea{
+    border-radius: 5px;
+    border: 1px solid #e5e7eb;
+    font-size: 1rem;
+    width: 60vw;
+    max-width: 400px;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+#contactme input::placeholder, textarea::placeholder{
+padding: 10px;
+font-size: 0.9rem;
+color: #9ca3af;
+}
+button{
+    background-color: #2563eb;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 5px;
+}
+#footer{
+    background-color: #111827;
+    color:#fff;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;}
+#footer p{
+    margin: 0;
+    padding: 0;
+    font-size: 0.8rem;
+}

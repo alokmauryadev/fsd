@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALOK MAURYA - PORTFOLIO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-bottom: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        ul {
+            list-style-type: square;
+        }
+        dl dt {
+            font-weight: bold;
+        }
+        dl dd {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input, textarea {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #namea {
+            color: #4CAF50;
+        }
+        #gender {
+            margin-top: 15px;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        a {
+            color: #4CAF50;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        textarea {
+            resize: vertical;
+        }
+        @media (max-width: 600px) {
+            header a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#about">About</a>
+        <a href="#education">Education</a>
+        <a href="#hobbies">Hobbies</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+    </header>
+    <main>
+        <section id="about">
+        <h2>About Me</h2>
+        <p>
+            Hi, I'm <strong id="namea">Alok Maurya.</strong> I’m a web developer who loves building websites that look great, work smoothly, and feel effortless to use.  
+            I started my journey with front‑end development, and over time I’ve been exploring the world of back‑end technologies to 
+            become more versatile. What excites me most is shaping digital experiences that balance beauty with real functionality.
+        </p>
+        <p>
+            I’m a lifelong learner, always curious about new tools and trends in the tech world. Working with others energizes me—I enjoy 
+            sharing ideas, solving problems together, and learning from different perspectives. 
+        </p>
+        <p>
+            Outside of coding, I spend time diving into new technologies, catching up on tech blogs, and sometimes just relaxing with a 
+            good book.
+        </p>
+        
+        </section>
+        <section id="education">
+            <h2>Education</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Degree</th>
+                        <th>Institution</th>
+                        <th>Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <td>Bachelor of Technology in Computer Science</td>
+                    <td>XYZ University</td>
+                    <td>2020</td>
+                </tr>
+                <tr>
+                    <td>Master of Science in Software Engineering</td>
+                    <td>ABC Institute of Technology</td>
+                    <td>2022</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: center; font-style: italic;">Education is the key to unlocking potential.</td>
+                </tr>
+              </tfoot>
+            </table>
+        </section>
+        <section id="hobbies">
+            <h2>Hobbies</h2>
+            <p>
+                In my free time, I enjoy hiking, photography, and exploring new places. I believe that these experiences inspire my creativity and help me approach problems from different angles.
+            </p>
+        </section>
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul>
+                <li>HTML, CSS, JavaScript</li>
+                <li>React, Node.js, Express</li>
+                <li>MongoDB, SQL</li>
+                <li>Git, GitHub</li>
+            </ul>
+        </section>
+        <section id="projects">
+            <h2>Projects</h2>
+            <p>
+                Here are some of the projects I've worked on:
+            </p>
+            <dl>
+                <dt><strong>Portfolio Website</strong></dt>
+                <dd>A personal portfolio website showcasing my projects and skills. Built with HTML, CSS, and JavaScript.</dd>
+                <dt><strong>Task Manager App</strong></dt>
+                <dd>A web application for managing tasks and to-dos. Developed using React for the front-end and Node.js with Express for the back-end.</dd>
+                <dt><strong>Blog Platform</strong></dt>
+                <dd>A full-stack blog platform allowing users to create, edit, and delete posts. Implemented with MongoDB for data storage.</dd>
+            </dl>
+        </section>
+        <section id="Contact">
+            <h2>Contact</h2>
+            <p>
+                Feel free to reach out to me via email at <a href="mailto:alokmaurya@example.com">alokmaurya@example.com</a>
+            </p>
+            <form action="https://formspree.io/f/xovnbgje" method="POST">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="gender" id="gender">Gender:</label>
+                <input type="radio" id="male" name="gender" value="male" required>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="female" required>
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="other" required>
+                <label for="other">Other</label>
+                <div>
+                    <label for="skills">Skills</label>
+                    <input type="checkbox" name="skills" id="html" value="HTML">
+                    <label for="html">HTML</label>
+                    <input type="checkbox" name="skills" id="css" value="CSS">
+                    <label for="css">CSS</label>
+                    <input type="checkbox" name="skills" id="javascript" value="JavaScript">
+                    <label for="javascript">JavaScript</label>
+                </div>
+                <div>
+                    <label for="country">Country:</label>
+                    <select id="country" name="country" required>
+                        <option value="">Select your country</option>
+                        <option value="usa">USA</option>
+                        <option value="uk">UK</option>
+                        <option value="india">India</option>
+                        <option value="australia">Australia</option>
+                        <option value="canada">Canada</option>
+                    </select>
+                </div>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </section>
+
+    </main>
+</body>
+</html>

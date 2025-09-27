@@ -1,0 +1,22 @@
+img{
+    width: 40%;
+    height: auto;
+    float: left;
+}
+#div1{
+    float: left;
+        width: 200px;
+    height: 100px;
+    background-color: red;
+}
+#div2{
+        width: 200px;
+    height: 100px;
+    background-color: red;
+    float: right;
+}
+#div3{
+    width: 200px;
+    height: 100px;
+    background-color: red;
+}

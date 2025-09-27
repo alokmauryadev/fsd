@@ -1,0 +1,48 @@
+ls - list the files
+ls -l - list many details along with file
+ls -a - list all the files in a folder
+
+mv - to move or rename files
+mv srcPath destPath
+
+cp - copy a file or directory
+cp -R, to copy folder with multiples files
+
+cd - to enter any directory
+cd .. going to previous directory
+cd ./ fo current directory
+
+mkdir - to create a directory
+
+touch - to create a file
+
+vim filename.ext - to open file editor
+
+cat - to edit a file
+cat > - overwrite method
+cat >> - append method
+
+nl - to display a file with line numbers
+
+rm - to remove/ file and directory
+rmdir - to remove a blank directory
+
+pwd - to print working directory
+ 
+grep "str" filePath - to find a string in a file
+grep -y (for case insenstivity)
+grep -n(display line numbers)
+
+less - to display large files easily
+more - to display small file easily
+
+wc - to find a total word count in a file
+
+sudo - to run a command as a superadmin
+
+command | command - it works to get output of a first command as a input for the second command
+
+
+find - to search a file by it he name
+find dir -name "file.ext"-
+find dir -iname "file.ext"- ( for case insenstivity)

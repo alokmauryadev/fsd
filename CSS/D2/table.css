@@ -1,0 +1,24 @@
+.studentData{
+    border: 2px solid black;
+
+}
+.studentData td{
+    border: 2px solid blue;
+}
+.studentData th{
+ border: 2px double red;
+}
+.studentData tbody tr:nth-child(odd){
+    background-color: gray;
+    color: gold;
+}
+.studentData tbody tr:nth-child(even){
+    background-color: aqua;
+    color: blue;
+}
+table{
+    border-spacing: 1px 5px;
+}
+.studentData td, .studentData th{
+    padding: 5px 20px;
+}

@@ -1,0 +1,149 @@
+*{
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    /* padding-bottom: 20px ; */
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(90deg, #b22222, #8b0000);
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.46);
+}
+
+header h1 {
+  margin: 0;
+  padding: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 3rem;
+}
+
+header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+header ul li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+header ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 12px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+header ul li a:hover,
+header ul li a.active {
+  background-color: white;
+  color: #8b0000;
+}
+
+main section {
+  margin: 3rem;
+  scroll-margin-top: 160px; /* prevents sticky header overlap */
+}
+/* Section Headings */
+.mhead {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #b22222; /* dark red */
+  margin: 20px 0 10px;
+  position: relative;
+}
+
+.mhead::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: #b22222;
+  margin-top: 5px;
+}
+
+.menu {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.menu tr {
+  border-bottom: 1px dashed #aaa;
+}
+
+.menu tr td {
+  padding: 12px 15px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.menu tr td:nth-child(2) {
+  font-weight: bold;
+  color: #b22222;
+  text-align: right;
+}
+
+.menu tr td:nth-child(2)::before {
+  content: "₹";
+  margin-right: 2px;
+}
+
+/* Alternate Row Background */
+.menu tr:nth-child(odd) {
+  background-color: #fffdfb;
+}
+.menu tr:nth-child(even) {
+  background-color: #fff6f2;
+}
+
+/* Hover Effect */
+.menu tr:hover {
+  background: #ffe8e8;
+}
+#nutri{
+    margin-top: 25px;
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+#nutri tr th{
+    background-color: #b22222;
+    color: #fff;
+    padding: 9px 10px;
+}
+#nutri th, #nutri td{
+  border: 1px solid #ddd;
+}
+#nutri tr td{
+    color: #292727;
+    padding: 9px 10px;
+    text-align: center;
+}
+#nutri tr:nth-child(odd){
+  background: #f9f9f9;
+}
+#nutri tr:hover{
+  background: #ffe0e0;
+}
+
+footer{
+  background-color:#8b0000;
+  padding: 18px 0px;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+}

@@ -1,0 +1,159 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family:'Segoe UI', Tahoma, Geneva, Ver
+    dana, sans-serif;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+nav ul{
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+}
+nav li a{
+    text-decoration: none;
+    color: #6b7280;
+}
+nav li a.active{
+    color: #1e40af;
+    border-bottom: 2px solid #1e40af;
+}
+nav li a:hover{
+    color: #1e40af;
+}
+
+nav li a:focus{
+    color: #1e40af;
+    border: 2px solid #1e40af;
+}
+
+nav h2{
+    color: #1e40af ;
+}
+nav button{
+    margin: auto;
+    color: #6b7280;
+    background-color: white;
+    border: 1px solid #a4a9b4;
+    padding: 0.5rem;
+    font-weight: 900;
+    border-radius: 5px;
+    cursor: pointer;
+}
+nav button:hover{
+    color: #1e40af;
+    border: 1px solid #1e40af;
+}
+section#home{
+    display: flex;
+    justify-content: center;
+    flex-shrink: 1;
+}
+.topnews{
+    width: 60vw;
+    border-radius: 10px;
+    box-shadow: 1px 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+
+}
+.main-content{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1rem;
+    width: 60vw;
+}
+.latestnews a{
+    text-decoration: none;
+}
+.topnews img{
+    position: relative;
+    width: 60vw;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+    }
+
+
+.tag{
+    background: #1e40af;
+    color: white;
+    text-align: center;
+    width: fit-content;
+    padding: 8px 12px;
+    border-radius: 16px;
+
+}
+.topnews h2{
+    color: black;
+}
+.para-desc{
+    color: #6b7280;
+}
+.meta-desc{
+    color: #9ca3af;
+    font-size: 0.875rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.gridnews{
+    display: grid;
+    /* flex-wrap: wrap; */
+
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    /* grid-auto-flow: column; */
+    gap: 1rem;
+    overflow: hidden;
+    /* width: 10%; */
+    /* width: 60vw; */
+}
+
+.tech img{
+    width: 100%;
+   /* width: 30vw; */
+}
+.newscard{
+    box-shadow: 0 1px 2px rgb(0, 0, 0,0.5) ;
+}
+aside{
+    display: flex;
+    width: 40vw;
+    flex-direction: column;
+    /* align-items: center; */
+
+}
+aside .trendingitem{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+aside .trendingitem span:first-child{
+    border-radius: 50%;
+    background: #1e40af;
+    color: white;
+
+}
+aside .trendingitem span{
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: black;
+
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #top{
+            position: sticky;
+            top: 0;
+            background: #ddd;
+            border: 1px solid #aaa;
+            width: 100%;
+            height: 10vh;
+        }
+        #bottom{
+            /* position: absolute; */
+            /* overflow: auto; */
+            /* bottom: 0; */
+        }
+        #main{
+            height: 80vh;
+            overflow-y: scroll;
+
+
+        }
+        .box{
+            height: 20vh;
+            background: #ddd;
+            border: 1px solid #000000;
+            margin: 10px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="top">
+        Fixed Top
+    </div>
+    <div id="main">
+        <div class="box">Box 1</div>
+        <div class="box">Box 2</div>
+        <div class="box">Box 3</div>
+        <div class="box">Box 4</div>
+        <div class="box">Box 5</div>
+        <div class="box">Box 6</div>
+        <div class="box">Box 7</div>
+        <div class="box">Box 8</div>
+        <div class="box">Box 9</div>
+        <div class="box">Box 10</div>
+    </div>
+    <div class="bottom">
+        Fixed Bottom
+    </div>
+</body>
+</html>

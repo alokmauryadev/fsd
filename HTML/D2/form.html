@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+    FORM IN HTML
+    </title>
+    <style>
+        form div{
+            margin: 10px;
+        }
+        label{
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+            margin-right: 10px;
+        }
+        input, select, textarea{
+            padding: 5px;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        #submit button{
+            width: 80px;
+            padding: 5px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: lightblue;
+            cursor: pointer;
+        }
+        #submit button:hover{
+            background-color: deepskyblue;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Form in HTML</h1>
+    <form action="">
+        <div id="firstName">
+            <label for="firstname">First Name:</label>
+            <input type="text" name="firstname" id="firstname" placeholder="Enter your first name" value="">
+        </div>
+        <div id="lastName">
+            <label for="lastname">Last Name:</label>
+            <input type="text" name="lastname" id="lastname" placeholder="Enter your last name" value="">
+        </div>
+        <div id="age">
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age"  min="1" max="100" step="2" value="18">
+        </div>
+        <div id="email">
+            <label for="email">Email:</label>
+            <input type="email" name="email" id="email" placeholder="Enter your email" value="">
+        </div>
+        <div id="password">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" value="">
+        </div>
+        <div id="gender">
+            <label for="gender">Gender:</label>
+            <input type="radio" name="gender" id="male" value="male">
+            <label for="male">Male</label>
+            <input type="radio" name="gender" id="female" value="female">
+            <label for="female">Female</label>
+            <input type="radio" name="gender" id="other" value="other">
+            <label for="other">Other</label>
+        </div>
+        <div id="checkbox">
+        </div>
+        <div id="address">
+            <label for="address">Address:</label>
+            <textarea name="address" id="address" cols="30" rows="5" placeholder="This is a read only text area" readonly></textarea>
+        </div>
+        <div id="country">
+            <label for="country">Country:</label>
+            <select name="country" id="country">
+                <option value="india">India</option>
+                <option value="usa">USA</option>
+                <option value="russia">Russia</option>
+                <option value="uk">UK</option>
+                <option value="australia">Australia</option>
+                <option value="canada">Canada</option>
+            </select>
+        </div>
+        <div id="car">
+            <label for="car">Choose a car:</label>
+            <select name="car" id="car">
+                <optgroup label="German Cars">
+                    <option value="bmw">BMW</option>
+                    <option value="audi">Audi</option>
+                    <option value="mercedes">Mercedes</option>
+                    <option value="volkswagen">Volkswagen</option>
+                </optgroup>
+                <optgroup label="Japanese Cars">
+                    <option value="toyota">Toyota</option>
+                    <option value="honda">Honda</option>
+                    <option value="nissan">Nissan</option>
+                </optgroup>
+            </select>
+        </div>
+        <div id="subscribe">
+            <input type="checkbox" name="subscribe" id="subscribe">
+            <label for="subscribe">Subscribe to newsletter</label>
+        </div>
+        <div id="submit">
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+        </div>
+    </form>
+
+</body>
+</html>

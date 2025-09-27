@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Animation Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Caveat', cursive;
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+
+        .ruled-paper {
+            background-image:
+                linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 2.2em;
+            line-height: 2.2em;
+            position: relative;
+            padding-left: 4rem; /* Space for the margin line */
+        }
+        
+        .ruled-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 3rem;
+            bottom: 0;
+            width: 2px;
+            background-color: #fca5a5; /* red-300 */
+        }
+
+        .handwritten {
+             font-family: 'Kalam', cursive;
+        }
+
+        .code-block {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+        
+        .code-block .keyword { color: #8b5cf6; /* violet-500 */ }
+        .code-block .property { color: #3b82f6; /* blue-500 */ }
+        .code-block .value { color: #10b981; /* emerald-500 */ }
+        .code-block .selector { color: #ec4899; /* pink-500 */ }
+        .code-block .comment { color: #6b7280; /* gray-500 */ }
+        
+        .output-block {
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+            font-size: 0.9rem;
+            background-color: #1f2937; /* gray-800 */
+            color: #d1d5db; /* gray-300 */
+        }
+
+        @keyframes pulse-demo {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+        }
+
+        .pulse-button {
+            animation: pulse-demo 2s infinite;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <main class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-2xl overflow-hidden">
+            <div class="ruled-paper p-8 sm:p-16">
+                <!-- Header -->
+                <div class="flex justify-between items-start mb-12">
+                    <h1 class="text-5xl font-bold text-gray-800 handwritten">CSS Animations Deep Dive! <i class="fa-solid fa-wand-magic-sparkles text-yellow-400"></i></h1>
+                    <div class="text-right">
+                        <p class="text-lg text-gray-600">Sept 23, 2025</p>
+                        <p class="text-sm text-gray-500">Lucknow, UP</p>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="space-y-12 text-2xl text-gray-700">
+                    <p>
+                        Hey! So today we're going deeper into making things move on a webpage using CSS. It's super fun! We'll look at the two main ways: <strong class="font-bold text-blue-600">Transitions</strong> and <strong class="font-bold text-purple-600">Keyframe Animations</strong>, but this time, we'll explore all the cool little details.
+                    </p>
+
+                    <!-- Transitions Section -->
+                    <div>
+                        <h2 class="text-4xl font-bold text-blue-600 handwritten inline-block border-b-4 border-blue-200 pb-1">1. Transitions: The Smooth Change <i class="fa-solid fa-shuffle text-xl"></i></h2>
+                        <p class="mt-4">
+                            Transitions are for simple, two-step animations. Something changes from a <span class="bg-yellow-200 rounded px-1">start state</span> to an <span class="bg-green-200 rounded px-1">end state</span>, usually triggered by something like a hover. The browser smoothly fills in the gaps.
+                        </p>
+                        <p class="mt-4">
+                           The main ingredients are:
+                           <ul class="list-disc list-inside ml-4 handwritten text-gray-800">
+                               <li><strong class="text-blue-500">Property:</strong> *What* are we animating? (e.g., `background-color`, `transform`)</li>
+                               <li><strong class="text-blue-500">Duration:</strong> *How long* should it take? (e.g., `0.5s`)</li>
+                               <li><strong class="text-blue-500">Timing Function:</strong> *How* does it animate? (the "speed curve", e.g., `ease-in-out`)</li>
+                               <li><strong class="text-blue-500">Delay:</strong> *How long* to wait before starting? (e.g., `0.2s`)</li>
+                           </ul>
+                        </p>
+                        
+                        <!-- Code Block for Transition -->
+                        <div class="mt-6">
+                           <div class="bg-gray-800 rounded-t-lg px-4 py-2 flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-gray-400 text-sm ml-2">transition.css</span>
+                                </div>
+                                <button onclick="copyCode(this)" class="text-gray-400 hover:text-white transition-colors duration-200">
+                                    <i class="fa-regular fa-clipboard"></i>
+                                    <span class="text-xs ml-1">Copy</span>
+                                </button>
+                            </div>
+                            <pre class="code-block bg-gray-900 text-white p-6 rounded-b-lg overflow-x-auto"><code class="language-css"><span class="selector">button</span> {
+    <span class="property">background-color</span>: <span class="value">steelblue</span>;
+    <span class="property">transform</span>: <span class="value">scale(1)</span>;
+    <span class="comment">/* Shorthand: property duration timing-function delay */</span>
+    <span class="property">transition</span>: <span class="value">all 0.4s ease-in-out 0s</span>;
+}
+
+<span class="selector">button:hover</span> {
+    <span class="property">background-color</span>: <span class="value">tomato</span>;
+    <span class="property">transform</span>: <span class="value">scale(1.1)</span>;
+}
+</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Keyframes Section -->
+                    <div>
+                        <h2 class="text-4xl font-bold text-purple-600 handwritten inline-block border-b-4 border-purple-200 pb-1">2. Keyframes: The Movie Scene <i class="fa-solid fa-film text-xl"></i></h2>
+                        <p class="mt-4">
+                            Keyframes are for more complex animations where you need full control. You can define multiple steps or stages using percentages, from 0% (start) to 100% (end).
+                        </p>
+                         <p class="mt-4">
+                           Key properties for `animation`:
+                           <ul class="list-disc list-inside ml-4 handwritten text-gray-800">
+                               <li><strong class="text-purple-500">Iteration Count:</strong> How many times to repeat? (`infinite` or a number)</li>
+                               <li><strong class="text-purple-500">Direction:</strong> Play forwards, backwards, or both? (`normal`, `reverse`, `alternate`)</li>
+                               <li><strong class="text-purple-500">Fill Mode:</strong> What styles apply before/after? (`forwards` is super useful to make it stick at the end!)</li>
+                           </ul>
+                        </p>
+                        
+                        <!-- Code Block for Keyframes -->
+                        <div class="mt-6">
+                           <div class="bg-gray-800 rounded-t-lg px-4 py-2 flex items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    <span class="text-gray-400 text-sm ml-2">keyframes.css</span>
+                                </div>
+                               <button onclick="copyCode(this)" class="text-gray-400 hover:text-white transition-colors duration-200">
+                                    <i class="fa-regular fa-clipboard"></i>
+                                    <span class="text-xs ml-1">Copy</span>
+                                </button>
+                            </div>
+                            <pre class="code-block bg-gray-900 text-white p-6 rounded-b-lg overflow-x-auto"><code class="language-css"><span class="comment">/* 1. Define the animation steps with percentages */</span>
+<span class="keyword">@keyframes</span> <span class="value">pulse</span> {
+    <span class="selector">0%</span>   { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+    <span class="selector">50%</span>  { <span class="property">transform</span>: <span class="value">scale(1.1)</span>; }
+    <span class="selector">100%</span> { <span class="property">transform</span>: <span class="value">scale(1)</span>; }
+}
+
+<span class="comment">/* 2. Apply it with all the cool options */</span>
+<span class="selector">.pulse-button</span> {
+    <span class="comment">/* name duration timing-function delay iteration-count direction fill-mode */</span>
+    <span class="property">animation</span>: <span class="value">pulse 2s ease-in-out infinite</span>;
+}
+</code></pre>
+                        </div>
+                        <!-- Output Box -->
+                        <div class="mt-4">
+                            <p class="text-xl font-bold text-gray-600 handwritten">Result: <i class="fa-solid fa-arrow-down"></i></p>
+                            <div class="output-block p-6 rounded-lg mt-2 flex items-center justify-center min-h-[120px]">
+                               <button class="pulse-button bg-pink-500 text-white text-lg rounded-full w-24 h-24 flex items-center justify-center shadow-lg">Pulse!</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Tips -->
+                    <div>
+                        <h2 class="text-4xl font-bold text-emerald-600 handwritten inline-block border-b-4 border-emerald-200 pb-1">Quick Tips & Good Habits <i class="fa-solid fa-brain text-xl"></i></h2>
+                        <p class="mt-4">A couple of things to remember to make your animations awesome!</p>
+                        <ul class="list-disc list-inside ml-4 space-y-4 handwritten">
+                            <li><strong class="text-emerald-700">Performance is Key:</strong> Animating `transform` (scale, rotate, translate) and `opacity` is super fast! Try to stick to these. Animating things like `width`, `height`, or `margin` can sometimes be slow because it makes the browser re-calculate the whole page layout.</li>
+                             <li><strong class="text-emerald-700">Transitions vs. Keyframes:</strong>
+                                <ul class="list-['-_'] list-inside ml-6 text-gray-600">
+                                    <li>Use <strong class="text-blue-500">Transitions</strong> for simple UI feedback (hover effects, opening menus).</li>
+                                    <li>Use <strong class="text-purple-500">Keyframes</strong> for complex, continuous, or attention-grabbing animations (like loaders, notifications, or fun background effects).</li>
+                                </ul>
+                             </li>
+                        </ul>
+                    </div>
+                    
+                    <p class="pt-8 border-t border-gray-200">
+                       And that's a much deeper look! Now you have way more tools to control your animations and make them look professional. Time to get creative! <i class="fa-regular fa-face-laugh-beam text-yellow-500"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.querySelector('code').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fa-solid fa-check"></i><span class="text-xs ml-1">Copied!</span>';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,26 @@
+.box{
+    width: 50px;
+    height: 50px;
+    background-color: bisque;
+    display: flex;
+    /* position: relative; */
+    transform: translate(100%,100%);
+    /* top: 50%;
+    left: 50%; */
+    justify-content: center;
+    align-items: center;
+    
+    /* transform: rotate(.5turn); */
+    /* transform: rotateX(30deg); */
+    /* transform: rotateY(40deg); */
+    /* transform: skew(5deg); */
+    /* transform: skewX(10deg); */
+    /* transform: translate(34px) skew(45deg); */
+
+    border: 2px solid black;
+}
+.container{
+    width: 100vw;
+    height: 80vh;
+    border: 2px solid purple;
+}

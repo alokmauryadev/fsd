@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+.cards {
+  display: grid;
+  /* Start with a single column for small screens (mobile-first) */
+  grid-template-columns: 400px 400px;
+}
+
+/* Use a min-width query to add a second column for larger screens (tablets and desktops) */
+.cards {
+  display: grid;
+  /* Default styles for desktop: two columns */
+  grid-template-columns: 400px 400px;
+}
+
+/* Media query for screens up to 767px wide (mobile) */
+@media screen and (max-width: 767px) {
+  .cards {
+    /* Override for mobile: single column */
+    grid-template-columns: 400px;
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="cards">
+        <div class="card card1">Card 1</div>
+        <div class="card card2">Card 2</div>
+        <div class="card card3">Card 3</div>
+        <div class="card card4">Card 4</div>
+        <div class="card card5">Card 5</div>
+    </div>
+</body>
+</html>

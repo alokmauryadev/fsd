@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fiesta - Professional AI Model Aggregation Platform</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="nav-logo">AI Fiesta</div>
+
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#about" class="nav-link">About</a>
+                <button class="btn btn-primary" onclick="scrollToContact()">Get Started</button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button class="hamburger md:hidden">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="animate-on-scroll">
+                <h1 class="hero-title">Unlock the Power of Multiple AI Models</h1>
+                <p class="subtitle">
+                    Access ChatGPT, Gemini, Claude, Grok, Perplexity, and DeepSeek in one powerful platform.
+                    Get advanced features, unified interface, and exceptional value.
+                </p>
+
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large">Start Your Free Trial</button>
+                    <button class="btn btn-secondary btn-large">Watch Demo</button>
+                </div>
+
+                <div class="flex items-center justify-center mt-12 space-x-8 text-white/80">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white">₹999</div>
+                        <div class="text-sm">per month</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white">4 lakh</div>
+                        <div class="text-sm">tokens monthly</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white">40%</div>
+                        <div class="text-sm">profit margin</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Models Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">World-Class AI Models in One Place</h2>
+                <p class="section-subtitle">
+                    Access the most advanced AI models from leading providers, all through our unified platform
+                </p>
+            </div>
+
+            <div class="ai-models">
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">CG</div>
+                    <h3>ChatGPT</h3>
+                    <p>gpt-4 & gpt-3.5</p>
+                </div>
+
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">GM</div>
+                    <h3>Gemini</h3>
+                    <p>Gemini Ultra & Pro</p>
+                </div>
+
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">CL</div>
+                    <h3>Claude</h3>
+                    <p>Claude 3 Opus</p>
+                </div>
+
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">GK</div>
+                    <h3>Grok</h3>
+                    <p>xAI's latest model</p>
+                </div>
+
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">PX</div>
+                    <h3>Perplexity</h3>
+                    <p>AI-powered search</p>
+                </div>
+
+                <div class="ai-model animate-on-scroll">
+                    <div class="ai-model-logo">DS</div>
+                    <h3>DeepSeek</h3>
+                    <p>Cryptocurrency AI</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose AI Fiesta?</h2>
+                <p class="section-subtitle">
+                    Experience the next generation of AI accessibility with features designed for professionals and businesses
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="feature-title">Multiple AI Models</h3>
+                    <p class="feature-description">
+                        Access top-tier AI models from leading providers in one unified interface. Compare responses, cross-validate information, and eliminate bias.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3 class="feature-title">Token Economy</h3>
+                    <p class="feature-description">
+                        Enjoy 4 lakh tokens monthly shared across all AI models. Pay only for consumed tokens, maximizing your AI investment.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">Advanced Features</h3>
+                    <p class="feature-description">
+                        Leverage prompt enhancement, image generation, audio transcription, and comparative analysis to supercharge your productivity.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Bias Mitigation</h3>
+                    <p class="feature-description">
+                        Cross-check responses across multiple AI models to identify and mitigate potential biases in AI-generated content.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="feature-title">Analytics Dashboard</h3>
+                    <p class="feature-description">
+                        Track token usage, cost insights, and performance metrics for informed decision-making.
+                    </p>
+                </div>
+
+                <div class="feature-card animate-on-scroll">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="feature-title">Priority Support</h3>
+                    <p class="feature-description">
+                        Get dedicated support from AI experts to maximize your platform utilization and productivity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How AI Fiesta Works</h2>
+                <p class="section-subtitle">Simple, efficient, and powerful - get started in minutes</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="animate-on-scroll text-center">
+                    <div class="text-6xl text-blue-500 mb-4">1</div>
+                    <h3 class="text-xl font-semibold mb-4">Sign Up</h3>
+                    <p class="text-gray-600">Create your account and choose your subscription plan</p>
+                </div>
+
+                <div class="animate-on-scroll text-center">
+                    <div class="text-6xl text-blue-500 mb-4">2</div>
+                    <h3 class="text-xl font-semibold mb-4">Configure</h3>
+                    <p class="text-gray-600">Set up your preferences and integrate with your workflow</p>
+                </div>
+
+                <div class="animate-on-scroll text-center">
+                    <div class="text-6xl text-blue-500 mb-4">3</div>
+                    <h3 class="text-xl font-semibold mb-4">Explore</h3>
+                    <p class="text-gray-600">Start using multiple AI models through our unified interface</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Trusted by Professionals</h2>
+                <p class="section-subtitle">See what our users say about their AI Fiesta experience</p>
+            </div>
+
+            <div class="testimonials-slider">
+                <div class="testimonial animate-on-scroll">
+                    <blockquote class="testimonial-quote">
+                        "AI Fiesta has revolutionized how I interact with multiple AI models. Having all these powerful tools in one place saves me hours daily and ensures I'm getting the most accurate responses."
+                    </blockquote>
+                    <div class="testimonial-author">Dr. Sarah Chen</div>
+                    <div class="testimonial-role">AI Researcher, TechCorp</div>
+                </div>
+
+                <div class="testimonial">
+                    <blockquote class="testimonial-quote">
+                        "The token economy is brilliant. I can experiment across different AIs without worrying about cost overruns. The cross-validation feature helps me trust the results more."
+                    </blockquote>
+                    <div class="testimonial-author">Mike Johnson</div>
+                    <div class="testimonial-role">Startup Founder, InnovateLab</div>
+                </div>
+
+                <div class="testimonial">
+                    <blockquote class="testimonial-quote">
+                        "Before AI Fiesta, I had to jump between different platforms and manage multiple subscriptions. Now everything is streamlined and cost-effective."
+                    </blockquote>
+                    <div class="testimonial-author">Emily Rodriguez</div>
+                    <div class="testimonial-role">Content Creator, MediaHub</div>
+                </div>
+
+                <div class="flex justify-center space-x-2 mt-8">
+                    <button class="testimonial-dot active w-3 h-3 rounded-full bg-blue-500"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300"></button>
+                    <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300"></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Choose Your Plan</h2>
+                <p class="section-subtitle">Flexible pricing designed to scale with your needs</p>
+            </div>
+
+            <div class="pricing-cards">
+                <div class="pricing-card animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-4">Personal</h3>
+                    <div class="pricing-price">₹699
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">Perfect for individual users who want to explore multiple AI models.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check icon"></i> Access to 4 AI models</li>
+                        <li><i class="fas fa-check icon"></i> 2 lakh tokens monthly</li>
+                        <li><i class="fas fa-check icon"></i> Basic features</li>
+                        <li><i class="fas fa-check icon"></i> Email support</li>
+                    </ul>
+                    <button class="btn btn-primary w-full mt-6">Get Started</button>
+                </div>
+
+                <div class="pricing-card popular animate-on-scroll">
+                    <div class="pricing-badge">Most Popular</div>
+                    <h3 class="text-xl font-semibold mb-4">Professional</h3>
+                    <div class="pricing-price">₹999
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">Full access to all features for serious AI practitioners.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check icon"></i> Access to all 6 AI models</li>
+                        <li><i class="fas fa-check icon"></i> 4 lakh tokens monthly</li>
+                        <li><i class="fas fa-check icon"></i> Advanced features</li>
+                        <li><i class="fas fa-check icon"></i> Priority support</li>
+                        <li><i class="fas fa-check icon"></i> Analytics dashboard</li>
+                        <li><i class="fas fa-check icon"></i> Bias mitigation tools</li>
+                    </ul>
+                    <button class="btn btn-primary w-full mt-6">Choose Professional</button>
+                </div>
+
+                <div class="pricing-card animate-on-scroll">
+                    <h3 class="text-xl font-semibold mb-4">Enterprise</h3>
+                    <div class="pricing-price">₹2,999
+                        <span class="pricing-period">/month</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">Custom solutions for teams and organizations.</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check icon"></i> Everything in Professional</li>
+                        <li><i class="fas fa-check icon"></i> Unlimted tokens</li>
+                        <li><i class="fas fa-check icon"></i> Dedicated support</li>
+                        <li><i class="fas fa-check icon"></i> Custom integrations</li>
+                        <li><i class="fas fa-check icon"></i> SLA guarantee</li>
+                        <li><i class="fas fa-check icon"></i> SSO & advanced security</li>
+                    </ul>
+                    <button class="btn btn-primary w-full mt-6">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="section">
+        <div class="container">
+            <div class="business-contact animate-on-scroll">
+                <h3 class="text-3xl font-bold mb-6">Business Model Overview</h3>
+                <p class="text-lg text-gray-600 mb-8">
+                    AI Fiesta operates on a scalable subscription model that grows profit margins at scale.
+                    Pay only for consumed tokens, maximizing efficiency for both users and our business.
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="text-center p-6 bg-gray-50 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-600 pricing-users">999</div>
+                        <div class="text-gray-600 uppercase text-sm">Monthly Subscription</div>
+                    </div>
+
+                    <div class="text-center p-6 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600 pricing-revenue">₹599,940</div>
+                        <div class="text-gray-600 uppercase text-sm">Monthly Revenue (600 users)</div>
+                    </div>
+
+                    <div class="text-center p-6 bg-purple-50 rounded-lg">
+                        <div class="text-3xl font-bold text-purple-600 pricing-profit">₹239,940</div>
+                        <div class="text-gray-600 uppercase text-sm">Monthly Profit</div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="btn btn-primary pricing-btn" data-users="1000">1,000 Users</button>
+                    <button class="btn btn-secondary pricing-btn" data-users="10000">10,000 Users</button>
+                    <button class="btn btn-secondary pricing-btn" data-users="50000">50,000 Users</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="footer-logo">AI Fiesta</div>
+
+            <div class="footer-description">
+                Revolutionizing AI accessibility by Dhruv Rathee. Experience the future of artificial intelligence aggregation.
+            </div>
+
+            <div class="footer-social">
+                <a href="#" data-tooltip="Follow us on Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" data-tooltip="Connect on LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" data-tooltip="Subscribe on YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" data-tooltip="Follow on Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 AI Fiesta. All rights reserved. | Created by Dhruv Rathee</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+</body>
+</html>

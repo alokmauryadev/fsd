@@ -1,0 +1,29 @@
+CSS stands for cascading style sheet
+html was never made for styling of website, to make a website more readable, beautiful with proper styles, css are being used
+we can use css using <style> tag in html
+
+Inilne, Interal and External CSS
+
+Inline - by using style attribue in a html tag
+Internal - by using <style></style> tag in head section of html file
+External - by creating a .css file and using <link> to link a html file with its css file
+<link rel="stylesheet" href="style.css">
+
+CSS Selectors
+
+'.' - it is used to select a element with is class name
+'#" = it is used to select a element with it's id name
+
+'>' for example div > p {}, it's an example of child Selectors
+it means it will select element which directly after an element
+
+
+div p, it means if p is anywhere inside div,it'll be selected for the styling
+
+
+pseudo elements
+
+
+
+
+  

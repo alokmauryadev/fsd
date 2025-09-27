@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables in HTML</title>
+    <!-- <link rel="stylesheet" href="modern-table.css"> -->
+    </style>
+    <style>
+        #student{
+            border-collapse: collapse;
+            margin: 5px;
+        }
+        th {
+
+            background-color: lightgray;
+        }
+        td, th{
+            border: 1px solid black;
+            border-radius: 5px;
+           
+        }
+    </style>
+</head>
+<body>
+    <h1>Tables</h1>
+<div class="ce">
+    <p>We'll be learning tables and different types of table attributes in HTML.</p>
+
+</div>
+    <table>
+        <caption>Student Information</caption>
+        <thead>
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Alice</td>
+                <td>20</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Bob</td>
+                <td>21</td>
+                <td>B+</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Charlie</td>
+                <td>19</td>
+                <td>A-</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">End of Student Information</td>
+            </tr>
+        </tfoot>
+    </table>
+    <br>
+
+    <table id="student" style="width: 100%;">
+        <tr>
+            <th>ID</th>
+            <th style="width: 50%;">Name</th>
+            <th>Email</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>n1</td>
+            <td rowspan="2">n1@gmail.com</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>n2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>n3</td>
+            <td>n3@gmail.com</td>
+        </tr>
+    </table>
+</body>
+</html>

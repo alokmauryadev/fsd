@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NIELIT - Modern Course Catalogue</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        /* Modern font and subtle background pattern for a tech feel */
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+            background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+            background-size: 2rem 2rem;
+        }
+        /* Glassmorphism effect for nav and cards */
+        .glass {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        /* Custom scrollbar for course list */
+        .thin-scroll::-webkit-scrollbar { height: 6px; width: 6px; }
+        .thin-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 6px; }
+
+        /* Enhanced course card styles with smoother transitions */
+        .course-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(22, 163, 74, 0.5); /* emerald-500 with opacity */
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        
+        /* Ensures x-cloak elements are hidden before Alpine initializes */
+        [x-cloak] { display: none !important; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 antialiased leading-relaxed">
+
+    <div x-data="courseSearch()" x-init="init()">
+
+        <nav class="sticky top-0 z-40 glass">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <a href="#" class="flex items-center gap-2">
+                        <i data-lucide="layers" class="w-6 h-6 text-emerald-400"></i>
+                        <span class="font-bold text-xl text-white">NIELIT Courses</span>
+                    </a>
+                    <div class="flex items-center gap-4">
+                        <a href="#courses" class="text-sm hover:text-emerald-400 transition-colors">Courses</a>
+                        <a href="#how-it-works" class="text-sm hover:text-emerald-400 transition-colors">How It Works</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <header class="relative overflow-hidden pt-12 pb-20">
+            <div class="container mx-auto px-4">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div data-aos="fade-right" class="space-y-6 text-center lg:text-left">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
+                            Explore NIELIT Courses
+                            <span class="block text-emerald-400">Skill Up, Future Ready</span>
+                        </h1>
+                        <p class="text-gray-300 max-w-xl mx-auto lg:mx-0">
+                            A modern, searchable catalogue of certifications & NSQF courses. Filter by domain, level, or keyword and quickly find course codes, descriptions and application links.
+                        </p>
+                        <div class="mt-8">
+                            <div class="flex gap-2 items-center bg-gray-800 p-2 rounded-lg glass max-w-lg mx-auto lg:mx-0">
+                                <i data-lucide="search" class="w-5 h-5 ml-2 text-gray-400"></i>
+                                <input x-model.debounce.300ms="q" @input="filter" placeholder="Search courses, e.g. AI, Cloud, CCC..." class="flex-1 bg-transparent px-2 py-2 outline-none text-md">
+                                <button x-show="q" @click="q = ''; filter()" class="p-2 rounded-md hover:bg-gray-700 transition-colors" title="Clear search">
+                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                            <div class="mt-4 flex gap-2 justify-center lg:justify-start flex-wrap">
+                                <button @click="setCategory('All')" :class="activeCat === 'All' ? 'bg-emerald-500 text-gray-900' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'" class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors">All</button>
+                                <button @click="setCategory('Information Technology')" :class="activeCat === 'Information Technology' ? 'bg-emerald-500 text-gray-900' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'" class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors">IT</button>
+                                <button @click="setCategory('AI ML')" :class="activeCat === 'AI ML' ? 'bg-emerald-500 text-gray-900' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'" class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors">AI/ML</button>
+                                <button @click="setCategory('Cloud DevOps')" :class="activeCat === 'Cloud DevOps' ? 'bg-emerald-500 text-gray-900' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'" class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors">Cloud</button>
+                                <button @click="setCategory('IoT Embedded')" :class="activeCat === 'IoT Embedded' ? 'bg-emerald-500 text-gray-900' : 'bg-gray-800 hover:bg-gray-700 text-gray-300'" class="px-3 py-1.5 rounded-full text-sm font-semibold transition-colors">IoT</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-aos="zoom-in" class="relative hidden lg:block">
+                        <div class="p-6 rounded-2xl bg-gradient-to-br from-gray-800/60 to-gray-900 glass shadow-2xl">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="text-sm text-gray-400 uppercase tracking-wider">Featured</h3>
+                                    <h2 class="text-2xl font-semibold text-white">IT O/A/B/C Levels</h2>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm text-gray-400">Updated</div>
+                                    <div class="font-medium text-white">Sep 2025</div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="p-3 bg-gray-900/50 rounded-lg">
+                                    <div class="text-xs text-gray-400">Total Courses</div>
+                                    <div class="text-2xl font-bold text-emerald-400" x-text="all.length + '+'"></div>
+                                </div>
+                                <div class="p-3 bg-gray-900/50 rounded-lg">
+                                    <div class="text-xs text-gray-400">Domains</div>
+                                    <div class="text-2xl font-bold text-emerald-400">10+</div>
+                                </div>
+                            </div>
+                            <div class="mt-6 flex gap-3 items-center p-3 bg-emerald-900/20 rounded-lg">
+                                <div class="p-3 rounded-full bg-emerald-500/20"><i data-lucide="book-open" class="w-6 h-6 text-emerald-300"></i></div>
+                                <div class="text-sm text-gray-300">Quick apply links, syllabus PDFs, and more details available for all courses.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto px-4 -mt-10">
+            <section id="courses" class="grid lg:grid-cols-4 gap-8">
+                
+                <aside class="lg:col-span-1 lg:sticky lg:top-24 h-fit">
+                    <div class="lg:hidden mb-4">
+                        <button @click="showFilters = !showFilters" class="w-full flex justify-between items-center p-3 rounded-lg bg-gray-800 glass font-semibold">
+                            <span>Filter & Sort Courses</span>
+                            <i data-lucide="chevron-down" class="w-5 h-5 transition-transform" :class="showFilters && 'rotate-180'"></i>
+                        </button>
+                    </div>
+
+                    <div x-show="showFilters" x-transition class="bg-gray-800 p-5 rounded-xl glass lg:block">
+                        <h3 class="font-semibold mb-4 text-lg">Filters</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="level-filter" class="text-sm text-gray-400">Level</label>
+                                <select id="level-filter" x-model="level" @change="filter" class="w-full mt-1 bg-gray-900 p-2.5 rounded-md border border-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                    <option>All</option> <option>Foundation</option> <option>O Level</option> <option>A Level</option> <option>B Level</option> <option>C Level</option> <option>Professional</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="domain-filter" class="text-sm text-gray-400">Domain</label>
+                                <select id="domain-filter" x-model="domain" @change="filter" class="w-full mt-1 bg-gray-900 p-2.5 rounded-md border border-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                    <option>All</option> <option>Information Technology</option> <option>AI ML</option> <option>Cloud DevOps</option> <option>IoT Embedded</option> <option>Web Development</option> <option>Cyber Security</option> <option>Quantum Technology</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="sort-filter" class="text-sm text-gray-400">Sort by</label>
+                                <select id="sort-filter" x-model="sort" @change="filter" class="w-full mt-1 bg-gray-900 p-2.5 rounded-md border border-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none">
+                                    <option value="popular">Popularity</option> <option value="recent">Recently Added</option> <option value="alpha">A-Z</option>
+                                </select>
+                            </div>
+                            <div class="pt-3">
+                                <button @click="reset" class="w-full py-2.5 rounded-lg bg-emerald-500 text-gray-900 font-semibold hover:bg-emerald-600 transition-colors">Reset Filters</button>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <section class="lg:col-span-3">
+                    <div id="results" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                        <template x-for="c in displayedCourses" :key="c.code">
+                            <article data-aos="fade-up" class="bg-gradient-to-br from-gray-800 to-gray-900 p-4 rounded-xl course-card flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-start gap-4">
+                                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-900/40 text-emerald-400 font-bold text-lg" x-text="c.tag || '??'"></div>
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-start">
+                                                <h4 class="font-semibold text-white" x-text="c.title"></h4>
+                                                <div class="text-xs text-gray-500 whitespace-nowrap" x-text="c.code"></div>
+                                            </div>
+                                            <p class="text-sm text-gray-400 mt-1 line-clamp-3" x-text="c.short"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-4 flex items-center justify-between">
+                                    <div class="flex gap-2 items-center text-xs text-gray-400">
+                                        <span class="px-2 py-1 rounded bg-gray-900/60 flex items-center gap-1"><i data-lucide="layers" class="w-3 h-3"></i> <span x-text="c.level"></span></span>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button @click="open(c)" class="px-3 py-1.5 text-sm rounded-md bg-emerald-500 text-gray-900 font-semibold hover:bg-emerald-600 transition-colors">Details</button>
+                                    </div>
+                                </div>
+                            </article>
+                        </template>
+                        <template x-if="displayedCourses.length === 0">
+                            <div class="sm:col-span-2 xl:col-span-3 text-center py-12 bg-gray-800/50 rounded-lg">
+                                <i data-lucide="search-x" class="w-12 h-12 mx-auto text-gray-500"></i>
+                                <h3 class="mt-4 text-xl font-semibold">No Courses Found</h3>
+                                <p class="text-gray-400 mt-1">Try adjusting your search or filters.</p>
+                                <button @click="reset" class="mt-4 px-4 py-2 text-sm rounded-lg bg-emerald-500 text-gray-900 font-semibold">Reset Filters</button>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div x-show="hasMoreCourses()" class="mt-8 flex justify-center">
+                        <button @click="loadMore" class="px-6 py-3 rounded-lg bg-gray-800 border border-gray-700 hover:bg-gray-700 transition-colors font-semibold">Load More Courses</button>
+                    </div>
+                </section>
+            </section>
+        </main>
+
+        <div x-show="modal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
+            x-transition:enter="ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0">
+            <div @click.away="close" class="bg-gray-900 w-full max-w-2xl p-6 rounded-2xl border border-gray-700 shadow-2xl"
+                x-transition:enter="ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95"
+                x-transition:enter-end="opacity-100 scale-100"
+                x-transition:leave="ease-in duration-200"
+                x-transition:leave-start="opacity-100 scale-100"
+                x-transition:leave-end="opacity-0 scale-95">
+                
+                <div class="flex justify-between items-start gap-4">
+                    <div>
+                        <h3 class="text-2xl font-bold text-white" x-text="modal?.title"></h3>
+                        <div class="text-sm mt-1 text-gray-400"><span x-text="modal?.code"></span> &bull; <span x-text="modal?.level"></span> &bull; <span x-text="modal?.domain"></span></div>
+                    </div>
+                    <button @click="close" class="p-2 -mr-2 -mt-2 rounded-full hover:bg-gray-800 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="mt-4 text-gray-300 prose prose-invert max-w-none prose-p:my-2" x-html="modal?.long"></div>
+                <div class="mt-6 flex gap-3 justify-end">
+                    <a :href="modal?.syllabus || '#'" target="_blank" class="px-5 py-2.5 rounded-lg border border-gray-700 hover:bg-gray-800 transition-colors font-semibold">Syllabus PDF</a>
+                    <a :href="modal?.apply || '#'" target="_blank" class="px-5 py-2.5 rounded-lg bg-emerald-500 text-gray-900 font-semibold hover:bg-emerald-600 transition-colors">Apply Now</a>
+                </div>
+            </div>
+        </div>
+
+    </div> <footer class="mt-20 text-gray-500 text-sm text-center py-8 border-t border-gray-800">
+        Reimagined NIELIT Course Catalogue &copy; 2025. This is a conceptual design.
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ duration: 600, once: true, offset: 50 });
+            lucide.createIcons();
+        });
+
+        // Main Alpine.js data component
+        function courseSearch() {
+            return {
+                q: '',
+                activeCat: 'All',
+                level: 'All',
+                domain: 'All',
+                sort: 'popular',
+                page: 1,
+                perPage: 9,
+                modal: null,
+                showFilters: window.innerWidth >= 1024, // Show filters by default on desktop
+                all: sampleData(), // All courses from our data source
+                filteredResults: [], // All courses that match filters (unpaginated)
+                displayedCourses: [], // The currently visible/paginated courses
+                
+                init() {
+                    this.filter();
+                    // Simple listener to handle filter visibility on resize
+                    window.addEventListener('resize', () => {
+                        this.showFilters = window.innerWidth >= 1024;
+                    });
+                },
+
+                filter() {
+                    // Reset pagination on any filter change
+                    this.page = 1;
+
+                    const query = this.q.toLowerCase().trim();
+                    let results = this.all.filter(c => {
+                        const matchesQuery = !query || [c.title, c.code, c.domain, c.short, c.level].join(' ').toLowerCase().includes(query);
+                        const matchesCategory = this.activeCat === 'All' || c.domain === this.activeCat;
+                        const matchesLevel = this.level === 'All' || c.level === this.level;
+                        const matchesDomain = this.domain === 'All' || c.domain === this.domain;
+                        return matchesQuery && matchesCategory && matchesLevel && matchesDomain;
+                    });
+
+                    // Sorting logic
+                    if (this.sort === 'alpha') results.sort((a, b) => a.title.localeCompare(b.title));
+                    if (this.sort === 'recent') results.sort((a, b) => (b.added || 0) - (a.added || 0));
+                    // 'popular' is the default order from sampleData
+
+                    this.filteredResults = results;
+                    this.updateDisplayedCourses();
+                },
+
+                updateDisplayedCourses() {
+                    const start = (this.page - 1) * this.perPage;
+                    const end = this.page * this.perPage;
+                    // If page is 1, replace. Otherwise, append.
+                    const newCourses = this.filteredResults.slice(start, end);
+                    this.displayedCourses = this.page === 1 ? newCourses : [...this.displayedCourses, ...newCourses];
+                },
+                
+                setCategory(cat) {
+                    this.activeCat = cat;
+                    // If a category button is clicked, also sync the domain dropdown
+                    this.domain = (cat !== 'All') ? cat : 'All';
+                    this.filter();
+                },
+                
+                open(course) {
+                    this.modal = course;
+                    // Ensure modal's 'x' icon renders correctly
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                close() { this.modal = null; },
+                
+                reset() {
+                    this.q = ''; this.level = 'All'; this.domain = 'All';
+                    this.sort = 'popular'; this.activeCat = 'All';
+                    this.filter();
+                },
+                
+                loadMore() {
+                    if (this.hasMoreCourses()) {
+                        this.page++;
+                        this.updateDisplayedCourses();
+                    }
+                },
+
+                hasMoreCourses() {
+                    return this.displayedCourses.length < this.filteredResults.length;
+                }
+            };
+        }
+
+        // Expanded sample dataset
+        function sampleData() {
+            const courses = [
+                { title: 'O LEVEL', code: 'O', short: 'Foundation course in computer applications for job roles like EDP assistant and web designer.', level: 'O Level', domain: 'Information Technology', tag: 'IT', added: 202201, apply: '#', syllabus: '#', long: '<p>The O Level certification is a foundational IT course designed to equip learners with essential skills in computer applications, programming, and web design. It is recognized by the Government of India for employment purposes.</p><p>Modules typically cover: <ul><li>IT Tools and Network Basics</li><li>Web Designing & Publishing</li><li>Programming and Problem Solving through Python</li><li>Internet of Things (IoT) and its Applications</li></ul></p>' },
+                { title: 'A LEVEL', code: 'A', short: 'Advanced diploma in computer applications, equivalent to an Advanced Diploma in the IT field.', level: 'A Level', domain: 'Information Technology', tag: 'IT', added: 202202, apply: '#', syllabus: '#', long: '<p>Building upon the O Level, the A Level course provides an in-depth understanding of advanced IT concepts. It is ideal for those looking to advance their careers in software development and system analysis.</p>' },
+                { title: 'B LEVEL', code: 'B', short: 'MCA level course recognized by the Government of India, focusing on advanced system management.', level: 'B Level', domain: 'Information Technology', tag: 'IT', added: 202203, apply: '#', syllabus: '#', long: '<p>The B Level course is equivalent to a Master\'s in Computer Applications (MCA) and is designed for professionals aiming for senior roles in the IT industry, including project management and system design.</p>' },
+                { title: 'C LEVEL', code: 'C', short: 'M.Tech level course, the highest certification for designing and developing complex IT systems.', level: 'C Level', domain: 'Information Technology', tag: 'IT', added: 202204, apply: '#', syllabus: '#', long: '<p>The C Level is the pinnacle of NIELIT\'s IT certifications, equivalent to an M.Tech degree. It focuses on research, development, and high-level system architecture.</p>' },
+                { title: 'Course on Computer Concepts (CCC)', code: 'CCC', short: 'A fundamental digital literacy program to empower citizens with basic computer skills.', level: 'Foundation', domain: 'Information Technology', tag: 'IT', added: 202301, apply: '#', syllabus: '#', long: '<p>The CCC is a certificate course that provides practical knowledge on computer fundamentals, internet usage, word processing, spreadsheets, and making small presentations.</p>' },
+                { title: 'AI Development Associate', code: 'ITES0141', short: 'Beginner-friendly course on AI fundamentals, machine learning models, and Python libraries.', level: 'Foundation', domain: 'AI ML', tag: 'AI', added: 202305, apply: '#', syllabus: '#', long: '<p>This course introduces the core concepts of Artificial Intelligence and Machine Learning. Students will learn to use popular Python libraries like NumPy, Pandas, and Scikit-learn to build simple predictive models.</p>' },
+                { title: 'Certified Cloud Computing Engineer', code: 'ITES4735', short: 'Comprehensive training on cloud infrastructure, services (IaaS, PaaS, SaaS), and DevOps practices.', level: 'Professional', domain: 'Cloud DevOps', tag: 'CD', added: 202306, apply: '#', syllabus: '#', long: '<p>Learn to design, deploy, and manage scalable and fault-tolerant systems on major cloud platforms like AWS and Azure. The course covers virtualization, containers (Docker), and orchestration (Kubernetes).</p>' },
+                { title: 'Internet of Things (IoT) Developer', code: 'EL00346', short: 'Hands-on course covering sensor integration, microcontrollers (Arduino/Raspberry Pi), and cloud connectivity.', level: 'Professional', domain: 'IoT Embedded', tag: 'IoT', added: 202307, apply: '#', syllabus: '#', long: '<p>This course provides the skills to develop end-to-end IoT solutions, from programming embedded devices to collecting and visualizing sensor data on a cloud dashboard.</p>' },
+                { title: 'Full Stack Development Associate', code: 'IT04172', short: 'Master both front-end (HTML, CSS, React) and back-end (Node.js, Express, MongoDB) web technologies.', level: 'Professional', domain: 'Web Development', tag: 'WD', added: 202308, apply: '#', syllabus: '#', long: '<p>Become a versatile web developer by learning the entire MERN stack. This project-based course will guide you through building and deploying complex web applications.</p>' },
+                { title: 'Certified Cyber Security Analyst', code: 'ITES9001', short: 'Learn ethical hacking, network defense, risk management, and incident response techniques.', level: 'Professional', domain: 'Cyber Security', tag: 'CS', added: 202309, apply: '#', syllabus: '#', long: '<p>This certification prepares you for a career in cybersecurity by teaching you how to identify vulnerabilities, secure networks, and respond effectively to cyber threats.</p>' },
+                { title: 'Quantum Computing Fundamentals', code: 'EL02643', short: 'An introduction to the principles of quantum mechanics, qubits, superposition, and entanglement.', level: 'Foundation', domain: 'Quantum Technology', tag: 'QT', added: 202310, apply: '#', syllabus: '#', long: '<p>Explore the future of computing with this introductory course on quantum principles. Learn about quantum gates and simple quantum algorithms using simulators.</p>' },
+                // Add more diverse courses
+                { title: 'Data Science with Python', code: 'DS0012', short: 'Learn data analysis, visualization, and machine learning using Python libraries.', level: 'Professional', domain: 'AI ML', tag: 'DS', added: 202311, apply: '#', syllabus: '#', long: '<p>Dive deep into data science. This course covers everything from data cleaning and exploration to building and evaluating complex machine learning models.</p>' },
+                { title: 'DevOps Engineering Professional', code: 'DO0023', short: 'Automate software delivery pipelines with CI/CD tools like Jenkins, Git, and Ansible.', level: 'Professional', domain: 'Cloud DevOps', tag: 'DO', added: 202401, apply: '#', syllabus: '#', long: '<p>Master the culture and practices of DevOps. Learn to build robust, automated CI/CD pipelines to improve development and deployment workflows.</p>' },
+                { title: 'Embedded Systems Design', code: 'ES0045', short: 'Design and program embedded systems using C/C++ and ARM microcontrollers.', level: 'Professional', domain: 'IoT Embedded', tag: 'ES', added: 202402, apply: '#', syllabus: '#', long: '<p>Gain expertise in hardware and software for embedded systems. This course focuses on real-time operating systems, device drivers, and system-on-chip (SoC) architecture.</p>' }
+            ];
+            // Add more dummy data to test pagination
+            for (let i = 1; i <= 15; i++) {
+                courses.push({
+                    title: `Additional Course ${i}`, code: `EXT${1000 + i}`,
+                    short: `This is a sample description for another course in our extensive catalog.`,
+                    level: ['Foundation', 'Professional'][i % 2],
+                    domain: ['Web Development', 'Cyber Security', 'AI ML'][i % 3],
+                    tag: ['WD', 'CS', 'AI'][i % 3],
+                    added: 202402 + i, apply: '#', syllabus: '#',
+                    long: `<p>This is an expanded description for Additional Course ${i}. It provides more details about the curriculum, objectives, and target audience.</p>`
+                });
+            }
+            return courses;
+        }
+    </script>
+</body>
+</html>

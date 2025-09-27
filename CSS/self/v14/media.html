@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color: red;
+        }
+        @media only screen and (orientation: landscape){
+            body{
+                background-color: blue;
+            }
+            .container{
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        .container{
+            display: flex;
+        }
+        .boxes{
+            margin: 10px;
+            border: 1px solid black;
+            width: 30vw;
+            height: 30vh;
+        }
+    </style>
+</head>
+<body>
+   <div class="container">
+<div class="boxes"></div>
+<div class="boxes"></div>
+<div class="boxes"></div></body></div>
+</html>

@@ -1,0 +1,3 @@
+# Ignore temporary Google Drive folders
+.tmp.drivedownload/
+.tmp.driveupload/

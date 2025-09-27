@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .grids{
+            display: grid;
+            grid-template-areas: "header header item2"
+                                 "item3 item4 item2" 
+                                 "item5 item5 item5";
+            background: rgb(227, 230, 239);
+            padding: 10px;
+            gap: 0.5rem;    
+                        
+        }
+        .griditem{
+            background: rgb(39, 101, 245);
+            color: white;
+            text-align: center;
+            align-content: center;
+        }
+
+        .item1{
+            grid-area: header;}
+        .item2{
+            grid-area: item2;
+         }
+        .item3{
+            grid-area: item3;
+        }
+        .item4{
+            grid-area: item4;
+        }
+         .item5{
+            grid-area: item5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grids">
+        <div class="griditem item1">Item 1</div>
+        <div class="griditem item2">Item 2</div>
+        <div class="griditem item3">Item 3</div>
+        <div class="griditem item4">Item 4</div>
+        <div class="griditem item5">Item 5</div>
+    </div>
+</body>
+</html>

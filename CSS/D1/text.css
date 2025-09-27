@@ -1,0 +1,11 @@
+#firstPara{
+    color: blueviolet;
+    text-decoration: underline wavy;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+#secondPara{
+    color: blue;
+    font-size: 20px;
+    
+}

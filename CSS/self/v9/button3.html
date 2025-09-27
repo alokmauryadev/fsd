@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Animated Order Button</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #1a1d2c;
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .order-button {
+            --bg: #635bff;
+            --bg-hover: #544ce8;
+            --bg-success: #2fca73;
+            --shadow: rgba(99, 91, 255, 0.35);
+            --color: #fff;
+            --transition-duration: 0.3s;
+
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 220px;
+            height: 60px;
+            padding: 0 24px;
+            border-radius: 30px;
+            border: none;
+            background: var(--bg);
+            color: var(--color);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 20px -5px var(--shadow);
+            overflow: hidden;
+            transition: background-color var(--transition-duration) ease, transform 0.2s ease;
+        }
+
+        .order-button:hover:not(:disabled) {
+            background: var(--bg-hover);
+            transform: translateY(-2px);
+        }
+        
+        .order-button:disabled {
+            cursor: not-allowed;
+        }
+
+        .button-text {
+            position: absolute;
+        }
+        
+        /* === SVG Icon Styles === */
+        .icon {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Hide all icons initially */
+            visibility: hidden;
+        }
+        
+        .icon svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Styles for the checkmark drawing animation */
+        #check-path {
+            /* This value is the approximate length of the SVG path */
+            stroke-dasharray: 54;
+            stroke-dashoffset: 54;
+        }
+
+    </style>
+</head>
+<body>
+
+<button class="order-button" id="orderButton">
+    <span class="button-text">Place Order</span>
+
+    <div class="icon" id="package-icon">
+        <svg fill="#FFFFFF" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M256 16c-16.38 0-32.38 1.4-48.02 4.04-12.38 2.1-24.38 5.2-36.02 9.02-31.5 10.38-60.12 26.38-84.38 47.62-24.12 21.12-42.38 47.5-54.25 77.88-11.75 30.12-17.38 62.62-17.38 95.38v144c0 8.84 7.16 16 16 16h80c8.84 0 16-7.16 16-16V288c0-8.84-7.16-16-16-16h-48v-32c0-58.88 38-109.12 90.5-123.12C208.75 113.12 231.25 96 256 96s47.25 17.12 63.5 40.88C372 150.88 410 201.12 410 260v32h-48c-8.84 0-16 7.16-16 16v128c0 8.84 7.16 16 16 16h80c8.84 0 16-7.16 16-16V250c0-32.75-5.62-65.25-17.38-95.38-11.88-30.38-30.12-56.75-54.25-77.88-24.25-21.25-52.88-37.25-84.38-47.62-11.62-3.81-23.62-6.91-36.02-9.02C288.38 17.4 272.38 16 256 16zm-48 304h96c8.84 0 16-7.16 16-16v-32h-48v-32h-32v32H162v32c0 8.84 7.16 16 16 16z"/></svg>
+    </div>
+
+    <div class="icon" id="truck-icon">
+       <svg fill="#FFFFFF" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M480 320h-32v-48c0-26.4-21.6-48-48-48H128V96h192c8.8 0 16-7.2 16-16s-7.2-16-16-16H128c-44.2 0-80 35.8-80 80v256h48c0 26.4 21.6 48 48 48s48-21.6 48-48h112c0 26.4 21.6 48 48 48s48-21.6 48-48h32c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16zm-320-32c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16zm192 0c-8.8 0-16 7.2-16 16s7.2 16 16 16 16-7.2 16-16-7.2-16-16-16z"/></svg>
+    </div>
+    
+     <div class="icon" id="check-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+            <path id="check-path" d="M22 6L9 19L2 12" />
+        </svg>
+    </div>
+
+</button>
+
+<script>
+    const orderButton = document.getElementById('orderButton');
+    const buttonText = orderButton.querySelector('.button-text');
+    const packageIcon = document.getElementById('package-icon');
+    const truckIcon = document.getElementById('truck-icon');
+    const checkIcon = document.getElementById('check-icon');
+    const checkPath = document.getElementById('check-path');
+
+    // Create the GSAP timeline
+    const timeline = gsap.timeline({ paused: true });
+
+    timeline
+        // Animate text out
+        .to(buttonText, { duration: 0.2, y: 15, opacity: 0, ease: 'power2.in' })
+        
+        // Make package icon visible and animate it in
+        .set(packageIcon, { visibility: 'visible' })
+        .fromTo(packageIcon, 
+            { scale: 0.5, opacity: 0 }, 
+            { duration: 0.4, scale: 1, opacity: 1, ease: 'back.out(1.7)' }, 
+            "<" 
+        )
+
+        // Animate package out and truck in (overlapping)
+        .to(packageIcon, { duration: 0.3, x: -50, opacity: 0, ease: 'power2.in' }, "+=0.5")
+        .set(truckIcon, { visibility: 'visible' })
+        .fromTo(truckIcon, 
+            { x: 50, opacity: 0 }, 
+            { duration: 0.4, x: 0, opacity: 1, ease: 'power2.out' },
+            "-=0.2" 
+        )
+
+        // Drive the truck across and fade it out
+        .to(truckIcon, { duration: 1.2, x: 250, opacity: 0, ease: 'power2.in' }, "+=0.5")
+        
+        // Change button color to success green
+        .to(orderButton, { 
+            duration: 0.3, 
+            backgroundColor: 'var(--bg-success)',
+            boxShadow: '0 5px 20px -5px rgba(47, 202, 115, 0.5)'
+        }, "-=1.2")
+
+        // *** FIXED CHECKMARK ANIMATION ***
+        // Make the check icon pop in and draw the path simultaneously
+        .set(checkIcon, { visibility: 'visible' })
+        .fromTo(checkIcon, 
+            { scale: 0.5, opacity: 0 },
+            { duration: 0.4, scale: 1, opacity: 1, ease: 'back.out(1.7)' },
+            "-=0.4" // Start this as the truck is leaving
+        )
+        .fromTo(checkPath, 
+            { strokeDashoffset: 54 },
+            { duration: 0.5, strokeDashoffset: 0, ease: 'power2.out' },
+            "<" // Start drawing at the same time the icon pops in
+        );
+
+    // Add the click event listener
+    orderButton.addEventListener('click', () => {
+        if (timeline.isActive()) {
+            return;
+        }
+        
+        orderButton.disabled = true;
+        
+        timeline.play();
+
+        // After a delay, reverse the animation to reset the button
+        const resetDelay = 3000; // 3 seconds
+        setTimeout(() => {
+            timeline.reverse();
+            // Re-enable the button once the reverse animation is complete
+            setTimeout(() => {
+                orderButton.disabled = false;
+            }, timeline.duration() * 1000); 
+        }, resetDelay);
+    });
+
+</script>
+
+</body>
+</html>

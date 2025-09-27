@@ -1,0 +1,30 @@
+.btn:active{
+    background:darkblue;
+    color: white;
+}
+.link:active{
+    color: red;
+}
+.link:visited{
+    color: yellowgreen;
+}
+.link:hover{
+    color: red;
+}
+#paraList p:last-child{
+    color: red;
+}
+p:first-child{
+    color: blue;
+}
+  label {
+    color: red;
+    font-weight: normal;
+    transition: all 0.3s ease;
+  }
+
+  input[type="checkbox"]:checked + label {
+    color: green;
+    font-weight: bold;
+    text-decoration: underline;
+  }

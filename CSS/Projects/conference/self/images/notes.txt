@@ -1,0 +1,6 @@
+audience - https://cdn-icons-png.flaticon.com/512/1040/1040005.png
+mic - https://www.iconpacks.net/icons/1/free-microphone-icon-342-thumb.png
+workshop - https://cdn-icons-png.flaticon.com/512/223/223399.png
+person - https://www.iconpacks.net/icons/1/free-user-icon-295-thumb.png
+twitter -https://cdn-icons-png.flaticon.com/512/733/733635.png
+linkedin - https://www.iconpacks.net/icons/1/free-linkedin-icon-112-thumb.png

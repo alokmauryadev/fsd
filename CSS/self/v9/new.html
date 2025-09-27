@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Smooth Order Placed Button</title>
+<style>
+  :root{
+    --h: clamp(44px, 6vw, 56px);
+    --px: 22px;
+    --r: 9999px;
+
+    --g1: #22c55e; /* emerald */
+    --g2: #10b981;
+    --txt: #fff;
+
+    --shadow: 0 8px 20px rgba(16,185,129,.35), 0 2px 6px rgba(0,0,0,.08);
+    --inner: inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(0,0,0,.08);
+    --focus: 0 0 0 4px rgba(16,185,129,.25);
+
+    --road: rgba(255,255,255,.55);
+    --icon: #ffffff;
+
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --easeOutBack: cubic-bezier(.34,1.56,.64,1);
+    --easeIn: cubic-bezier(.32,0,.67,0);
+    --easeOut: cubic-bezier(.33,1,.68,1);
+
+    --t-in: 220ms;
+    --t-xfade: 220ms;
+    --t-drive: 1200ms;
+    --t-exit: 200ms;
+    --t-check: 340ms;
+    --t-hold: 900ms;
+  }
+
+  .order-btn{
+    -webkit-tap-highlight-color: transparent;
+    appearance: none;
+    border: 0;
+    height: var(--h);
+    padding: 0 calc(var(--px) + 6px);
+    border-radius: var(--r);
+    color: var(--txt);
+    background: linear-gradient(135deg, var(--g1), var(--g2));
+    box-shadow: var(--shadow), var(--inner);
+    font: 600 16px/1 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    letter-spacing: .2px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .12s var(--ease), filter .2s var(--ease), box-shadow .2s var(--ease);
+    user-select: none;
+  }
+  .order-btn:hover{ filter: brightness(1.03); }
+  .order-btn:active{ transform: translateY(1px) scale(.997); }
+  .order-btn:focus-visible{ outline: none; box-shadow: var(--shadow), var(--inner), var(--focus); }
+  .order-btn[disabled]{ cursor: not-allowed; filter: saturate(.9) opacity(.9); }
+
+  .label{
+    display: inline-block;
+    transition: opacity .22s var(--ease), transform .22s var(--ease);
+    white-space: nowrap;
+  }
+  .order-btn[data-state="running"] .label{
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  .stage{
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .22s var(--ease);
+  }
+  .order-btn[data-state="running"] .stage{ opacity: 1; }
+
+  .track{ position: relative; width: 100%; height: 100%; }
+
+  .road, .trail{
+    position: absolute;
+    left: 12%; right: 12%;
+    bottom: calc(50% - 1px);
+    height: 2px; border-radius: 2px;
+    transform-origin: left center;
+    transform: scaleX(0);
+    will-change: transform, opacity;
+  }
+  .road{ background: linear-gradient(90deg, transparent 0%, var(--road) 15%, var(--road) 85%, transparent 100%); opacity: .9; }
+  .trail{ background: linear-gradient(90deg, rgba(255,255,255,.7), rgba(255,255,255,0)); opacity: 0; }
+
+  .icon{
+    position: absolute; top: 50%; left: 50%;
+    height: calc(var(--h) * 0.52);
+    display: grid; place-items: center;
+    transform: translate(-50%,-50%);
+    opacity: 0; will-change: transform, opacity;
+  }
+  .icon svg{ height: 100%; width: auto; display: block; stroke: var(--icon); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+  .truck{ transform: translate(-50%,-50%) translateX(0); }
+  .check path{ stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+  @media (prefers-reduced-motion: reduce){
+    .order-btn, .label, .stage, .icon, .road, .trail{ transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<button class="order-btn" id="orderBtn" type="button" aria-live="polite" aria-label="Place Order">
+  <span class="label">Place Order</span>
+  <span class="stage" aria-hidden="true">
+    <div class="track">
+      <div class="road"></div>
+      <div class="trail"></div>
+
+      <!-- Package -->
+      <div class="package icon">
+        <svg viewBox="0 0 48 48" preserveAspectRatio="xMidYMid meet">
+          <path d="M6 18l18 6 18-6" />
+          <path d="M12 16l12 4 12-4" />
+          <path d="M10 18v16a4 4 0 0 0 4 4h20a4 4 0 0 0 4-4V18" />
+          <path d="M24 22v16" />
+        </svg>
+      </div>
+
+      <!-- Truck -->
+      <div class="truck icon">
+        <svg viewBox="0 0 64 40" preserveAspectRatio="xMidYMid meet">
+          <g id="truckBody">
+            <rect x="4" y="12" width="34" height="16" rx="3" />
+            <path d="M38 12h10l6 8v8H38z" />
+            <path d="M38 16h8" />
+          </g>
+          <g id="w1"><circle cx="16" cy="32" r="4" /></g>
+          <g id="w2"><circle cx="48" cy="32" r="4" /></g>
+        </svg>
+      </div>
+
+      <!-- Check -->
+      <div class="check icon">
+        <svg viewBox="0 0 48 48" preserveAspectRatio="xMidYMid meet">
+          <path id="checkPath" d="M12 26l8 8 16-20" />
+        </svg>
+      </div>
+    </div>
+  </span>
+</button>
+
+<script>
+(() => {
+  const btn = document.getElementById('orderBtn');
+  const label = btn.querySelector('.label');
+  const stage = btn.querySelector('.stage');
+  const road = btn.querySelector('.road');
+  const trail = btn.querySelector('.trail');
+  const pkg = btn.querySelector('.package');
+  const truck = btn.querySelector('.truck');
+  const check = btn.querySelector('.check');
+  const checkPath = document.getElementById('checkPath');
+  const w1 = truck.querySelector('#w1');
+  const w2 = truck.querySelector('#w2');
+
+  const D = {
+    in: 220,
+    xfade: 220,
+    drive: 1200,
+    exit: 200,
+    check: 340,
+    hold: 900
+  };
+  const ease = 'cubic-bezier(.22,.61,.36,1)';
+  const easeOutBack = 'cubic-bezier(.34,1.56,.64,1)';
+  const easeOut = 'cubic-bezier(.33,1,.68,1)';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let running = false;
+  let anims = [];
+  const A = (el, kf, opt) => {
+    const a = el.animate(kf, opt);
+    anims.push(a);
+    return a;
+  };
+  const cancelAll = () => { anims.forEach(a=>{try{a.cancel()}catch{}}); anims=[]; };
+
+  // Prep check length
+  let checkLen = 1;
+  const prepCheck = () => {
+    try {
+      checkLen = checkPath.getTotalLength();
+      checkPath.style.strokeDasharray = checkLen;
+      checkPath.style.strokeDashoffset = checkLen;
+    } catch {}
+  };
+  prepCheck();
+  addEventListener('resize', prepCheck, { passive: true });
+
+  const resetVisual = () => {
+    [pkg, truck, check].forEach(el => { el.style.opacity = 0; el.style.transform = ''; });
+    road.style.transform = 'scaleX(0)';
+    road.style.opacity = '.9';
+    trail.style.transform = 'scaleX(0)';
+    trail.style.opacity = '0';
+    checkPath.style.strokeDasharray = checkLen;
+    checkPath.style.strokeDashoffset = checkLen;
+  };
+
+  const reset = () => {
+    cancelAll();
+    resetVisual();
+    btn.dataset.state = '';
+    btn.disabled = false;
+    btn.removeAttribute('aria-busy');
+    btn.setAttribute('aria-label', 'Place Order');
+    label.textContent = 'Place Order';
+    label.style.opacity = '';
+    label.style.transform = '';
+    running = false;
+  };
+
+  async function showPackage(){
+    if(reduce){
+      pkg.style.opacity = 1;
+      return;
+    }
+    pkg.style.opacity = 1;
+    await A(pkg, [
+      { opacity: 0, transform: 'translate(-50%,-50%) scale(.9)' },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' }
+    ], { duration: D.in, easing: ease }).finished;
+  }
+
+  async function xfadeToTruck(){
+    if(reduce){
+      pkg.style.opacity = 0;
+      truck.style.opacity = 1;
+      return;
+    }
+    const out = A(pkg, [
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' },
+      { opacity: 0, transform: 'translate(-55%,-55%) scale(.92)' }
+    ], { duration: D.xfade, easing: ease });
+
+    truck.style.opacity = 1;
+    const inA = A(truck, [
+      { opacity: 0, transform: 'translate(-50%,-50%) scale(.96)' },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' }
+    ], { duration: D.xfade, easing: easeOutBack });
+
+    await Promise.all([out.finished, inA.finished]);
+  }
+
+  function getDriveDistance(){
+    // Move truck from just before left edge to just past right edge using transforms (GPU-friendly)
+    const rect = btn.getBoundingClientRect();
+    const truckRect = truck.getBoundingClientRect();
+    const margin = rect.width * 0.12; // matches road insets
+    const startX = -((rect.width/2) - margin) - (truckRect.width * 0.5) - 6; // a bit off-screen
+    const endX = ((rect.width/2) - margin) + (truckRect.width * 0.5) + 12;  // exit past right
+    return { startX, endX };
+  }
+
+  async function drive(){
+    const { startX, endX } = getDriveDistance();
+
+    if(reduce){
+      road.style.transform = 'scaleX(1)';
+      trail.style.opacity = '0';
+      truck.style.opacity = 1;
+      truck.style.transform = `translate(-50%,-50%) translateX(${endX}px)`;
+      return;
+    }
+
+    // Prep start
+    truck.style.transform = `translate(-50%,-50%) translateX(${startX}px)`;
+    truck.style.opacity = 1;
+
+    // Road grow + subtle trail fade
+    const roadAnim = A(road, [
+      { transform: 'scaleX(0)', opacity: .9 },
+      { transform: 'scaleX(1)', opacity: .9 }
+    ], { duration: D.drive, easing: ease });
+
+    const trailAnim = A(trail, [
+      { transform: 'scaleX(.05)', opacity: .0 },
+      { transform: 'scaleX(1)', opacity: .35, offset: .25 },
+      { transform: 'scaleX(1)', opacity: 0.0 }
+    ], { duration: D.drive, easing: ease });
+
+    // Subtle suspension bounce
+    const bodyBob = A(truck, [
+      { transform: `translate(-50%,-50%) translateX(${startX}px)` },
+      { transform: `translate(-50%,-52%) translateX(${startX + (endX-startX)*.15}px)` , offset: .15 },
+      { transform: `translate(-50%,-50%) translateX(${startX + (endX-startX)*.3}px)`, offset: .3 },
+      { transform: `translate(-50%,-50%) translateX(${startX + (endX-startX)*.6}px)`, offset: .6 },
+      { transform: `translate(-50%,-49%) translateX(${startX + (endX-startX)*.75}px)`, offset: .75 },
+      { transform: `translate(-50%,-50%) translateX(${endX}px)` }
+    ], { duration: D.drive, easing: easeOut });
+
+    // Indicate wheel spin by tiny rotation groups (visual hint)
+    const spin1 = A(w1, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(540deg)'}], { duration: D.drive, easing: 'linear' });
+    const spin2 = A(w2, [{ transform: 'rotate(0deg)' }, { transform: 'rotate(540deg)'}], { duration: D.drive, easing: 'linear' });
+
+    await Promise.all([roadAnim.finished, trailAnim.finished, bodyBob.finished, spin1.finished, spin2.finished]);
+
+    // Exit fade-out + slight scale forward
+    await A(truck, [
+      { opacity: 1, transform: `translate(-50%,-50%) translateX(${endX}px) scale(1)` },
+      { opacity: 0, transform: `translate(-50%,-50%) translateX(${endX + 10}px) scale(1.02)` }
+    ], { duration: D.exit, easing: easeOut }).finished;
+  }
+
+  async function showCheck(){
+    check.style.opacity = 1;
+    if(reduce){
+      checkPath.style.strokeDashoffset = 0;
+      return;
+    }
+    A(check, [
+      { opacity: 0, transform: 'translate(-50%,-50%) scale(.9)' },
+      { opacity: 1, transform: 'translate(-50%,-50%) scale(1)' }
+    ], { duration: 160, easing: easeOutBack });
+
+    await A(checkPath, [
+      { strokeDashoffset: checkLen },
+      { strokeDashoffset: 0 }
+    ], { duration: D.check, easing: ease }).finished;
+
+    // Fade road out subtly after success
+    A(road, [{ opacity: .9 }, { opacity: .0 }], { duration: 260, easing: ease });
+  }
+
+  async function run(){
+    if(running) return;
+    running = true;
+    btn.disabled = true;
+    btn.dataset.state = 'running';
+    btn.setAttribute('aria-busy', 'true');
+
+    try{
+      await showPackage();
+      await xfadeToTruck();
+      await drive();
+      await showCheck();
+
+      btn.setAttribute('aria-label', 'Order placed successfully');
+      label.textContent = 'Order Placed';
+
+      await new Promise(r => setTimeout(r, D.hold));
+    } catch(e){
+      // no-op; ensure reset
+    } finally {
+      reset();
+    }
+  }
+
+  btn.addEventListener('click', run, { passive: true });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f0f8ff;
+            --text-color: #333;
+            --light-gray: #f4f4f7;
+            --border-color: #ddd;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .checkout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1100px;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            flex-wrap: wrap;
+        }
+
+        .payment-form, .order-summary {
+            padding: 40px;
+            flex-grow: 1;
+        }
+
+        .payment-form {
+            flex-basis: 60%;
+            background-color: #fff;
+        }
+
+        .order-summary {
+            flex-basis: 40%;
+            background-color: var(--secondary-color);
+            border-left: 1px solid var(--border-color);
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+        
+        h2 {
+            font-size: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+        
+        .input-group-split {
+            display: flex;
+            gap: 20px;
+        }
+
+        .input-group-split .form-group {
+            flex: 1;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+        
+        .input-with-icon .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .card-logos {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-logos img {
+            height: 25px;
+        }
+        
+        .pay-button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .pay-button:hover {
+            background-color: #0056b3;
+        }
+
+        .secure-payment-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Order Summary Styles */
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .order-item .item-details {
+            font-weight: 500;
+        }
+
+        .order-item .item-price {
+            font-weight: 600;
+        }
+
+        .order-total {
+            border-top: 2px solid var(--border-color);
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .total-line.grand-total {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .checkout-container {
+                flex-direction: column;
+            }
+            .order-summary {
+                border-left: none;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-form, .order-summary {
+                padding: 25px;
+            }
+            h1 { font-size: 24px; }
+            h2 { font-size: 20px; }
+            .input-group-split {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="checkout-container">
+        <div class="payment-form">
+            <h1>Secure Checkout</h1>
+            <p>Please enter your billing and payment information.</p>
+            
+            <form action="#">
+                <h3>Billing Information</h3>
+                <div class="form-group">
+                    <label for="fullname">Full Name</label>
+                    <input type="text" id="fullname" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+91 123 456 7890">
+                </div>
+                <div class="form-group">
+                    <label for="address">Billing Address</label>
+                    <input type="text" id="address" placeholder="123 Harmony Lane, Apt 4B">
+                </div>
+
+                <h3>Payment Information</h3>
+                <div class="card-logos">
+                    <img src="https://img.icons8.com/color/48/000000/visa.png" alt="Visa">
+                    <img src="https://img.icons8.com/color/48/000000/mastercard.png" alt="Mastercard">
+                    <img src="https://img.icons8.com/color/48/000000/amex.png" alt="American Express">
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Credit Card Number</label>
+                     <div class="input-with-icon">
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                        </div>
+                        <input type="text" id="card-number" placeholder="1234 5678 9876 5432">
+                    </div>
+                </div>
+
+                <div class="input-group-split">
+                    <div class="form-group">
+                        <label for="expiry-date">Expiry Date</label>
+                        <input type="text" id="expiry-date" placeholder="MM / YY">
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="123">
+                    </div>
+                </div>
+
+                <button type="submit" class="pay-button">Pay ₹178.50</button>
+
+                <div class="secure-payment-badge">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Secure SSL Encrypted Payment</span>
+                </div>
+            </form>
+        </div>
+
+        <div class="order-summary">
+            <h2>Order Summary</h2>
+            <div class="order-item">
+                <span class="item-details">
+                    Product Name A (x1) <br>
+                    <small>Size: M, Color: Blue</small>
+                </span>
+                <span class="item-price">₹99.00</span>
+            </div>
+            <div class="order-item">
+                <span class="item-details">
+                    Product Name B (x2) <br>
+                    <small>Color: Black</small>
+                </span>
+                <span class="item-price">₹50.00</span>
+            </div>
+            
+            <div class="order-total">
+                <div class="total-line">
+                    <span>Subtotal</span>
+                    <span>₹149.00</span>
+                </div>
+                <div class="total-line">
+                    <span>Shipping</span>
+                    <span>₹15.00</span>
+                </div>
+                <div class="total-line">
+                    <span>Taxes</span>
+                    <span>₹14.50</span>
+                </div>
+                <div class="total-line grand-total">
+                    <span>Total</span>
+                    <span>₹178.50</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

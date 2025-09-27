@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VidyaVins Bazzar — Fast Local Essentials</title>
+  <meta name="description" content="VidyaVins Bazzar: Same-day delivery, best prices, trusted by families in your city." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#2563eb', 50: '#eff6ff', 100: '#dbeafe', 600: '#2563eb', 700: '#1d4ed8' },
+            accent: { DEFAULT: '#ff6b00' },
+            brand: { green: '#00c853', amber: '#ffb300' }
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,.08)',
+            glow: '0 10px 30px rgba(37, 99, 235, .25)'
+          },
+          animation: {
+            marquee: 'marquee 22s linear infinite',
+            pulseSlow: 'pulse 2.5s ease-in-out infinite'
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0)' },
+              '100%': { transform: 'translateX(-50%)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,.75) }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="font-sans text-slate-800 bg-slate-50"
+      x-data="app()"
+      x-init="init()">
+
+  <div class="bg-primary text-white text-xs md:text-sm">
+    <div class="max-w-7xl mx-auto px-3 md:px-6 py-2 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1">
+          <iconify-icon icon="mdi:map-marker" class="text-white/90"></iconify-icon>
+          <span class="hidden sm:inline">Deliver to:</span>
+          <strong x-text="city || 'Detecting…'"></strong>
+          <button class="ml-2 px-2 py-0.5 rounded bg-white/10 hover:bg-white/20" @click="detectLocation()">Detect</button>
+        </div>
+        <div class="hidden md:flex items-center gap-1">
+          <span>PIN</span>
+          <input x-model="pin" maxlength="6" inputmode="numeric" class="px-2 py-0.5 rounded text-slate-900" placeholder="110001" />
+          <button class="px-2 py-0.5 rounded bg-white text-primary font-medium" @click="verifyPin()">Verify</button>
+          <span class="ml-1" x-text="pinStatus" :class="pinOk ? 'text-emerald-200' : 'text-yellow-200'"></span>
+        </div>
+      </div>
+
+      <div class="hidden md:flex items-center gap-2">
+        <iconify-icon icon="mdi:translate" class="opacity-90"></iconify-icon>
+        <select class="bg-white/10 hover:bg-white/20 rounded px-2 py-0.5" x-model="lang" @change="persistLang()">
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+        </select>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a :href="`tel:${csNumber}`" class="flex items-center gap-1 hover:underline">
+          <iconify-icon icon="mdi:phone" class="opacity-90"></iconify-icon>
+          <span x-text="t('customerService')"></span>: <strong x-text="csNumber"></strong>
+        </a>
+        <div class="relative group">
+          <button class="flex items-center gap-1 bg-white text-primary px-2 py-0.5 rounded font-medium">
+            <iconify-icon icon="mdi:qrcode-scan"></iconify-icon>
+            <span x-text="t('downloadApp')"></span>
+          </button>
+          <div class="absolute right-0 mt-2 bg-white p-3 rounded shadow-soft w-56 hidden group-hover:block">
+            <div class="text-slate-700 text-xs mb-2">Scan QR to download</div>
+            <img class="w-28 h-28 mx-auto"
+                 :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(appUrl)}`" alt="QR code" />
+            <div class="mt-2 text-center text-xs text-slate-600">Android & iOS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="sticky top-0 z-50 bg-white/90 glass border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-3 md:px-6 py-3 flex items-center gap-3">
+      <a href="#" class="flex items-center gap-2">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-blue-400 grid place-items-center text-white font-bold">VB</div>
+        <div>
+          <div class="font-extrabold text-lg md:text-xl">VidyaVins Bazzar</div>
+          <div class="text-[11px] text-slate-500 flex items-center gap-1">
+            <iconify-icon icon="mdi:shield-check" class="text-brand-green"></iconify-icon>
+            Since 2015 • Trusted Local Retailer
+          </div>
+        </div>
+      </a>
+
+      <div class="relative">
+        <button @mouseenter="megaOpen = true" @mouseleave="megaHovering=false; setTimeout(()=>{if(!megaHovering) megaOpen=false}, 180)"
+                class="ml-2 hidden md:flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+          <iconify-icon icon="mdi:view-grid-plus-outline"></iconify-icon>
+          <span x-text="t('categories')"></span>
+        </button>
+
+        <div x-show="megaOpen" x-transition @mouseenter="megaHovering = true" @mouseleave="megaHovering = false; megaOpen=false"
+             class="absolute left-0 top-full w-[90vw] max-w-5xl bg-white rounded-xl shadow-soft border border-slate-100 mt-2 p-4 hidden md:block">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <template x-for="cat in categories" :key="cat.id">
+              <a href="#catalog" @click="activeCategoryFilter = cat.id; filterProducts()"
+                 class="group rounded-lg border border-slate-100 hover:border-primary/30 hover:shadow-glow p-3 flex flex-col gap-2">
+                <div class="flex items-center gap-2">
+                  <iconify-icon :icon="cat.icon" class="text-primary"></iconify-icon>
+                  <div class="font-medium" x-text="cat.name"></div>
+                </div>
+                <div class="text-xs text-slate-500" x-text="cat.hi"></div>
+                <div class="text-[11px] text-slate-500">
+                  ETA: <span class="font-medium text-slate-700" x-text="cat.eta"></span>
+                </div>
+                <div class="text-[11px] text-emerald-600" x-show="cat.popular">★ Most popular in your area</div>
+              </a>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1 relative">
+        <div class="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2 md:py-2.5 ml-1 md:ml-4">
+          <iconify-icon icon="mdi:magnify" class="text-slate-500"></iconify-icon>
+          <input x-model="searchQuery" @input="search()" @focus="searchOpen = true" @blur="setTimeout(()=>searchOpen=false, 200)"
+                 :placeholder="t('searchPlaceholder')" class="bg-transparent flex-1 focus:outline-none text-sm md:text-base" />
+          <button @click="openImageSearch()" class="text-slate-500 hover:text-primary"><iconify-icon icon="mdi:image-search"></iconify-icon></button>
+          <button :class="{'text-primary':isListening}" @click="toggleVoice()"
+                  class="text-slate-500 hover:text-primary"><iconify-icon icon="mdi:microphone"></iconify-icon></button>
+          <button @click="openScanner()" class="text-slate-500 hover:text-primary hidden md:block">
+            <iconify-icon icon="mdi:barcode-scan"></iconify-icon>
+          </button>
+        </div>
+
+        <div x-show="searchOpen && suggestions.length"
+             class="absolute left-0 right-0 mt-1 bg-white rounded-xl shadow-soft border border-slate-100 z-40">
+          <template x-for="s in suggestions" :key="s.id + s.type">
+            <div @click="goSuggestion(s)"
+                 class="px-3 py-2 hover:bg-slate-50 cursor-pointer flex items-center gap-2">
+              <iconify-icon :icon="s.icon || 'mdi:magnify'"></iconify-icon>
+              <div class="flex-1">
+                <div class="text-sm" x-html="highlightQuery(s.label)"></div>
+                <div class="text-xs text-slate-500" x-text="s.sub"></div>
+              </div>
+              <div class="text-[11px] text-slate-400" x-text="s.type"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 ml-2">
+        <div class="relative">
+          <button @mouseenter="accountOpen=true" @mouseleave="accountOpen=false"
+                  class="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+            <iconify-icon icon="mdi:account-circle-outline"></iconify-icon>
+            <span x-text="t('account')"></span>
+          </button>
+          <div x-show="accountOpen" @mouseenter="accountOpen=true" @mouseleave="accountOpen=false"
+               class="absolute right-0 mt-2 bg-white rounded-xl shadow-soft w-72 p-3 border border-slate-100 z-50">
+            <div class="font-medium mb-2" x-text="t('recentOrders')"></div>
+            <template x-for="o in ordersPreview" :key="o.id">
+              <div class="flex items-center justify-between text-sm py-2 border-b last:border-0">
+                <div>
+                  <div class="font-medium" x-text="o.item"></div>
+                  <div class="text-xs text-slate-500" x-text="o.date"></div>
+                </div>
+                <div class="text-right">
+                  <div class="font-semibold">₹<span x-text="o.amount"></span></div>
+                  <div class="text-[11px] text-emerald-600" x-text="o.status"></div>
+                </div>
+              </div>
+            </template>
+            <div class="mt-2 text-xs text-slate-500">Login to see full history</div>
+          </div>
+        </div>
+
+        <button class="relative px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200" @click="scrollToSection('catalog')">
+          <iconify-icon icon="mdi:heart-outline"></iconify-icon>
+          <span class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] rounded-full px-1.5"
+                x-text="wishlist.length"></span>
+        </button>
+
+        <div class="relative">
+          <button @mouseenter="cartOpen=true" @mouseleave="cartOpen=false"
+                  class="relative px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200">
+            <iconify-icon icon="mdi:cart-outline"></iconify-icon>
+            <span class="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] rounded-full px-1.5"
+                  x-text="cartCount"></span>
+          </button>
+          <div x-show="cartOpen" @mouseenter="cartOpen=true" @mouseleave="cartOpen=false"
+               class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-soft border border-slate-100 p-3 z-50">
+            <div class="font-medium mb-2">Cart</div>
+            <template x-if="cart.length === 0">
+              <div class="text-sm text-slate-500">Your cart is empty.</div>
+            </template>
+            <template x-for="c in cart" :key="c.id">
+              <div class="flex items-center gap-2 py-2 border-b last:border-0">
+                <img :src="c.image" alt="" class="w-12 h-12 rounded object-cover" />
+                <div class="flex-1">
+                  <div class="text-sm font-medium" x-text="c.name"></div>
+                  <div class="text-xs text-slate-500" x-text="c.brand"></div>
+                  <div class="text-xs">Qty: <span x-text="c.qty"></span></div>
+                </div>
+                <div class="text-right">
+                  <div class="font-semibold">₹<span x-text="(c.price*c.qty).toFixed(0)"></span></div>
+                  <button class="text-red-500 text-xs" @click="removeFromCart(c.id)">Remove</button>
+                </div>
+              </div>
+            </template>
+            <div class="mt-2 flex items-center justify-between">
+              <div class="font-semibold">Total: ₹<span x-text="cartTotal.toFixed(0)"></span></div>
+              <button class="px-3 py-1.5 rounded bg-primary text-white hover:bg-primary-700">Checkout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <template x-for="slide in heroSlides" :key="slide.id">
+          <div class="swiper-slide">
+            <div class="max-w-7xl mx-auto px-3 md:px-6 py-8 md:py-12 grid md:grid-cols-2 gap-6 items-center">
+              <div data-aos="fade-right" data-aos-duration="700">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs mb-3">
+                  <iconify-icon :icon="slide.badgeIcon"></iconify-icon>
+                  <span x-text="slide.badge"></span>
+                </div>
+                <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+                  <span x-text="slide.title"></span>
+                </h1>
+                <p class="mt-3 text-slate-600 text-sm md:text-base" x-text="slide.subtitle"></p>
+                <div class="mt-5 flex flex-wrap gap-2">
+                  <div class="px-3 py-1.5 bg-white rounded-lg shadow-soft border text-sm flex items-center gap-2">
+                    <iconify-icon icon="mdi:truck-fast-outline" class="text-primary"></iconify-icon>
+                    <span x-text="t('sameDayDelivery')"></span>
+                  </div>
+                  <div class="px-3 py-1.5 bg-white rounded-lg shadow-soft border text-sm flex items-center gap-2">
+                    <iconify-icon icon="mdi:cash-multiple" class="text-amber-600"></iconify-icon>
+                    <span x-text="t('bestPrices')"></span>
+                  </div>
+                  <div class="px-3 py-1.5 bg-white rounded-lg shadow-soft border text-sm flex items-center gap-2">
+                    <iconify-icon icon="mdi:check-decagram" class="text-emerald-600"></iconify-icon>
+                    <span x-text="t('qualityChecked')"></span>
+                  </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                  <a href="#catalog" class="px-5 py-2 rounded-lg bg-primary text-white hover:shadow-glow" x-text="t('shopNow')"></a>
+                  <button class="px-5 py-2 rounded-lg bg-slate-100 hover:bg-slate-200" @click="openScanner()">
+                    <iconify-icon icon="mdi:barcode-scan" class="mr-1"></iconify-icon>
+                    <span x-text="t('scanBarcode')"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="relative" data-aos="fade-left" data-aos-duration="700">
+                <img :src="slide.image" alt="" class="w-full rounded-xl shadow-soft object-cover max-h-[420px]" />
+                <div class="absolute bottom-3 left-3 bg-white/90 glass rounded-lg p-2 text-xs shadow-soft">
+                  <div class="flex items-center gap-2">
+                    <iconify-icon icon="mdi:map-marker-outline"></iconify-icon>
+                    <span x-text="city"></span>
+                    <span class="mx-1">•</span>
+                    <iconify-icon icon="mdi:weather-partly-cloudy"></iconify-icon>
+                    <span x-text="weatherLabel"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-3 md:px-6 -mt-6 md:-mt-10 relative z-10">
+      <div class="bg-white rounded-xl shadow-soft border border-slate-100 p-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-emerald-50 grid place-items-center text-emerald-600">
+            <iconify-icon icon="mdi:account-group-outline"></iconify-icon>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Active customers in <span x-text="city"></span></div>
+            <div class="font-bold text-lg" x-text="liveCustomers.toLocaleString()"></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-amber-50 grid place-items-center text-amber-600">
+            <iconify-icon icon="mdi:star-outline"></iconify-icon>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Rating</div>
+            <div class="font-bold text-lg">4.8/5 <span class="text-slate-500 text-sm">(12,394 reviews)</span></div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-blue-50 grid place-items-center text-blue-600">
+            <iconify-icon icon="mdi:shield-check-outline"></iconify-icon>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Secure payments</div>
+            <div class="flex items-center gap-2 text-slate-500 text-xs">
+              <iconify-icon icon="simple-icons:upi"></iconify-icon>
+              <iconify-icon icon="logos:visa"></iconify-icon>
+              <iconify-icon icon="logos:mastercard"></iconify-icon>
+              <iconify-icon icon="mdi:cash"></iconify-icon>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-rose-50 grid place-items-center text-rose-600">
+            <iconify-icon icon="mdi:refresh-circle"></iconify-icon>
+          </div>
+          <div>
+            <div class="text-sm text-slate-500">Returns</div>
+            <div class="font-bold text-lg">Easy 7-day policy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mt-6 bg-white border-y border-slate-100">
+    <div class="max-w-7xl mx-auto px-3 md:px-6 py-2 text-xs text-slate-600 overflow-hidden whitespace-nowrap relative">
+      <div class="flex gap-8 animate-marquee">
+        <template x-for="msg in tickerMessages.concat(tickerMessages)" :key="msg + Math.random()">
+          <div class="flex items-center gap-2">
+            <iconify-icon icon="mdi:clock-outline"></iconify-icon>
+            <span x-text="msg"></span>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <section class="max-w-7xl mx-auto px-3 md:px-6 py-8">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl md:text-2xl font-extrabold">Shop by category</h2>
+      <a href="#catalog" class="text-primary hover:underline">Browse all</a>
+    </div>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <template x-for="cat in categories" :key="cat.id">
+        <a href="#catalog" @click="activeCategoryFilter = cat.id; filterProducts()"
+           class="group rounded-xl overflow-hidden bg-white border border-slate-100 hover:shadow-soft">
+          <div class="h-28 bg-slate-100 overflow-hidden">
+            <img :src="cat.image" alt="" class="w-full h-full object-cover group-hover:scale-[1.03] transition" />
+          </div>
+          <div class="p-3">
+            <div class="font-semibold flex items-center gap-2">
+              <iconify-icon :icon="cat.icon" class="text-primary"></iconify-icon>
+              <span x-text="cat.name"></span>
+            </div>
+            <div class="text-xs text-slate-500" x-text="cat.hi"></div>
+            <div class="mt-1 text-[11px]">
+              Price range: <span class="font-medium">₹<span x-text="cat.minPrice"></span>-<span x-text="cat.maxPrice"></span></span>
+            </div>
+            <div class="mt-1 text-[11px] text-slate-500">ETA: <span x-text="cat.eta"></span></div>
+            <div class="mt-1 text-[11px] text-emerald-600" x-show="cat.popular">★ Most popular in your area</div>
+          </div>
+        </a>
+      </template>
+    </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-3 md:px-6 py-4">
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-xl border border-slate-100 p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold">Frequently bought together</h3>
+          <span class="text-xs text-slate-500">Based on orders near <span x-text="city"></span></span>
+        </div>
+        <div class="flex gap-3 overflow-x-auto no-scrollbar">
+          <template x-for="p in recsTogether" :key="p.id">
+            <div class="min-w-[220px] rounded-lg border border-slate-100 p-3 bg-slate-50 hover:bg-white">
+              <div class="flex gap-2">
+                <img :src="p.image" class="w-16 h-16 rounded object-cover" />
+                <div class="flex-1">
+                  <div class="text-sm font-semibold" x-text="p.name"></div>
+                  <div class="text-xs text-slate-500" x-text="p.brand"></div>
+                  <div class="font-bold mt-1">₹<span x-text="p.price"></span></div>
+                </div>
+              </div>
+              <button class="mt-2 w-full bg-primary text-white rounded py-1.5" @click="addToCart(p.id)">Add</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-slate-100 p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="font-bold">Others in your locality bought</h3>
+          <span class="text-xs text-slate-500">Real-time popularity</span>
+        </div>
+        <div class="flex gap-3 overflow-x-auto no-scrollbar">
+          <template x-for="p in recsLocal" :key="p.id">
+            <div class="min-w-[220px] rounded-lg border border-slate-100 p-3 bg-slate-50 hover:bg-white">
+              <div class="flex gap-2">
+                <img :src="p.image" class="w-16 h-16 rounded object-cover" />
+                <div class="flex-1">
+                  <div class="text-sm font-semibold" x-text="p.name"></div>
+                  <div class="text-xs text-slate-500" x-text="p.brand"></div>
+                  <div class="font-bold mt-1">₹<span x-text="p.price"></span></div>
+                </div>
+              </div>
+              <button class="mt-2 w-full bg-primary text-white rounded py-1.5" @click="addToCart(p.id)">Add</button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="catalog" class="max-w-7xl mx-auto px-3 md:px-6 py-8">
+    <div class="flex items-center justify-between gap-3 mb-4">
+      <h2 class="text-xl md:text-2xl font-extrabold">Discover products</h2>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-2 bg-slate-100 rounded-lg hover:bg-slate-200" @click="filtersOpen=true">
+          <iconify-icon icon="mdi:filter-outline"></iconify-icon>
+          Filters
+        </button>
+        <div class="hidden sm:flex items-center gap-2 text-xs text-slate-500">
+          <span>Sort by:</span>
+          <select x-model="sortBy" @change="filterProducts()" class="text-sm bg-white border rounded px-2 py-1">
+            <option value="pop">Popularity</option>
+            <option value="priceAsc">Price: Low to High</option>
+            <option value="priceDesc">Price: High to Low</option>
+            <option value="rating">Rating</option>
+            <option value="delivery">Fastest Delivery</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      <template x-if="activeCategoryFilter">
+        <span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full flex items-center gap-1">
+          <iconify-icon icon="mdi:tag-outline"></iconify-icon>
+          <span x-text="categoryName(activeCategoryFilter)"></span>
+          <button @click="activeCategoryFilter=null; filterProducts()">
+            <iconify-icon icon="mdi:close"></iconify-icon>
+          </button>
+        </span>
+      </template>
+      <template x-for="chip in chips" :key="chip">
+        <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs rounded-full flex items-center gap-1">
+          <span x-text="chip"></span>
+          <button @click="removeChip(chip)"><iconify-icon icon="mdi:close"></iconify-icon></button>
+        </span>
+      </template>
+    </div>
+
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <template x-for="p in filtered" :key="p.id">
+        <div class="bg-white rounded-xl border border-slate-100 hover:shadow-soft p-3 flex flex-col">
+          <div class="relative">
+            <img :src="p.image" alt="" class="w-full h-40 object-cover rounded-lg" />
+            <button @click="toggleWishlist(p.id)"
+                    class="absolute top-2 right-2 bg-white rounded-full p-1 shadow">
+              <iconify-icon :icon="wishlist.includes(p.id) ? 'mdi:heart' : 'mdi:heart-outline'"
+                            :class="wishlist.includes(p.id) ? 'text-rose-500' : 'text-slate-600'"></iconify-icon>
+            </button>
+            <div class="absolute bottom-2 left-2 text-xs px-2 py-1 rounded bg-black/60 text-white"
+                 x-text="p.delivery"></div>
+          </div>
+          <div class="mt-2 flex-1">
+            <div class="font-semibold" x-text="p.name"></div>
+            <div class="text-xs text-slate-500" x-text="p.brand"></div>
+            <div class="flex items-center gap-2 mt-1">
+              <div class="font-bold text-lg">₹<span x-text="p.price"></span></div>
+              <div class="text-xs line-through text-slate-400">₹<span x-text="p.mrp"></span></div>
+              <div class="text-xs text-emerald-600 font-medium" x-text="discount(p)"></div>
+            </div>
+            <div class="text-xs text-amber-600 flex items-center gap-1 mt-1">
+              <iconify-icon icon="mdi:star"></iconify-icon>
+              <span x-text="p.rating"></span>
+              <span class="text-slate-400">( <span x-text="p.reviews"></span> )</span>
+            </div>
+            <div class="text-[11px] mt-1" :class="p.stock>5 ? 'text-emerald-600' : 'text-rose-600'">
+              <span x-text="p.stock>5 ? 'In stock' : 'Limited stock'"></span>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center gap-2">
+            <div class="flex items-center border rounded-lg overflow-hidden">
+              <button class="px-2 py-1" @click="decQty(p)">-</button>
+              <input class="w-10 text-center" x-model.number="p.qty" />
+              <button class="px-2 py-1" @click="incQty(p)">+</button>
+            </div>
+            <button class="flex-1 bg-primary text-white rounded-lg py-2 hover:shadow-glow" @click="addToCart(p.id)" x-text="t('addToCart')"></button>
+          </div>
+          <div class="mt-2 flex flex-wrap gap-2 text-[11px] text-slate-500">
+            <span class="px-2 py-0.5 bg-slate-100 rounded" x-text="p.brandType === 'local' ? 'Local brand' : 'National brand'"></span>
+            <template x-for="d in p.diet" :key="d">
+              <span class="px-2 py-0.5 bg-slate-100 rounded" x-text="d"></span>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="text-center text-slate-500 text-sm mt-6" x-show="!filtered.length">No products match your filters.</div>
+  </section>
+
+  <footer class="mt-10 bg-white border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-3 md:px-6 py-8 grid md:grid-cols-4 gap-6">
+      <div>
+        <div class="font-extrabold text-xl">VidyaVins Bazzar</div>
+        <div class="text-sm text-slate-500 mt-2">Same-day delivery of essentials at prices lower than local shops.</div>
+        <div class="mt-3 flex items-center gap-2 text-sm">
+          <iconify-icon icon="mdi:clock-outline"></iconify-icon>
+          Customer service: 7 AM – 10 PM IST
+        </div>
+      </div>
+      <div>
+        <div class="font-bold">Categories</div>
+        <ul class="text-sm text-slate-600 mt-2 space-y-1">
+          <li>Groceries</li>
+          <li>Packaged Foods</li>
+          <li>Personal Care</li>
+          <li>Household</li>
+          <li>Specialty Items</li>
+          <li>Electronics</li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold">Company</div>
+        <ul class="text-sm text-slate-600 mt-2 space-y-1">
+          <li>About</li>
+          <li>Careers</li>
+          <li>Stores</li>
+          <li>Contact</li>
+          <li>Return Policy</li>
+        </ul>
+      </div>
+      <div>
+        <div class="font-bold">Get the app</div>
+        <img :src="`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(appUrl)}`"
+             alt="App QR" class="w-28 h-28 mt-2" />
+        <div class="text-xs text-slate-500 mt-2">Scan to download</div>
+      </div>
+    </div>
+    <div class="text-center text-xs text-slate-500 py-4 border-t">© <span x-text="new Date().getFullYear()"></span> VidyaVins Bazzar. All rights reserved.</div>
+  </footer>
+
+  <div x-show="filtersOpen" x-transition class="fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" @click="filtersOpen=false"></div>
+    <div class="absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white shadow-xl p-4 overflow-y-auto">
+      <div class="flex items-center justify-between mb-3">
+        <div class="font-bold text-lg">Filters</div>
+        <button class="text-slate-500" @click="filtersOpen=false"><iconify-icon icon="mdi:close"></iconify-icon></button>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <div class="text-sm font-medium mb-1">Language</div>
+          <select class="w-full border rounded px-2 py-2" x-model="lang" @change="persistLang()">
+            <option value="en">English</option>
+            <option value="hi">हिंदी</option>
+            <option value="mr">मराठी</option>
+          </select>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Price range (₹)</div>
+          <div class="flex items-center gap-2">
+            <input type="number" class="w-1/2 border rounded px-2 py-2" x-model.number="priceMin" placeholder="Min" />
+            <input type="number" class="w-1/2 border rounded px-2 py-2" x-model.number="priceMax" placeholder="Max" />
+          </div>
+          <label class="mt-2 flex items-center gap-2 text-sm">
+            <input type="checkbox" x-model="budgetFriendly" />
+            Highlight budget-friendly (under ₹200)
+          </label>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Brand preference</div>
+          <div class="flex items-center gap-3 text-sm">
+            <label class="flex items-center gap-1"><input type="checkbox" value="local" x-model="brandFilter" /> Local</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="national" x-model="brandFilter" /> National</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Delivery time</div>
+          <div class="flex items-center gap-3 text-sm">
+            <label class="flex items-center gap-1"><input type="checkbox" value="Same day" x-model="deliveryFilter" /> Same day</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="Next day" x-model="deliveryFilter" /> Next day</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Quantity</div>
+          <div class="flex items-center gap-3 text-sm">
+            <label class="flex items-center gap-1"><input type="checkbox" value="retail" x-model="quantityFilter" /> Retail</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="bulk" x-model="quantityFilter" /> Bulk</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Dietary / Religious</div>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <label class="flex items-center gap-1"><input type="checkbox" value="Veg" x-model="dietFilter" /> Veg</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="Jain" x-model="dietFilter" /> Jain</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="Vegan" x-model="dietFilter" /> Vegan</label>
+            <label class="flex items-center gap-1"><input type="checkbox" value="Halal" x-model="dietFilter" /> Halal</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-sm font-medium mb-1">Categories</div>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <template x-for="cat in categories" :key="cat.id">
+              <label class="flex items-center gap-1">
+                <input type="radio" name="cat" :value="cat.id" x-model="activeCategoryFilter" />
+                <span x-text="cat.name"></span>
+              </label>
+            </template>
+            <label class="flex items-center gap-1">
+              <input type="radio" name="cat" value="" x-model="activeCategoryFilter" />
+              All
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center gap-2">
+          <button class="px-3 py-2 bg-primary text-white rounded" @click="filterProducts(); filtersOpen=false">Apply</button>
+          <button class="px-3 py-2 bg-slate-100 rounded" @click="resetFilters()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div x-show="scannerOpen" x-transition class="fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" @click="closeScanner()"></div>
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-4 w-[90vw] max-w-lg shadow-xl">
+      <div class="flex items-center justify-between mb-2">
+        <div class="font-bold">Barcode scanner</div>
+        <button @click="closeScanner()"><iconify-icon icon="mdi:close"></iconify-icon></button>
+      </div>
+      <div id="qr-reader" class="rounded border overflow-hidden"></div>
+      <div class="text-xs text-slate-500 mt-2">Tip: Put the barcode in the box. Camera permission required.</div>
+    </div>
+  </div>
+
+  <div x-show="imageSearchOpen" x-transition class="fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/40" @click="imageSearchOpen=false"></div>
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-4 w-[92vw] max-w-lg shadow-xl">
+      <div class="flex items-center justify-between mb-2">
+        <div class="font-bold">Image-based search</div>
+        <button @click="imageSearchOpen=false"><iconify-icon icon="mdi:close"></iconify-icon></button>
+      </div>
+      <input type="file" accept="image/*" @change="handleImage($event)" class="w-full border rounded p-2" />
+      <div class="mt-3" x-show="imagePreview">
+        <img :src="imagePreview" class="w-full h-48 object-cover rounded" />
+        <div class="text-sm text-slate-600 mt-2">Suggested matches:</div>
+        <div class="flex flex-wrap gap-2 mt-2">
+          <template x-for="tag in imageTags" :key="tag">
+            <button class="px-2 py-1 bg-slate-100 rounded text-sm" @click="applyImageTag(tag)"><iconify-icon icon="mdi:tag-outline"></iconify-icon> <span x-text="tag"></span></button>
+          </template>
+        </div>
+      </div>
+      <div class="text-xs text-slate-500 mt-2">Prototype: On-device suggestion only.</div>
+    </div>
+  </div>
+
+  <script>
+    function app() {
+      return {
+        // State
+        appUrl: 'https://vidyavins-bazzar.example/app',
+        csNumber: '1800-889-1234',
+        lang: localStorage.getItem('lang') || 'en',
+        city: 'Delhi',
+        pin: '',
+        pinStatus: '',
+        pinOk: false,
+
+        searchQuery: '',
+        searchOpen: false,
+        suggestions: [],
+        isListening: false,
+        recognition: null,
+
+        megaOpen: false,
+        megaHovering: false,
+        accountOpen: false,
+        cartOpen: false,
+        filtersOpen: false,
+
+        scannerOpen: false,
+        html5Scanner: null,
+
+        imageSearchOpen: false,
+        imagePreview: '',
+        imageTags: [],
+
+        liveCustomers: 245,
+
+        weather: null,
+        weatherLabel: '—',
+        heroSlides: [],
+
+        categories: [],
+        products: [],
+        filtered: [],
+        sortBy: 'pop',
+        priceMin: '',
+        priceMax: '',
+        brandFilter: [],
+        deliveryFilter: [],
+        quantityFilter: [],
+        dietFilter: [],
+        budgetFriendly: false,
+        activeCategoryFilter: null,
+        chips: [],
+
+        recsTogether: [],
+        recsLocal: [],
+
+        ordersPreview: [
+          { id: 1, item: 'Good Day Biscuits 1kg', amount: 110, status: 'Delivered', date: 'Sun, 3:40 PM' },
+          { id: 2, item: 'Fortune Sunflower Oil 5L', amount: 699, status: 'Out for delivery', date: 'Today, 9:10 AM' }
+        ],
+
+        tickerMessages: [],
+
+        cart: [],
+        wishlist: [],
+
+        get cartCount() { return this.cart.reduce((t,c)=>t + (c.qty||1), 0) },
+        get cartTotal() { return this.cart.reduce((t,c)=>t + (c.price*c.qty), 0) },
+
+        t(key) {
+          const dict = {
+            en: {
+              downloadApp: 'Download App',
+              customerService: 'Customer care',
+              categories: 'Categories',
+              searchPlaceholder: 'Search rice, atta, tea, shampoo…',
+              sameDayDelivery: 'Same day delivery',
+              bestPrices: 'Lower than local shops',
+              qualityChecked: 'Quality checked locally',
+              shopNow: 'Shop now',
+              scanBarcode: 'Scan barcode',
+              addToCart: 'Add to cart',
+              account: 'Account',
+              recentOrders: 'Your recent orders'
+            },
+            hi: {
+              downloadApp: 'ऐप डाउनलोड करें',
+              customerService: 'कस्टमर केयर',
+              categories: 'श्रेणियाँ',
+              searchPlaceholder: 'चावल, आटा, चाय, शैम्पू खोजें…',
+              sameDayDelivery: 'उसी दिन डिलीवरी',
+              bestPrices: 'स्थानीय दुकानों से कम दाम',
+              qualityChecked: 'स्थानीय टीम द्वारा गुणवत्ता जाँच',
+              shopNow: 'अभी खरीदें',
+              scanBarcode: 'बारकोड स्कैन करें',
+              addToCart: 'कार्ट में जोड़ें',
+              account: 'खाता',
+              recentOrders: 'हाल की खरीदारी'
+            },
+            mr: {
+              downloadApp: 'ॲप डाउनलोड करा',
+              customerService: 'ग्राहक सेवा',
+              categories: 'वर्ग',
+              searchPlaceholder: 'तांदूळ, पीठ, चहा, शॅम्पू शोधा…',
+              sameDayDelivery: 'त्याच दिवशी डिलिव्हरी',
+              bestPrices: 'स्थानिक दुकानांपेक्षा कमी दर',
+              qualityChecked: 'स्थानिक टीमने तपासले',
+              shopNow: 'आता खरेदी करा',
+              scanBarcode: 'बारकोड स्कॅन करा',
+              addToCart: 'कार्टमध्ये जोडा',
+              account: 'खाते',
+              recentOrders: 'अलीकडील ऑर्डर्स'
+            }
+          };
+          return (dict[this.lang] && dict[this.lang][key]) || dict['en'][key] || key;
+        },
+
+        async init() {
+          AOS.init({ once: true });
+          this.loadPersisted();
+          this.seedData();
+          this.filterProducts();
+          this.buildTicker();
+          this.updateLiveCustomers();
+          setInterval(()=>this.updateLiveCustomers(true), 10000);
+          await this.bootstrapLocationAndWeather();
+          this.buildHero();
+          this.buildRecs();
+
+          // Init Swiper after slides are ready
+          setTimeout(() => {
+            new Swiper('.mySwiper', {
+              loop: true,
+              autoplay: { delay: 3500 },
+              pagination: { el: '.swiper-pagination', clickable: true }
+            });
+          }, 400);
+        },
+
+        // Data seeding
+        seedData() {
+          this.categories = [
+            { id: 'groceries', name: 'Groceries', hi: 'किराना', icon: 'mdi:basket-outline', image: 'https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?q=80&w=1200&auto=format&fit=crop', eta: '2-4 hrs', popular: true, minPrice: 30, maxPrice: 899 },
+            { id: 'packaged', name: 'Packaged Foods', hi: 'पैकेज्ड फूड', icon: 'mdi:food-variant', image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop', eta: '2-4 hrs', popular: true, minPrice: 20, maxPrice: 499 },
+            { id: 'personal', name: 'Personal Care', hi: 'निजी देखभाल', icon: 'mdi:shower', image: 'https://images.unsplash.com/photo-1571782742478-0816a4773a10?q=80&w=1200&auto=format&fit=crop', eta: '3-5 hrs', popular: false, minPrice: 49, maxPrice: 699 },
+            { id: 'household', name: 'Household', hi: 'गृह उपयोग', icon: 'mdi:home-outline', image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?q=80&w=1200&auto=format&fit=crop', eta: '3-5 hrs', popular: false, minPrice: 49, maxPrice: 899 },
+            { id: 'specialty', name: 'Specialty Items', hi: 'विशेष वस्तुएँ', icon: 'mdi:hand-heart-outline', image: 'https://images.unsplash.com/photo-1524594227084-60e8b35c2aa3?q=80&w=1200&auto=format&fit=crop', eta: 'Same/Next day', popular: true, minPrice: 30, maxPrice: 999 },
+            { id: 'electronics', name: 'Electronics', hi: 'इलेक्ट्रॉनिक्स', icon: 'mdi:lightning-bolt-outline', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop', eta: 'Next day', popular: false, minPrice: 199, maxPrice: 2999 },
+          ];
+          this.products = [
+            // Groceries
+            { id:'p1', name:'Basmati Rice 5kg', brand:'Daawat', brandType:'national', category:'groceries', price:499, mrp:649, rating:4.6, reviews:920, stock:12, delivery:'2-4 hrs', qty:1, diet:['Veg'], quantityType:'bulk', image:'https://images.unsplash.com/photo-1604908812243-9b4fd0a6b7f0?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p2', name:'Wheat Atta 5kg', brand:'Aashirvaad', brandType:'national', category:'groceries', price:289, mrp:320, rating:4.7, reviews:1100, stock:9, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'bulk', image:'https://images.unsplash.com/photo-1586201375761-83865001e31b?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p3', name:'Toor Dal 1kg', brand:'Tata Sampann', brandType:'national', category:'groceries', price:169, mrp:199, rating:4.5, reviews:540, stock:6, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1604908553729-b4b111b83c53?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p4', name:'Pure Ghee 1L', brand:'Amul', brandType:'national', category:'groceries', price:549, mrp:599, rating:4.8, reviews:2100, stock:10, delivery:'2-4 hrs', qty:1, diet:['Veg'], quantityType:'retail', image:'https://images.unsplash.com/photo-1563630423918-4a9acec7d1e7?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p5', name:'Cooking Oil 5L', brand:'Fortune', brandType:'national', category:'groceries', price:699, mrp:799, rating:4.4, reviews:870, stock:4, delivery:'2-4 hrs', qty:1, diet:['Veg','Vegan'], quantityType:'bulk', image:'https://images.unsplash.com/photo-1505575972945-280b9fef5be0?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p6', name:'Masala Combo', brand:'Everest', brandType:'national', category:'groceries', price:199, mrp:249, rating:4.6, reviews:650, stock:15, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1505577058444-a3dab90d4253?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p7', name:'Sugar 1kg', brand:'Local Mill', brandType:'local', category:'groceries', price:38, mrp:44, rating:4.2, reviews:300, stock:20, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1615486363871-0eab18d5f1c3?q=80&w=1200&auto=format&fit=crop' },
+            // Packaged Foods
+            { id:'p8', name:'Good Day Biscuits 1kg', brand:'Britannia', brandType:'national', category:'packaged', price:110, mrp:140, rating:4.5, reviews:1500, stock:30, delivery:'2-4 hrs', qty:1, diet:['Veg'], quantityType:'retail', image:'https://images.unsplash.com/photo-1604908177052-9d5e9d0251eb?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p9', name:'Masala Namkeen 500g', brand:'Haldiram\'s', brandType:'national', category:'packaged', price:89, mrp:110, rating:4.6, reviews:1200, stock:25, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1625944526147-69063f7a31fb?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p10', name:'Assam Tea 1kg', brand:'Tata Tea', brandType:'national', category:'packaged', price:349, mrp:399, rating:4.7, reviews:900, stock:12, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p11', name:'Instant Coffee 200g', brand:'Nescafé', brandType:'national', category:'packaged', price:299, mrp:349, rating:4.5, reviews:750, stock:10, delivery:'2-4 hrs', qty:1, diet:['Veg'], quantityType:'retail', image:'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p12', name:'Mixed Dry Fruits 500g', brand:'Nutty', brandType:'local', category:'packaged', price:499, mrp:599, rating:4.4, reviews:430, stock:8, delivery:'2-4 hrs', qty:1, diet:['Veg','Vegan','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop' },
+            // Personal Care
+            { id:'p13', name:'Anti-dandruff Shampoo 650ml', brand:'Head & Shoulders', brandType:'national', category:'personal', price:349, mrp:399, rating:4.3, reviews:420, stock:14, delivery:'3-5 hrs', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1604881986998-c0af4b5b5a40?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p14', name:'Herbal Face Wash 150ml', brand:'Himalaya', brandType:'national', category:'personal', price:129, mrp:149, rating:4.4, reviews:380, stock:18, delivery:'3-5 hrs', qty:1, diet:['Vegan'], quantityType:'retail', image:'https://images.unsplash.com/photo-1585238342025-3f1b4c006c18?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p15', name:'Toothpaste 200g', brand:'Colgate', brandType:'national', category:'personal', price:89, mrp:99, rating:4.6, reviews:1600, stock:35, delivery:'3-5 hrs', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1582738412305-1bee3f45bb47?q=80&w=1200&auto=format&fit=crop' },
+            // Household
+            { id:'p16', name:'Dishwash Liquid 1L', brand:'Vim', brandType:'national', category:'household', price:149, mrp:169, rating:4.4, reviews:690, stock:16, delivery:'3-5 hrs', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1615485737652-0d2140d951f1?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p17', name:'Floor Cleaner 1L', brand:'Lizol', brandType:'national', category:'household', price:179, mrp:199, rating:4.5, reviews:520, stock:20, delivery:'3-5 hrs', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1615485737652-4cae3d7e9c22?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p18', name:'Steel Kadhai', brand:'Pigeon', brandType:'national', category:'household', price:799, mrp:999, rating:4.3, reviews:240, stock:7, delivery:'Next day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop' },
+            // Specialty
+            { id:'p19', name:'Pooja Thali Set', brand:'Local Crafts', brandType:'local', category:'specialty', price:399, mrp:499, rating:4.7, reviews:330, stock:9, delivery:'Same day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1592250644531-9820cb0c0c07?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p20', name:'Baby Diapers M (42)', brand:'Pampers', brandType:'national', category:'specialty', price:599, mrp:699, rating:4.6, reviews:980, stock:11, delivery:'Same day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1571867424483-8766b271b107?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p21', name:'Protein Powder 1kg', brand:'Optimum', brandType:'national', category:'specialty', price:1999, mrp:2499, rating:4.5, reviews:410, stock:5, delivery:'Next day', qty:1, diet:['Halal'], quantityType:'bulk', image:'https://images.unsplash.com/photo-1586015555751-63bb77f1a4a5?q=80&w=1200&auto=format&fit=crop' },
+            // Electronics
+            { id:'p22', name:'Wired Earphones', brand:'boAt', brandType:'national', category:'electronics', price:499, mrp:799, rating:4.2, reviews:1200, stock:25, delivery:'Next day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1518444028785-8f9f91d1f3f5?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p23', name:'Mixer Grinder 750W', brand:'Prestige', brandType:'national', category:'electronics', price:2799, mrp:3199, rating:4.1, reviews:320, stock:6, delivery:'Next day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1611259182441-9389d8dd1fb7?q=80&w=1200&auto=format&fit=crop' },
+            { id:'p24', name:'LED Bulb 9W (Pack of 4)', brand:'Philips', brandType:'national', category:'electronics', price:399, mrp:549, rating:4.6, reviews:880, stock:20, delivery:'Same day', qty:1, diet:[''], quantityType:'retail', image:'https://images.unsplash.com/photo-1485629005123-8716e3dfb16f?q=80&w=1200&auto=format&fit=crop' },
+            // Extras
+            { id:'p25', name:'Jaggery 1kg', brand:'Local Farm', brandType:'local', category:'groceries', price:120, mrp:160, rating:4.5, reviews:220, stock:14, delivery:'2-4 hrs', qty:1, diet:['Veg','Jain'], quantityType:'retail', image:'https://images.unsplash.com/photo-1626534269280-3feb8babd7f0?q=80&w=1200&auto=format&fit=crop' },
+          ];
+          // Initial qty defaults
+          this.products.forEach(p=>{ if(!p.qty) p.qty = 1; });
+          this.filtered = this.products.slice();
+        },
+
+        buildRecs() {
+          // Simple selections for demo
+          this.recsTogether = [this.find('p2'), this.find('p10'), this.find('p8')].filter(Boolean);
+          this.recsLocal = [this.find('p5'), this.find('p12'), this.find('p24')].filter(Boolean);
+        },
+
+        find(id){ return this.products.find(p=>p.id===id) },
+
+        // Filters
+        filterProducts() {
+          let list = this.products.slice();
+
+          if (this.activeCategoryFilter) {
+            list = list.filter(p => p.category === this.activeCategoryFilter);
+          }
+
+          if (this.priceMin !== '' && !isNaN(this.priceMin)) list = list.filter(p => p.price >= this.priceMin);
+          if (this.priceMax !== '' && !isNaN(this.priceMax)) list = list.filter(p => p.price <= this.priceMax);
+
+          if (this.brandFilter.length) list = list.filter(p => this.brandFilter.includes(p.brandType));
+          if (this.deliveryFilter.length) list = list.filter(p => this.deliveryFilter.some(d => p.delivery.includes(d)));
+          if (this.quantityFilter.length) list = list.filter(p => this.quantityFilter.includes(p.quantityType));
+          if (this.dietFilter.length) list = list.filter(p => this.dietFilter.some(d => p.diet.includes(d)));
+
+          switch (this.sortBy) {
+            case 'priceAsc': list.sort((a,b)=>a.price-b.price); break;
+            case 'priceDesc': list.sort((a,b)=>b.price-a.price); break;
+            case 'rating': list.sort((a,b)=>b.rating-a.rating); break;
+            case 'delivery': list.sort((a,b)=> (a.delivery>b.delivery?1:-1)); break;
+            default: list.sort((a,b)=>b.reviews - a.reviews);
+          }
+
+          this.filtered = list;
+
+          // Chips UI
+          this.chips = [];
+          if (this.budgetFriendly) this.chips.push('Budget < ₹200');
+          this.brandFilter.forEach(b => this.chips.push(b==='local'?'Local brand':'National brand'));
+          this.deliveryFilter.forEach(d => this.chips.push(d));
+          this.quantityFilter.forEach(q => this.chips.push(q));
+          this.dietFilter.forEach(d => this.chips.push(d));
+          if (this.priceMin !== '') this.chips.push(`Min ₹${this.priceMin}`);
+          if (this.priceMax !== '') this.chips.push(`Max ₹${this.priceMax}`);
+
+          if (this.budgetFriendly) this.filtered = this.filtered.filter(p => p.price <= 200);
+        },
+        resetFilters() {
+          this.priceMin = ''; this.priceMax = '';
+          this.brandFilter = []; this.deliveryFilter = [];
+          this.quantityFilter = []; this.dietFilter = [];
+          this.budgetFriendly = false; this.activeCategoryFilter = null;
+          this.sortBy = 'pop';
+          this.filterProducts();
+        },
+        removeChip(chip) {
+          if (chip === 'Budget < ₹200') this.budgetFriendly = false;
+          this.brandFilter = this.brandFilter.filter(b => (b==='local'?'Local brand':'National brand') !== chip);
+          this.deliveryFilter = this.deliveryFilter.filter(d => d !== chip);
+          this.quantityFilter = this.quantityFilter.filter(q => q !== chip);
+          this.dietFilter = this.dietFilter.filter(d => d !== chip);
+          if (chip.startsWith('Min ₹')) this.priceMin = '';
+          if (chip.startsWith('Max ₹')) this.priceMax = '';
+          this.filterProducts();
+        },
+        categoryName(id){ const c=this.categories.find(x=>x.id===id); return c?c.name:''; },
+
+        // Cart / Wishlist
+        incQty(p) { p.qty = Math.min(99, (p.qty||1)+1); },
+        decQty(p) { p.qty = Math.max(1, (p.qty||1)-1); },
+        addToCart(id) {
+          const p = this.products.find(pr=>pr.id===id);
+          if (!p) return;
+          const idx = this.cart.findIndex(c=>c.id===id);
+          if (idx>-1) this.cart[idx].qty += p.qty||1;
+          else this.cart.push({ id:p.id, name:p.name, brand:p.brand, image:p.image, price:p.price, qty:p.qty||1 });
+          this.persist();
+        },
+        removeFromCart(id) { this.cart = this.cart.filter(c=>c.id!==id); this.persist(); },
+        toggleWishlist(id) {
+          if (this.wishlist.includes(id)) this.wishlist = this.wishlist.filter(x=>x!==id);
+          else this.wishlist.push(id);
+          this.persist();
+        },
+
+        discount(p) {
+          const d = Math.round(100 - (p.price/p.mrp*100));
+          return `-${d}%`;
+        },
+
+        // Search + Voice
+        search() {
+          const q = (this.searchQuery || '').trim().toLowerCase();
+          if (!q) { this.suggestions = []; return; }
+          const cats = this.categories
+            .filter(c => c.name.toLowerCase().includes(q) || c.hi.toLowerCase().includes(q))
+            .map(c => ({ type:'category', id:c.id, label:c.name, sub:c.hi, icon:c.icon }));
+          const prods = this.products
+            .filter(p => [p.name, p.brand, this.categoryName(p.category)].join(' ').toLowerCase().includes(q))
+            .slice(0, 8)
+            .map(p => ({ type:'product', id:p.id, label:p.name, sub:p.brand, icon:'mdi:cube-outline' }));
+          this.suggestions = cats.concat(prods).slice(0, 10);
+        },
+        goSuggestion(s) {
+          if (s.type === 'category') {
+            this.activeCategoryFilter = s.id; this.filterProducts();
+            this.scrollToSection('catalog');
+          } else {
+            const el = document.getElementById('catalog');
+            this.filtered = this.products.filter(p=>p.id===s.id);
+            this.scrollToSection('catalog');
+          }
+          this.searchOpen = false;
+        },
+        highlightQuery(label) {
+          const q = this.searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          return label.replace(new RegExp(q, 'ig'), (m)=>`<span class="bg-yellow-100">${m}</span>`);
+        },
+        setupVoice() {
+          const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (!SR) return null;
+          const rec = new SR();
+          rec.lang = this.lang === 'hi' ? 'hi-IN' : (this.lang === 'mr' ? 'mr-IN' : 'en-IN');
+          rec.interimResults = false; rec.maxAlternatives = 1;
+          rec.onresult = (e) => {
+            const text = e.results[0][0].transcript;
+            this.searchQuery = text; this.search(); this.isListening = false;
+          };
+          rec.onend = () => { this.isListening = false; };
+          rec.onerror = () => { this.isListening = false; };
+          return rec;
+        },
+        toggleVoice() {
+          if (!this.recognition) this.recognition = this.setupVoice();
+          if (!this.recognition) { alert('Voice search not supported in this browser.'); return; }
+          if (this.isListening) { this.recognition.stop(); this.isListening = false; }
+          else { this.isListening = true; try { this.recognition.start(); } catch(e) { this.isListening=false; } }
+        },
+
+        // Location + Weather
+        async bootstrapLocationAndWeather() {
+          try {
+            // Try geolocation (requires https or localhost)
+            const geo = await new Promise((res, rej) => {
+              if (!navigator.geolocation) return rej('no geo');
+              navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 4000 });
+            });
+            const { latitude, longitude } = geo.coords;
+            await this.resolveCityByIP(); // quick fallback to IP city name
+            await this.fetchWeather(latitude, longitude);
+          } catch (e) {
+            // IP fallback
+            await this.resolveCityByIP();
+            // Weather fallback using city's approx coords
+            const coords = this.cityCoords(this.city);
+            await this.fetchWeather(coords.lat, coords.lon);
+          }
+        },
+        async detectLocation() { await this.bootstrapLocationAndWeather(); },
+        async resolveCityByIP() {
+          try {
+            const r = await fetch('https://ipapi.co/json/');
+            if (r.ok) {
+              const j = await r.json();
+              if (j && j.city) this.city = j.city;
+            }
+          } catch(e) {}
+        },
+        cityCoords(city) {
+          const map = {
+            'Delhi': { lat:28.6139, lon:77.2090 },
+            'Mumbai': { lat:19.0760, lon:72.8777 },
+            'Bengaluru': { lat:12.9716, lon:77.5946 },
+            'Hyderabad': { lat:17.3850, lon:78.4867 },
+            'Chennai': { lat:13.0827, lon:80.2707 },
+            'Kolkata': { lat:22.5726, lon:88.3639 }
+          };
+          return map[city] || { lat: 28.6139, lon: 77.2090 };
+        },
+        async fetchWeather(lat, lon) {
+          try {
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
+            const r = await fetch(url);
+            if (!r.ok) throw new Error('weather');
+            const j = await r.json();
+            this.weather = j.current_weather;
+            const t = Math.round(this.weather.temperature);
+            const code = this.weather.weathercode;
+            const label = (code>=51 && code<=67) || (code>=80) ? `Rainy • ${t}°C` :
+                          (code<=3) ? `Clear • ${t}°C` : `Cloudy • ${t}°C`;
+            this.weatherLabel = label;
+          } catch(e) {
+            this.weatherLabel = '—';
+          }
+        },
+
+        // Hero slides logic
+        buildHero() {
+          const time = new Date();
+          const hour = time.getHours();
+          const isMorning = hour < 12;
+          const isEvening = hour >= 18;
+
+          const festival = this.currentFestival();
+          const cityMsg = `Now delivering in ${this.city}`;
+const slides = [
+  {
+    id: 's1',
+    badge: 'Available in your city',
+    badgeIcon: 'mdi:map-marker-check',
+    title: this.lang === 'hi' ? `नमस्ते ${this.city}!` : `Hello ${this.city}!`,
+    subtitle: cityMsg + ' • Same-day delivery on essentials.',
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    id: 's2',
+    badge: isMorning ? 'Morning grocery rush' : (isEvening ? 'Evening essentials' : 'Daily essentials'),
+    badgeIcon: 'mdi:weather-sunny',
+    title: isMorning
+      ? 'Fresh start, fresh groceries'
+      : (isEvening ? 'Essentials for a cozy evening' : 'Essentials at your doorstep'),
+    subtitle: isMorning
+      ? 'Order grains, milk and bread now — delivered in hours.'
+      : (isEvening ? 'Snacks, tea, and last-minute items delivered fast.' : 'From pantry to personal care.'),
+    image: isMorning
+      ? 'https://images.unsplash.com/photo-1516594798947-e65505dbb29d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      : 'https://images.unsplash.com/photo-1534723452862-4c874018d66d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  }, // ✅ this closing brace was missing
+  {
+    id: 's3',
+    badge: 'Weather picks',
+    badgeIcon: 'mdi:weather-partly-rainy',
+    title: this.weatherLabel.includes('Rainy')
+      ? 'Rainy day comfort picks'
+      : this.weatherLabel.includes('Clear')
+        ? 'Sunny day chillers'
+        : 'Cloudy-day essentials',
+    subtitle: this.weatherLabel.includes('Rainy')
+      ? 'Chai, pakoda mix, and umbrella in stock.'
+      : this.weatherLabel.includes('Clear')
+        ? 'Cold drinks, ice cream, and coolers ready.'
+        : 'Soups, tea and quick bites.',
+    image: this.weatherLabel.includes('Rainy')
+      ? 'https://images.unsplash.com/photo-1433863448220-78aaa064ff47?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+      : 'https://images.unsplash.com/photo-1433863448220-78aaa064ff47?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+  },
+  {
+    id: 's4',
+    badge: `${festival.name} specials`,
+    badgeIcon: 'mdi:firework',
+    title: festival.title,
+    subtitle: festival.subtitle,
+    image: festival.image
+  }
+];
+
+this.heroSlides = slides;
+
+        },
+
+        currentFestival() {
+          const m = new Date().getMonth()+1;
+          if (m===10 || m===11) return { name:'Diwali', title:'Diwali Dhamaka Deals', subtitle:'Pooja items, sweets & decor — all in one place.', image:'https://images.unsplash.com/photo-1604152135912-04a022e23696?q=80&w=1200&auto=format&fit=crop' };
+          if (m===2 || m===3) return { name:'Holi', title:'Rang Barse Savings', subtitle:'Snacks, colors and cleaning supplies.', image:'https://images.unsplash.com/photo-1617195737496-7b78d7ab4f5c?q=80&w=1200&auto=format&fit=crop' };
+          if (m===4 || m===5) return { name:'Eid', title:'Eid Essentials', subtitle:'Dry fruits, dates, sherbet & more.', image:'https://images.unsplash.com/photo-1496104679561-38b095a27c30?q=80&w=1200&auto=format&fit=crop' };
+          if (m===12 || m===1) return { name:'Makar Sankranti', title:'Warm winter picks', subtitle:'Sesame treats, jaggery and more.', image:'https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?q=80&w=1200&auto=format&fit=crop' };
+          if (m===8 || m===9) return { name:'Ganesh Chaturthi', title:'Festive Specials', subtitle:'Pooja samagri, flowers, sweets.', image:'https://images.unsplash.com/photo-1628341335151-0a19c898b016?q=80&w=1200&auto=format&fit=crop' };
+          return { name:'Seasonal', title:'Seasonal Specials', subtitle:'Curated picks for the week.', image:'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1200&auto=format&fit=crop' };
+        },
+
+        // PIN verify
+        verifyPin() {
+          const p = (this.pin||'').trim();
+          if (!/^\d{6}$/.test(p)) { this.pinStatus='Enter a valid 6-digit PIN'; this.pinOk=false; return; }
+          const map = { '560001':'Bengaluru', '400001':'Mumbai', '110001':'Delhi', '700001':'Kolkata', '600001':'Chennai', '500001':'Hyderabad' };
+          const c = map[p] || this.city;
+          this.city = c;
+          this.pinOk = true;
+          this.pinStatus = `Delivering to ${c}`;
+          this.buildHero();
+        },
+
+        // Live customers + ticker
+        updateLiveCustomers(jitter=false) {
+          if (!jitter) {
+            const base = this.city==='Mumbai'||this.city==='Delhi' ? 620 : 280;
+            this.liveCustomers = base + Math.floor(Math.random()*120);
+          } else {
+            const delta = Math.floor((Math.random()-0.5)*30);
+            this.liveCustomers = Math.max(50, this.liveCustomers + delta);
+          }
+        },
+        buildTicker() {
+          const names = ['Ananya','Rohit','Pooja','Arjun','Kavya','Vivek','Meera','Aman','Sana','Neha','Rahul'];
+          const areas = ['Koramangala','Andheri','Dwarka','Kukatpally','T. Nagar','Salt Lake','Kothrud','Baner','Powai','Jayanagar'];
+          const picks = this.products.slice(0, 12);
+          this.tickerMessages = Array.from({length: 12}).map(()=>{
+            const n = names[Math.floor(Math.random()*names.length)];
+            const a = areas[Math.floor(Math.random()*areas.length)];
+            const p = picks[Math.floor(Math.random()*picks.length)];
+            return `${n} from ${a} ordered ${p.name}`;
+          });
+        },
+
+        // Scanner
+        openScanner() {
+          this.scannerOpen = true;
+          setTimeout(() => {
+            if (window.Html5Qrcode) {
+              const config = { fps: 10, qrbox: 250 };
+              this.html5Scanner = new Html5Qrcode("qr-reader");
+              this.html5Scanner.start(
+                { facingMode: "environment" },
+                config,
+                (decoded) => {
+                  this.searchQuery = decoded;
+                  this.search();
+                  this.scannerOpen = false;
+                  this.closeScanner();
+                },
+                () => {}
+              ).catch(() => {});
+            }
+          }, 100);
+        },
+        closeScanner() {
+          if (this.html5Scanner) {
+            this.html5Scanner.stop().then(()=> this.html5Scanner.clear());
+            this.html5Scanner = null;
+          }
+          this.scannerOpen = false;
+        },
+
+        // Image search
+        openImageSearch(){ this.imageSearchOpen = true; this.imagePreview=''; this.imageTags=[]; },
+        handleImage(e) {
+          const file = e.target.files[0];
+          if (!file) return;
+          const r = new FileReader();
+          r.onload = () => {
+            this.imagePreview = r.result;
+            // Simple heuristic tags
+            this.imageTags = ['Groceries', 'Snacks', 'Tea', 'Electronics'].sort(()=>Math.random()-0.5).slice(0,3);
+          };
+          r.readAsDataURL(file);
+        },
+        applyImageTag(tag) {
+          const cat = this.categories.find(c => c.name.toLowerCase().includes(tag.toLowerCase()));
+          if (cat) {
+            this.activeCategoryFilter = cat.id; this.filterProducts();
+            this.imageSearchOpen = false; this.scrollToSection('catalog');
+          } else {
+            this.searchQuery = tag; this.search(); this.imageSearchOpen=false;
+          }
+        },
+
+        // Utils
+        scrollToSection(id) {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        },
+        persist() {
+          localStorage.setItem('vb_cart', JSON.stringify(this.cart));
+          localStorage.setItem('vb_wishlist', JSON.stringify(this.wishlist));
+        },
+        persistLang() { localStorage.setItem('lang', this.lang); this.buildHero(); },
+        loadPersisted() {
+          try {
+            this.cart = JSON.parse(localStorage.getItem('vb_cart')||'[]');
+            this.wishlist = JSON.parse(localStorage.getItem('vb_wishlist')||'[]');
+          } catch(e) {}
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/dist/html5-qrcode.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+.para::after{
+    content:"This is added using CSS";
+}
+.para:first-letter{
+ font-size: 3em;
+}
+.para:first-line{
+    color: brown;
+}
+.para::selection{
+    background: yellow;
+    color: rgb(255, 0, 0);
+}
+input::placeholder{
+    color: darkblue;
+    font-size: 20px;
+}
+input{
+    
+    width: auto;
+}

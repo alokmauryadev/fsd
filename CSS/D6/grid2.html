@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grids IN CSS</title>
+    <style>
+        .grid{
+            display: grid;
+            background-color: black;
+            grid-template-columns: 1fr 1fr 1fr;
+
+            /* row-gap: 2rem;
+            column-gap: 1rem; */
+        }
+        .gridchild{
+            color: white;
+            background: steelblue;
+           height: 10vh;
+           border: 1px solid aqua;
+        }
+        .grid1{
+            grid-column: 1 / span 2;
+        }
+        .grid2{
+            grid-column: 3/ span 3;
+            grid-row:  1 / span 2;
+        }
+        .grid5{
+            grid-area: 3 / 1 / 4 / 4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid">
+        <div class="gridchild grid1">child-1</div>
+        <div class="gridchild grid2">child-2</div>
+        <div class="gridchild grid3">child-3</div>
+        <div class="gridchild grid4">child-4</div>
+        <div class="gridchild grid5">child5</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+html, body{
+    height: 100%;
+    margin: 0;
+}
+h1{
+    color: #ffffff;
+}
+h1:hover{
+    background-color: rgb(106, 100, 100);
+    padding: 5px;
+    border: 2px solid rgb(255, 204, 0);
+}
+#firstp{
+    color: rgba(246, 255, 0);
+}
+#secondp{
+color: hsl(228, 100%, 99%);
+}
+body{
+    background-image: url(./images/bg.jpg);
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+

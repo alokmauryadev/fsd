@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Order Button Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            perspective: 1000px;
+        }
+
+        .order-button {
+            position: relative;
+            width: 320px;
+            height: 80px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 50%, #ffa0a0 100%);
+            cursor: pointer;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.2),
+                0 10px 20px rgba(0, 0, 0, 0.1),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .order-button:hover:not(.processing) {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                0 15px 30px rgba(0, 0, 0, 0.15),
+                inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+
+        .order-button:active:not(.processing) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .order-button.processing {
+            cursor: not-allowed;
+        }
+
+        .button-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        .button-text span {
+            display: inline-block;
+        }
+
+        .icon-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .package-icon, .truck-icon, .checkmark-icon {
+            width: 50px;
+            height: 50px;
+            fill: white;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .truck-icon {
+            position: absolute;
+            opacity: 0;
+            transform: translateX(-200px);
+        }
+
+        .checkmark-icon {
+            position: absolute;
+            opacity: 0;
+            width: 60px;
+            height: 60px;
+        }
+
+        .checkmark-icon path {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .road-line {
+            position: absolute;
+            bottom: 20px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            width: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="order-button" id="orderBtn">
+            <div class="shimmer"></div>
+            <div class="road-line"></div>
+            
+            <div class="button-content">
+                <span class="button-text">
+                    <span>P</span><span>l</span><span>a</span><span>c</span><span>e</span>
+                    <span>&nbsp;</span>
+                    <span>O</span><span>r</span><span>d</span><span>e</span><span>r</span>
+                </span>
+            </div>
+
+            <div class="icon-container">
+                <!-- Package Icon -->
+                <svg class="package-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(50, 50)">
+                        <rect x="-25" y="-20" width="50" height="40" rx="2" fill="white" opacity="0.9"/>
+                        <path d="M -25 -10 L 0 -15 L 25 -10" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M 0 -15 L 0 20" stroke="white" stroke-width="2" opacity="0.6"/>
+                        <rect x="-20" y="-15" width="15" height="8" fill="white" opacity="0.5"/>
+                        <circle cx="0" cy="5" r="8" fill="white" opacity="0.3"/>
+                        <path d="M -5 5 L -2 8 L 5 1" stroke="white" stroke-width="2" fill="none" opacity="0.7"/>
+                    </g>
+                </svg>
+
+                <!-- Truck Icon -->
+                <svg class="truck-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(50, 50)">
+                        <!-- Truck Body -->
+                        <rect x="-30" y="-15" width="45" height="25" rx="2" fill="white"/>
+                        <!-- Cabin -->
+                        <path d="M 15 -15 L 30 -15 Q 35 -15 35 -10 L 35 5 L 15 5 Z" fill="white"/>
+                        <!-- Window -->
+                        <rect x="18" y="-12" width="12" height="10" rx="1" fill="white" opacity="0.3"/>
+                        <!-- Wheels -->
+                        <circle cx="-15" cy="12" r="5" fill="white"/>
+                        <circle cx="20" cy="12" r="5" fill="white"/>
+                        <!-- Cargo Lines -->
+                        <line x1="-25" y1="-8" x2="-5" y2="-8" stroke="white" stroke-width="2" opacity="0.5"/>
+                        <line x1="-25" y1="-2" x2="-10" y2="-2" stroke="white" stroke-width="2" opacity="0.5"/>
+                    </g>
+                </svg>
+
+                <!-- Checkmark Icon -->
+                <svg class="checkmark-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="white" stroke-width="4" opacity="0.3"/>
+                    <path d="M 30 50 L 45 65 L 70 35" fill="none" stroke="white" stroke-width="5" 
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div class="particles"></div>
+        </button>
+    </div>
+
+    <script>
+        class OrderButton {
+            constructor() {
+                this.button = document.getElementById('orderBtn');
+                this.text = this.button.querySelector('.button-text');
+                this.textSpans = this.button.querySelectorAll('.button-text span');
+                this.packageIcon = this.button.querySelector('.package-icon');
+                this.truckIcon = this.button.querySelector('.truck-icon');
+                this.checkmarkIcon = this.button.querySelector('.checkmark-icon');
+                this.checkmarkPath = this.checkmarkIcon.querySelector('path:last-child');
+                this.roadLine = this.button.querySelector('.road-line');
+                this.shimmer = this.button.querySelector('.shimmer');
+                this.particlesContainer = this.button.querySelector('.particles');
+                
+                this.isAnimating = false;
+                this.timeline = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.button.addEventListener('click', () => this.animate());
+                this.createParticles();
+            }
+
+            createParticles() {
+                for (let i = 0; i < 12; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    this.particlesContainer.appendChild(particle);
+                }
+                this.particles = this.particlesContainer.querySelectorAll('.particle');
+            }
+
+            animate() {
+                if (this.isAnimating) return;
+                this.isAnimating = true;
+                this.button.classList.add('processing');
+
+                // Kill any existing timeline
+                if (this.timeline) this.timeline.kill();
+
+                // Create master timeline
+                this.timeline = gsap.timeline({
+                    onComplete: () => {
+                        setTimeout(() => this.reset(), 800);
+                    }
+                });
+
+                // Phase 1: Text disappears with stagger
+                this.timeline.to(this.textSpans, {
+                    duration: 0.3,
+                    opacity: 0,
+                    y: -20,
+                    rotationX: -90,
+                    stagger: 0.02,
+                    ease: "power2.in"
+                });
+
+                // Phase 2: Package appears with bounce
+                this.timeline.to(this.packageIcon.parentElement, {
+                    duration: 0.001,
+                    opacity: 1
+                })
+                .from(this.packageIcon, {
+                    duration: 0.6,
+                    scale: 0,
+                    rotation: -180,
+                    ease: "back.out(1.7)"
+                }, "-=0.1")
+                .to(this.packageIcon, {
+                    duration: 0.3,
+                    y: -10,
+                    ease: "power2.out"
+                })
+                .to(this.packageIcon, {
+                    duration: 0.3,
+                    y: 0,
+                    ease: "bounce.out"
+                });
+
+                // Phase 3: Package morphs to truck
+                this.timeline.to(this.packageIcon, {
+                    duration: 0.4,
+                    scale: 0,
+                    rotation: 180,
+                    opacity: 0,
+                    ease: "power2.in"
+                })
+                .set(this.truckIcon, {
+                    opacity: 1,
+                    scale: 0,
+                    x: -150
+                })
+                .to(this.truckIcon, {
+                    duration: 0.5,
+                    scale: 1,
+                    ease: "back.out(1.5)"
+                }, "-=0.2");
+
+                // Phase 4: Road appears and truck drives
+                this.timeline.to(this.roadLine, {
+                    duration: 0.3,
+                    width: "80%",
+                    ease: "power2.out"
+                }, "-=0.3")
+                .to(this.truckIcon, {
+                    duration: 1.5,
+                    x: 200,
+                    ease: "power2.inOut",
+                    onUpdate: function() {
+                        const progress = this.progress();
+                        const bounce = Math.sin(progress * Math.PI * 8) * 2;
+                        gsap.set(this.targets()[0], { y: bounce });
+                    }
+                }, "-=0.2");
+
+                // Phase 5: Success state
+                this.timeline.to(this.button, {
+                    duration: 0.5,
+                    background: "linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%)",
+                    ease: "power2.inOut"
+                }, "-=0.5")
+                .to(this.truckIcon, {
+                    duration: 0.3,
+                    opacity: 0,
+                    scale: 0.5,
+                    ease: "power2.in"
+                }, "-=0.3")
+                .to(this.roadLine, {
+                    duration: 0.2,
+                    opacity: 0
+                }, "-=0.3");
+
+                // Phase 6: Checkmark animation
+                this.timeline.set(this.checkmarkIcon, {
+                    opacity: 1,
+                    scale: 0
+                })
+                .to(this.checkmarkIcon, {
+                    duration: 0.5,
+                    scale: 1,
+                    rotation: 360,
+                    ease: "back.out(1.5)"
+                }, "-=0.2")
+                .to(this.checkmarkPath, {
+                    duration: 0.6,
+                    strokeDashoffset: 0,
+                    ease: "power2.out"
+                }, "-=0.3");
+
+                // Particles explosion
+                this.timeline.add(() => this.explodeParticles(), "-=0.5");
+
+                // Shimmer effect
+                this.timeline.to(this.shimmer, {
+                    duration: 0.6,
+                    left: "100%",
+                    ease: "power2.inOut"
+                }, "-=0.4");
+            }
+
+            explodeParticles() {
+                this.particles.forEach((particle, i) => {
+                    const angle = (i / this.particles.length) * Math.PI * 2;
+                    const distance = 60 + Math.random() * 40;
+                    
+                    gsap.set(particle, {
+                        left: "50%",
+                        top: "50%",
+                        opacity: 1,
+                        scale: 1
+                    });
+                    
+                    gsap.to(particle, {
+                        duration: 0.8,
+                        x: Math.cos(angle) * distance,
+                        y: Math.sin(angle) * distance,
+                        opacity: 0,
+                        scale: 0,
+                        ease: "power2.out"
+                    });
+                });
+            }
+
+            reset() {
+                const resetTimeline = gsap.timeline({
+                    onComplete: () => {
+                        this.isAnimating = false;
+                        this.button.classList.remove('processing');
+                    }
+                });
+
+                // Fade out checkmark
+                resetTimeline.to(this.checkmarkIcon, {
+                    duration: 0.3,
+                    scale: 0,
+                    opacity: 0,
+                    rotation: -180,
+                    ease: "power2.in"
+                });
+
+                // Reset button background
+                resetTimeline.to(this.button, {
+                    duration: 0.5,
+                    background: "linear-gradient(135deg, #ff6b6b 0%, #ff8787 50%, #ffa0a0 100%)",
+                    ease: "power2.inOut"
+                }, "-=0.2");
+
+                // Bring back text with stagger
+                resetTimeline.to(this.textSpans, {
+                    duration: 0.4,
+                    opacity: 1,
+                    y: 0,
+                    rotationX: 0,
+                    stagger: 0.02,
+                    ease: "back.out(1.5)"
+                });
+
+                // Reset all elements
+                resetTimeline.set([
+                    this.packageIcon.parentElement,
+                    this.packageIcon,
+                    this.truckIcon,
+                    this.checkmarkIcon,
+                    this.roadLine,
+                    this.shimmer
+                ], {
+                    clearProps: "all"
+                });
+
+                resetTimeline.set(this.checkmarkPath, {
+                    strokeDashoffset: 100
+                });
+            }
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new OrderButton();
+        });
+    </script>
+</body>
+</html>

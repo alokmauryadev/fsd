@@ -1,0 +1,6 @@
+.main p::first-line{
+    color: red !important;
+}
+p[data-s=alok]{
+    color: blue;
+}
