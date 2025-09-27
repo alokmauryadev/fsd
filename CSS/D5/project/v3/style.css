@@ -1,0 +1,91 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.images{
+    display: grid;
+    gap: 1.5rem;
+    margin: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+img{
+    display: block;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+
+}
+figcaption{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    color: white;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent looks cleaner */
+        opacity: 0;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease;
+
+
+}
+.image-item:hover figcaption {
+    /* 4. The final, visible state for the caption */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Slide into view */
+}
+
+.image-item{
+    position: relative; 
+    border-radius: 10px;
+        transition: transform 0.5s ease;
+
+    overflow: hidden; /* Ensures the zoomed image and sliding caption are clipped */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* A slightly softer shadow */
+}
+.image-item:hover{
+    transform: scale(1.05);
+
+}
+
+img:hover{
+    transform: scale(1.05);
+}
+
+.hflex{
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    border-top: 2px solid black;
+    padding: 10px;
+    border-bottom: 2px solid black;
+    margin-bottom: 2px;
+}
+.hflex::-webkit-scrollbar{
+    display: none;
+}
+.hflex .image-item{
+    flex: 1 0 280px;
+}
+.hflex .image-item::after{
+   content: "I am a Image";
+   padding: 10px;
+   width: 100%;
+   background: rgba(0, 0, 0,0.5 );
+   color: white;
+   position: absolute;
+   bottom: 0;
+    opacity: 0;
+    visibility: hidden;
+   left: 0;
+   transform: translateY(100%);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease;
+}
+.hflex .image-item:hover::after{
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
