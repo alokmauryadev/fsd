@@ -1,0 +1,72 @@
+.accordion{
+    width: 70vw;
+    display: grid;
+    gap: 0.5rem;
+    padding: 10px 9px;
+    margin: auto;
+    border: 1px solid rgb(203, 193, 193);
+    box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(90deg, rgba(255, 254, 254, 0.841), rgba(89, 80, 80, 0.534));
+}
+.accordion-data{
+    /* background: white; */
+    margin: 0px 10px;
+    /* margin: 10px; */
+    /* width: 100%; */
+}
+details{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+    position: relative;
+    /* height: 10vh; */
+}
+summary{
+    list-style-type: none;
+         padding: 16px 18px;
+        background: white;
+
+}
+
+details[open] summary{
+    transition: backround 1s ease;
+}
+details summary::after{
+    content: "+";
+    position: absolute;
+    right: 0;
+    /* top: 12%; */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* align-self: center; */
+    margin: 0px 10px;
+    /* padding: 5px 10px; */
+    width: 30px;
+    height: 30px;
+    align-self: center;
+    background: #e4e8ea;
+    align-content: center;
+    border-radius: 50%;
+    font-weight: 600;
+    transition: content 1s linear;
+    font-size: larger;
+    transition: transform 0.3s linear;
+}
+details[open] summary::after{
+    transform: rotate(45deg);
+}
+
+details[open] summary{
+    background-color: #b0e1db;
+}
+
+details > span{
+    position: relative;
+    background: #c9eae4;
+    padding: 16px 18px;
+    display: block;
+    margin: 0;
+    /* transform: translateY(100%); */
+
+}
