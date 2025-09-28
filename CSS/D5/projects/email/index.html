@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostBox</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="pcontent">
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fa-solid fa-envelope"></i>
+                <h3>PostBox</h3>
+            </div>
+            <div class="navtool">
+                <i class="fa-solid fa-rotate-right"></i>
+                <i class="fa-solid fa-gear"></i>
+                <i class="fa-solid fa-user"></i>
+            </div>
+        </nav>
+    </header>
+    <aside>
+        <div class="sidebar">
+            <div class="compose">
+                <i class="fa-solid fa-plus"></i>
+                <h4>Compose</h4>
+            </div>
+            <div class="inbox sideopt active">
+                <div>
+                    <i class="fa-solid fa-inbox"></i>
+                    <div>Inbox</div>
+                </div>
+                <div class="nmessage">
+                    8
+                </div>
+            </div>
+            <div class="sent sideopt">
+                <div>
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <div>Sent</div>
+                </div>
+            </div>
+            <div class="draft sideopt">
+                <div>
+                    <i class="fa-regular fa-file"></i>
+                    <div>Draft</div>
+                </div>
+            </div>
+            <div class="Starred sideopt">
+                <div>
+                    <i class="fa-solid fa-star"></i>
+                    <div>Starred</div>
+                </div>
+            </div>
+            <div class="trash sideopt">
+                <div>
+                    <i class="fa-solid fa-trash"></i>
+                    <div>Trash</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <main>
+        <div class="toolbar">
+            <div class="checkall"><input type="checkbox" name="" id=""></div>
+            <div class="archive"><i class="fa-solid fa-box-archive"></i></div>
+            <div class="delete"><i class="fa-solid fa-trash"></i></div>
+            <div class="search">
+                <div class="searchinput">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  <input placeholder="Search mail" type="text">
+                </div>
+            </div>
+        </div>
+        <div class="mainmail">
+        <div class="mainbox unread">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">R</div>
+            <div class="textcontent">
+                <div class="mailtitle">Rhea - Meeting notes</div>
+                <p class="maildescription">Quick summary from today's sync - action times and owner list</p>
+            </div>
+            <div class="time">
+                <time datetime="">9:12 AM</time>
+            </div>
+        </div>
+                <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">G</div>
+            <div class="textcontent">
+                <div class="mailtitle">Google - Security alert</div>
+                <p class="maildescription">We noticed a new sign-in to your account from Chrome on Android</p>
+            </div>
+            <div class="time">
+                <time datetime="">8:01 AM</time>
+            </div>
+        </div>
+                <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">D</div>
+            <div class="textcontent">
+                <div class="mailtitle">Design Team - New mockups</div>
+                <p class="maildescription">Please review the v2 mockups attached to this email</p>
+            </div>
+            <div class="time">
+                <time datetime="">Yesterday</time>
+            </div>
+        </div>
+                <div class="mainbox unread">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">H</div>
+            <div class="textcontent">
+                <div class="mailtitle">HR - Policy update</div>
+                <p class="maildescription">Updated leave policy for Q4 - please read carefully</p>
+            </div>
+            <div class="time">
+                <time datetime="">Sep 24</time>
+            </div>
+        </div>
+        <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">S</div>
+            <div class="textcontent">
+                <div class="mailtitle">Sam - Weekend plans</div>
+                <p class="maildescription">Are you free this Saturday for a quick catch-up?</p>
+            </div>
+            <div class="time">
+                <time datetime="">Sep 22</time>
+            </div>
+        </div>
+                <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">N</div>
+            <div class="textcontent">
+                <div class="mailtitle">Newsletter - Top reads of the week</div>
+                <p class="maildescription">Hand-picked articles for web designers and devs </p>
+            </div>
+            <div class="time">
+                <time datetime="">Sep 20</time>
+            </div>
+        </div>
+                <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">S</div>
+            <div class="textcontent">
+                <div class="mailtitle">Shop - Order shipped</div>
+                <p class="maildescription">Your order #2341 has been shipped and is out for delivery</p>
+            </div>
+            <div class="time">
+                <time datetime="">Sep 18</time>
+            </div>
+        </div>
+                <div class="mainbox">
+            <div class="checkbox"><input type="checkbox" name="" id=""></div>
+            <div class="namelogo">A</div>
+            <div class="textcontent">
+                <div class="mailtitle">Alok - Project Kickoff</div>
+                <p class="maildescription">Kicsoff notes and next steps - assigning owners</p>
+            </div>
+            <div class="time">
+                <time datetime="">Sep 16</time>
+            </div>
+        </div>
+        </div>
+    </main>
+    <footer>
+        Made with ❤️ - PostBox
+    </footer>
+    </div>
+</body>
+
+</html>
