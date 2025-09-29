@@ -35,20 +35,31 @@ body{
 }   
 
 .pcontent{
-    display: grid;
-    grid-template-areas: "header header header header"
-                         "sidebar main main main"
-                      
-                         "footer footer footer footer";
-    gap: 1.5rem 2rem;
-    /* margin: 0px 16px; */
-    /* justify-content: space-around; */
-    /* padding: 10px; */
+    display: block;
+    position: relative;
+    padding-top: 60px;
+    min-height: 100vh;
+    padding-bottom: 40px;
+    
 }
 
-header{
-    grid-area: header;
-    margin: 0px;
+header {
+    /* grid-area: header; -- No longer needed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Keep it on top */
+}
+
+footer {
+    /* grid-area: footer; -- No longer needed */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem; /* Add some padding */
+    background: var(--bg); /* Give it a background */
 }
 nav{
     display: flex;
@@ -75,12 +86,24 @@ nav{
     align-items: center;
     color: var(--muted);
 }
-aside{
-    grid-area: sidebar;
+aside {
+    /* grid-area: sidebar; -- No longer needed */
+    position: absolute;
+    top: 60px; /* Below the header */
+    left: 1rem; /* A little space from the edge */
+    width: 250px; /* Give sidebar a fixed width */
+    height: calc(100vh - 120px); /* Fill the vertical space */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* THE MAGIC! */
 }
-aside, main{
-    padding: 10px;
-    
+
+main {
+    /* grid-area: main; -- No longer needed */
+    position: absolute;
+    top: 60px; /* Below the header */
+    left: calc(250px + 2rem); /* Next to the sidebar with a gap */
+    width: calc(100% - 250px - 3rem); /* Fill remaining width */
+    height: calc(100vh - 120px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* THE MAGIC! */
 }
 .sidebar::-webkit-scrollbar{
     display: none;
@@ -109,6 +132,7 @@ aside, main{
     color: var(--bg);
     justify-content: center;
     cursor: pointer;
+    transition: transform 1s ease;
 }
 i:hover{
     color: var(--accent);
@@ -149,7 +173,7 @@ i:hover{
     font-weight: 400;
 }
 
-main{
+/* main{
     background:var(--card);
     border-radius: 10px;
     height: 80vh;
@@ -157,9 +181,9 @@ main{
         overflow-x: hidden;
         overflow-y: auto;
     /* margin-right: 10px; */
-    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.4);
+    /* box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.4); */
 
-}
+/* }  */
 main::-webkit-scrollbar{
     display: none;
 }
@@ -273,8 +297,55 @@ font-size: 13px;
 footer{
     text-align: center;
 }
+@media only screen and (max-width: 600px) {
+    /* You can remove the .pcontent grid-template-areas rule from here */
 
-@media only screen and (max-width:600px){
+    aside {
+        top: calc(100vh - 120px); /* Move it to the bottom */
+        left: 0;
+        width: 100%;
+        height: 100px; 
+        z-index: 5;
+    }
+    
+    /* Make the sidebar content horizontal for mobile */
+    .sidebar {
+        height: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 10px;
+    }
+
+    .compose {
+/* display: none;     */
+        position: fixed;
+       transform: translate(40vw, -15vh);
+       clip-path: circle();
+       width: 50px;
+       font-size: xx-large;
+}
+.compose h4{
+    display: none;
+}
+    .sideopt div div {
+        display: none; /* Hide the text labels */
+    }
+
+    main {
+        top: 60px; /* Position below header */
+        left: 0;
+        overflow: hidden;
+        overflow-y: auto;
+        width: 100%;
+        height: calc(100vh - 180px); /* Adjust height for header, footer, and sidebar */
+        margin: 0; /* Remove margin */
+    }
+    footer{
+        display: none;
+    }
+}
+/* @media only screen and (max-width:600px){
     .pcontent{ 
             grid-template-areas: "header header header header"
                          "main main main main"
@@ -291,17 +362,17 @@ footer{
         left: 0;
         width: 100%;
         /* margin: 10px; */
-        box-sizing: border-box;
+        /* box-sizing: border-box; */
         /* transform: translateY(-60%); */
-        z-index: 2;
-        display: grid;
-        box-shadow: 2px 2px 3px 1px rgb(0, 0, 0, 05);
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        background-color: var(--accent-2);
-        align-items: center;
-        justify-items: center;
-    }
-    .compose{
+        /* z-index: 2; */
+        /* display: grid; */
+        /* box-shadow: 2px 2px 3px 1px rgb(0, 0, 0, 05); */
+        /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+        /* background-color: var(--accent-2); */
+        /* align-items: center; */
+        /* justify-items: center; */
+    /* } */
+    /* .compose{
         grid-area: 1/span 5;
         width: 100%;
             background: linear-gradient(90deg, var(--bg), var(--card));
@@ -320,35 +391,10 @@ footer{
         overflow-x: hidden;
         margin: 10px;
         
-    }
-}
+    } */
+/* } */
 
-.sidebar {
+/* .sidebar {
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
               opacity 0.4s ease;
-}
-
-/* Default desktop */
-@media only screen and (min-width: 601px) {
-  .sidebar {
-    transform: translateX(0);
-    opacity: 1;
-    position: static;
-  }
-}
-
-/* Mobile layout */
-@media only screen and (max-width: 600px) {
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    transform: translateY(100%); /* start hidden below screen */
-    opacity: 0;
-  }
-  .sidebar.show {
-    transform: translateY(0); /* slide up */
-    opacity: 1;
-  }
-}
+} */
