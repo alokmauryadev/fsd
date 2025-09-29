@@ -1,0 +1,400 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* :root {
+  --bg: #f9fafb;      
+  --card: #ffffff;         
+  --muted: #6b7280;        
+  --accent: #4f7cff;         
+  --accent-2: #10b981;     
+  --glass: rgba(0, 0, 0, 0.04);
+  --radius: 12px;
+  --transition: 200ms cubic-bezier(.2,.9,.3,1);
+  color-scheme: light;
+} */
+    :root{
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #9aa4b2;
+      --accent: #4f7cff;
+      --accent-2: #6be5b3;
+      --glass: rgba(255,255,255,0.04);
+      --radius: 12px;
+      --transition: 200ms cubic-bezier(.2,.9,.3,1);
+      color-scheme: dark;
+    }
+body{
+    background: linear-gradient(90deg, var(--bg), var(--card));  
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+  font-style: normal;
+}   
+
+.pcontent{
+    display: block;
+    position: relative;
+    padding-top: 60px;
+    min-height: 100vh;
+    padding-bottom: 40px;
+    
+}
+
+header {
+    /* grid-area: header; -- No longer needed */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Keep it on top */
+}
+
+footer {
+    /* grid-area: footer; -- No longer needed */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem; /* Add some padding */
+    background: var(--bg); /* Give it a background */
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+     padding: 10px 20px;
+     background: var(--card);
+
+}
+.logo{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.logo i{
+    font-size: x-large;
+    color: var(--accent);
+}
+.navtool{
+    display: flex;
+    gap: 1rem;
+    font-size: smaller;
+    justify-content: center;
+    align-items: center;
+    color: var(--muted);
+}
+aside {
+    /* grid-area: sidebar; -- No longer needed */
+    position: absolute;
+    top: 60px; /* Below the header */
+    left: 1rem; /* A little space from the edge */
+    width: 250px; /* Give sidebar a fixed width */
+    height: calc(100vh - 120px); /* Fill the vertical space */
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* THE MAGIC! */
+}
+
+main {
+    /* grid-area: main; -- No longer needed */
+    position: absolute;
+    top: 60px; /* Below the header */
+    left: calc(250px + 2rem); /* Next to the sidebar with a gap */
+    width: calc(100% - 250px - 3rem); /* Fill remaining width */
+    height: calc(100vh - 120px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* THE MAGIC! */
+}
+.sidebar::-webkit-scrollbar{
+    display: none;
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background:var(--card);
+    padding: 20px;
+    overflow-y: auto;
+      transition: all 0.5s ease; /* Smooth transition for all properties */
+
+    border-radius: 10px;
+    height: 80vh;
+}
+    
+.compose{
+    display: flex;
+    gap: .5rem;
+    background: linear-gradient(90deg, var(--accent),var(--accent-2));
+    border-radius: 8px;
+    align-items: center;
+    padding: 10px;
+    color: var(--bg);
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 1s ease;
+}
+i:hover{
+    color: var(--accent);
+    transform: translateY(-10%);
+}
+.sideopt{
+    display: flex;
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: background .5s ease;
+    padding: 10px;
+    border-radius: 10px;
+    justify-content: space-between;
+}
+.sideopt.inbox.active{
+    color: white;
+    background: linear-gradient(90deg,rgba(79,124,255,0.12),rgba(107,229,179,0.06));
+}
+.nmessage{
+    background: var(--accent);
+    width: 24px;
+    height: 24px;
+    clip-path: circle();
+    /* border-radius: 50%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sideopt:hover{
+    background: var(--bg);
+    color: white;
+}
+.sideopt div{
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 400;
+}
+
+/* main{
+    background:var(--card);
+    border-radius: 10px;
+    height: 80vh;
+        grid-area: main;
+        overflow-x: hidden;
+        overflow-y: auto;
+    /* margin-right: 10px; */
+    /* box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.4); */
+
+/* }  */
+main::-webkit-scrollbar{
+    display: none;
+}
+
+footer{
+    grid-area: footer;
+}
+.toolbar{
+    display: flex;
+    gap: 1rem;
+    color: var(--muted);
+    align-items: center;
+    padding: 10px;
+    /* position: static; */
+    /* z-index: 2; */
+    justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.01);
+}
+.search{
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    flex: 1;
+}
+.searchinput i{
+    font-size: large;
+}
+.searchinput{
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    font-size: x-large;
+    gap: 0.5rem;
+}
+.searchinput input[type=text]{
+    border: none;
+    width: 100%;
+    background: none;
+}
+.searchinput input[type=text]:focus-visible{
+    border: none;
+    outline: none;
+}
+.mainbox{
+    display: flex;
+    gap: .5rem;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    position: relative;
+    padding: 12px;
+
+    background: rgba(255, 255, 255, 0.01);
+}
+.mainmail{
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    padding: 8px;
+    
+}
+.mainbox.unread{
+    background: linear-gradient(90deg, rgba(79, 124, 255, 0.06), rgba(107, 229, 179, 0.02));
+    border-color: rgba(79, 124, 255, 0.08);
+}
+.mainbox:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.03);
+}
+.namelogo{
+    color: white;
+    font-size: x-large;
+    background: linear-gradient(180deg,#2b3a67,#16243f);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.maildescription{
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 13px;
+}
+.mainbox .time{
+/* float: right; */
+color: var(--muted);
+margin-left: auto;
+font-size: 13px;
+/* display: flex; */
+
+/* width: 100%; */
+/* justify-content: flex-end; */}
+
+
+.mailtitle{
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.textcontent{
+        overflow: hidden;
+    text-overflow: ellipsis;
+}
+footer{
+    text-align: center;
+}
+@media only screen and (max-width: 600px) {
+    /* You can remove the .pcontent grid-template-areas rule from here */
+
+    aside {
+        top: calc(100vh - 120px); /* Move it to the bottom */
+        left: 0;
+        width: 100%;
+        height: 100px; 
+        z-index: 5;
+    }
+    
+    /* Make the sidebar content horizontal for mobile */
+    .sidebar {
+        height: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 10px;
+    }
+
+    .compose {
+/* display: none;     */
+        position: fixed;
+       transform: translate(40vw, -15vh);
+       clip-path: circle();
+       width: 50px;
+       font-size: xx-large;
+}
+.compose h4{
+    display: none;
+}
+    .sideopt div div {
+        display: none; /* Hide the text labels */
+    }
+
+    main {
+        top: 60px; /* Position below header */
+        left: 0;
+        overflow: hidden;
+        overflow-y: auto;
+        width: 100%;
+        height: calc(100vh - 180px); /* Adjust height for header, footer, and sidebar */
+        margin: 0; /* Remove margin */
+    }
+    footer{
+        display: none;
+    }
+}
+/* @media only screen and (max-width:600px){
+    .pcontent{ 
+            grid-template-areas: "header header header header"
+                         "main main main main"
+                      
+                         "sidebar sidebar sidebar sidebar"
+                         "footer footer footer footer";
+
+
+    }
+    .sidebar{
+        height: max-content;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        /* margin: 10px; */
+        /* box-sizing: border-box; */
+        /* transform: translateY(-60%); */
+        /* z-index: 2; */
+        /* display: grid; */
+        /* box-shadow: 2px 2px 3px 1px rgb(0, 0, 0, 05); */
+        /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+        /* background-color: var(--accent-2); */
+        /* align-items: center; */
+        /* justify-items: center; */
+    /* } */
+    /* .compose{
+        grid-area: 1/span 5;
+        width: 100%;
+            background: linear-gradient(90deg, var(--bg), var(--card));
+    color: var(--accent-2);
+    }
+    .sideopt div div{
+        display:none ;
+    }
+    .sidebar div{
+        width: 100%;
+        margin: auto;
+        justify-content: center;
+    }
+    main{
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin: 10px;
+        
+    } */
+/* } */
+
+/* .sidebar {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease;
+} */
