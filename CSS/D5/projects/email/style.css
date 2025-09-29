@@ -41,7 +41,7 @@ body{
                       
                          "footer footer footer footer";
     gap: 1.5rem 2rem;
-    margin: 0px 16px;
+    /* margin: 0px 16px; */
     /* justify-content: space-around; */
     /* padding: 10px; */
 }
@@ -78,6 +78,13 @@ nav{
 aside{
     grid-area: sidebar;
 }
+aside, main{
+    padding: 10px;
+    
+}
+.sidebar::-webkit-scrollbar{
+    display: none;
+}
 
 .sidebar{
     display: flex;
@@ -85,6 +92,7 @@ aside{
     gap: 1rem;
     background:var(--card);
     padding: 20px;
+    overflow-y: auto;
     border-radius: 10px;
     height: 80vh;
     
@@ -117,7 +125,8 @@ aside{
     background: var(--accent);
     width: 24px;
     height: 24px;
-    border-radius: 50%;
+    clip-path: circle();
+    /* border-radius: 50%; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -138,8 +147,7 @@ main{
     border-radius: 10px;
     height: 80vh;
         grid-area: main;
-    overflow-y: auto;
-    overflow-x: hidden;
+  
     /* margin-right: 10px; */
     box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.4);
 
@@ -190,7 +198,9 @@ input[type=text]{
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
+    position: relative;
     padding: 12px;
+
     background: rgba(255, 255, 255, 0.01);
 }
 .mainmail{
@@ -198,10 +208,16 @@ input[type=text]{
     flex-direction: column;
     gap: .5em;
     padding: 8px;
+    
 }
 .mainbox.unread{
     background: linear-gradient(90deg, rgba(79, 124, 255, 0.06), rgba(107, 229, 179, 0.02));
     border-color: rgba(79, 124, 255, 0.08);
+}
+.mainbox:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: rgba(255, 255, 255, 0.03);
 }
 .namelogo{
     color: white;
@@ -256,6 +272,10 @@ footer{
 
     }
     .sidebar{
-        height: 50vh;
+        height: max-content;
+    }
+    main{
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 }
