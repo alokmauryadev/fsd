@@ -8,7 +8,7 @@ img{
     /* filter: blur(5px); */
     /* filter: brightness(.7) contrast(5) grayscale(0.5) sepia();  */
     /* filter: sepia(1); */
-    /* filter: invert(.16); */
+    /* filter: invert(.16);m */
     filter: opacity(0.5);
 
     height: 600px;
