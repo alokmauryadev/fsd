@@ -15,6 +15,12 @@ function sum(a,b) {
     return a + b;
 }
 
+let a = 10;
+let b = 12;
+let name = function(name){
+    console.log("Your name is " + name);
+}
+
 // let y = sum(3,5);
 console.log(sum(3,5))
 
