@@ -1,0 +1,221 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+header nav{
+    display: flex;
+    /* padding: 16px; */
+    justify-content: space-around;
+    align-items: center;
+}
+.logo img{
+    width: 100px;
+}
+#hero{
+    height: 70vh;
+    background: url(images/herobak.jpg) no-repeat center;
+    background-size: cover;
+    width: 100vw;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      /* gap: 2rem; */
+
+
+}
+#hero::before{
+    position: absolute;
+    content: "";
+    width: 100vw;
+    height: 70vh;
+          box-sizing: border-box;
+
+    background: linear-gradient(95deg, rgba(0,0,0,0.9), rgba(0,0,0,0.3));
+}
+header{
+    position: relative;
+    z-index: 2;
+}
+.menu{
+    gap: .7rem;
+    padding:1rem;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+.menu select{
+    color: white;
+    font-size: 1rem;
+    background: rgba(22, 22, 22, 0.7);
+    border-radius: 0.25rem;
+    border-width: 0.0625rem;
+      padding: 10px 1rem;
+    padding-right: calc(0.75rem + 0rem);
+    border-color: rgba(128, 128, 128, 0.7);
+}
+.menu button{
+    background: #cc0000;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 1rem;
+    border: none;
+    border-radius: .5rem;
+}
+#heromain{
+    position: relative;
+    color: white;
+    text-align: center;
+    font-size: 1.123rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+}
+
+#heromain h1{
+    font-weight: 700;
+}
+.email{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+#emailint{
+    position: relative;
+}
+.lemail{
+    color: black;
+    left: 0;
+    top:0 ;
+    transform: translate(10%,25%);
+    font-size: medium;
+    color: rgb(255, 255, 255);
+    margin: 1px;
+    position: absolute;
+    transition: all 0.3s ease;
+}
+input[type=email]{
+    outline: none;
+    background: rgba(22, 22, 22, 0.7);
+    border-radius: 0.25rem;
+    border-width: 0.0625rem;
+      padding: .8rem 1rem;
+    padding-right: calc(0.75rem + 0rem);
+    border-color: rgba(128, 128, 128, 0.7);
+}
+input[type=email]:focus-within + .lemail{
+    font-size: .6rem;
+    transform: translate(10%,20%);
+}
+input:focus{
+    color: white;
+    caret-color: white;
+}
+.email button{
+    background: #cc0000;
+    color: white;
+    font-size: 1rem;
+    padding: 10px 1rem;
+    border: none;
+    font-weight: 600;
+    border-radius: .2rem;
+}
+#trending, #features, #faq, #footer, .signup{
+    background: black;
+    position: relative;
+    color: white;
+}
+.overlay{ 
+    height: 50px;
+    width: 100vw;
+    top: -79px;
+    z-index: 2;
+    position: absolute;  
+      /* border: solid .25rem transparent; */
+    box-sizing: border-box;
+    border-top: 3px solid rgb(187, 13, 13);
+    border-top-left-radius: 50% 100%;
+    border-top-right-radius: 50% 100%;
+    background: radial-gradient(50% 500% at 50% -420%, rgba(64, 97, 231, 0.4) 80%, rgba(0, 0, 0, 0.1) 100%), black;
+}
+.shows{
+    display: flex;
+    overflow-x: scroll;
+    gap: 1rem;
+    margin-top: 2rem;
+    margin: 40px;
+}
+.shows::-webkit-scrollbar{
+    display: none;
+}
+.show-item{
+    /* flex: 1 0 100px; */
+    overflow: hidden;
+    width: max-content;
+    padding: 1rem;
+    flex: 1 0 15%;
+    position: relative;
+}
+.show-item img{
+        border-radius: 10px;
+        object-fit: cover;}
+
+img {
+  max-width: 100%;
+  height: auto;
+
+    /* width: max-content; */
+    /* height: 300px; */
+}
+.show-item::after{
+    content: attr(data-content);
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+  -webkit-text-stroke: 2px white; /* width color */
+    font-size: 7vw;
+    font-weight: 700;
+    color: rgb(0, 0, 0);
+}
+.overlay h3{
+    color: white;
+    position: absolute;
+    bottom: -20px;
+    left: 40px;
+}
+.featurelist{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+.featureitem{
+    display: flex;
+    margin: 1rem;
+    padding: 10px;
+    border-radius: 1rem;
+    flex-direction: column;
+    background: linear-gradient(145deg,#1f1442, #240919);
+}
+.featureimg{
+    align-self: flex-end;
+    justify-items: center;
+}
+.featureitem p{
+    color: rgba(255,255,255,0.7);
+}
+.footlinks{
+    display: grid;
+    grid-template-columns: repeat(autofill,minmax(1fr, 300px));
+}
+.footlinks a{
+    display: inline-block;
+    width: 300px;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animations in CSS</title>
+<style>
+
+  .container{
+   border: 5px solid red;
+   width: fit-content;
+    }
+    .box{
+        width: fit-content;
+        height: fit-content;
+        border: 2px solid black;
+        overflow: hidden;
+    }
+    img{
+        display: block;
+        /* animation: 3s ease-in 1s 2 reverse both scaleOut; */
+        animation-name: scaleOut;
+        animation-duration: 2s;
+        animation-timing-function: steps(3);
+        /* animation-delay: 1s; */
+        animation-direction: alternate;
+        animation-iteration-count:infinite;
+        animation-fill-mode: both;
+        /* animation-play-state:running ; */
+        /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+        /* animation-dv range: ; */
+    }
+    @keyframes scaleOut{
+        from{
+            transform: scale(1);
+        }
+        to{
+            transform: scale(1.4);
+        }
+    }
+    </style> 
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <img src="https://i.pinimg.com/236x/dd/dc/1d/dddc1df85caafe71e42dd6daf89b8921.jpg" alt="">
+        </div>
+    </div>
+</body>
+</html>
