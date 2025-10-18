@@ -1,0 +1,6 @@
+document.title = "Alok Bhai is great"
+// DOCUMENT MODEL IS USED TO MAP ENTIRE HTM FILE AS A DOCUMENT TREE
+
+// IT IS USED TO EASILY ACCESS HTML USING JS TO MANIPULATE AND ACCESS DIFFERENT TYPE OF DATA
+
+document.body.style.backgroundColor = "green";

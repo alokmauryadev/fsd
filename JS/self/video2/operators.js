@@ -104,3 +104,7 @@ console.log(`b **= a; ->  b is now: ${b}`);
 b %= a; 
 console.log(`b %= a; ->  b is now: ${b}`);
 // Output: b is now: a number very close to 0
+
+let a1 = 10;
+let check =a1>10?("Greather than 10"):("Not greater or equal to 10")
+console.log(check)

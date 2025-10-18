@@ -1,0 +1,6 @@
+-> & compares by converting the integer into 32-bit binary system
+it compare both bit on both numbers, and return 1 if both bits have 1 at same position, if both or any one of them is 0, the the answer is 0
+- | copmares by converting the interget into 32-bit binary system also
+if any 1 of them is 1, then it return 1 but if have both are 0 or 1, then it return 0 and 1 respectively
+- ^ - it also compares by same method, but if only get 1 if any one of the bit is 1, otherwise we get 0 for any condition
+- ~ it convert 

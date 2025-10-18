@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Terminal</title>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body{
+            background-color: #1a1b1b;
+        }
+        .container{
+            position: fixed;
+            inset: 0;
+             margin: auto;
+            width: 50vw;
+            background: rgb(0, 0, 0);
+            overflow: hidden;
+            height: 30vh;
+            align-content: center;
+            padding: 20px;
+            color: rgb(0, 246, 61);
+        }
+            .tool {
+                   position: absolute;
+                   top: 0;
+                   right: 0;
+                   width: 100%;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding: 5px;
+      background-color: #282323;
+    }
+
+    .tool i {
+     
+      cursor: pointer;
+      font-size: 12px;
+      color: #cbd4c2;
+      transition: color 0.3s;
+    }
+
+    .tool i:hover {
+      color: #007bff;
+    }
+
+    </style>
+</head>
+<body>
+    <!-- create a hacking simulator which has green background and it shows  these messages with random delay of 1 to 7 seconds,
+
+    Initializing Hacking....
+    Reading your files...
+    Password files Detected...
+    sending all passwords and personal files to server...
+    Cleaning up...
+    The three dots must blink so that it looks like a real terminal 
+    -->
+    <div class="container">
+        <div class="tool">
+            
+  <div class="tool">
+    <i class="fas fa-window-minimize" title="Minimize"></i>
+    <i class="fas fa-window-maximize" title="Maximize"></i>
+    <i class="fas fa-times" title="Close"></i>
+  </div>
+
+        </div>
+        <div class="terminal">
+        </div>
+    </div>
+    <script>
+async function main() {
+    let terminal = document.querySelector(".terminal");
+    
+    async function addline(text, delay = null) {
+        return new Promise((resolve) => {
+            const interval = (delay !== null) ? delay : Math.floor(Math.random() * 6000) + 1000;
+            setTimeout(() => {
+                // Add the line
+                terminal.innerHTML += `<p class="line">${text}</p>`;
+                
+                // Get the last added line
+                const lastLine = terminal.querySelector(".line:last-child");
+                
+                // Create the blinking dots span
+                const dotsSpan = document.createElement("span");
+                dotsSpan.textContent = "...";
+                dotsSpan.style.marginLeft = "5px"; // Optional spacing
+                lastLine.appendChild(dotsSpan);
+                
+                // Start blinking with setInterval
+                let isVisible = true;
+                const blinkInterval = setInterval(() => {
+                    dotsSpan.style.opacity = isVisible ? "0" : "1";
+                    isVisible = !isVisible;
+                }, 500);
+                
+                // Stop blinking and remove after 3 seconds
+                setTimeout(() => {
+                    clearInterval(blinkInterval);
+                    if (dotsSpan.parentNode) {
+                        dotsSpan.remove();
+                    }
+                }, 3000);
+                
+                // Resolve immediately after setup
+                resolve();
+            }, interval);
+        });
+    }
+    
+    let simhacking = async () => {
+        await addline("Initializing Hacking", 0);
+        await addline("Password files Detected");
+        await addline("sending all passwords and personal files to server");
+    };
+    
+    simhacking();
+}
+
+main();
+    </script>
+</body>
+</html>
