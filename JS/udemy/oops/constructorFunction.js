@@ -24,6 +24,21 @@ function Tea(type, flavor){
     this.type = type;
     this.flavor = flavor;
     this.describe = function(){
-        return `this is a cup of ${this.type}`
+        return `this is a cup of ${this.type} and it's flavor is ${this.flavor}`
     }
+
 }
+function Animal(species){
+    this.species = species;
+}
+let lemonTea = new Tea("lemon tea","sour")
+console.log(lemonTea.describe())
+
+
+Animal.prototype.sound = function(){
+    return `${this.species} makes as sound`
+}
+let dog = new Animal("Dog")
+let cat = new Animal("Cat")
+console.log(dog.sound())
+console.log(cat.sound())
