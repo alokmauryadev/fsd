@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            display: flex;
+            margin: 40px;
+            overflow-x: scroll;
+            position: relative;
+            height: max-content;
+        }
+        .slider{
+            position: absolute;
+            align-self: center;
+            font-size: 5rem;
+            z-index: 2;
+                        background-color: rgb(116, 108, 108);
+            color: white;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            padding: 5px;
+        }
+        #right{
+
+            left: 0;
+            top: -5%;
+            transform: translate(10%,100%);
+        }
+        #left{
+            right: 0;
+            top: -5%;
+            transform: translate(-10%,100%);
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            
+        }
+
+        .container::-webkit-scrollbar{
+            display: none;
+        }
+        img{
+            width: 200px;
+        }
+        .images{
+            gap: 5px;
+            display: flex;
+            overflow-x: scroll;
+            /* transform: translateX(-10%); */
+        }
+        .images::-webkit-scrollbar{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="right" class="slider">&lt;</div>
+        <div class="images">
+            <img src="products/product-2.jpg" alt="">
+            <img src="products/product-3.jpg" alt="">
+            <img src="products/product-4.jpg" alt="">
+            <img src="products/product-5.jpg" alt="">
+            <img src="products/product-6.jpg" alt="">
+            <img src="products/product-7.jpg" alt="">
+            <img src="products/product-8.jpg" alt="">
+            <img src="products/product-9.jpg" alt="">
+        </div>
+        <div id="left" class="slider">&gt;</div>
+
+    </div>
+    <script src="">
+        // let rigthSlide = document.getElement
+    </script>
+</body>
+</html>
