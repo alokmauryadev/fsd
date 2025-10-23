@@ -1,0 +1,16 @@
+//what is  a recursion
+
+// when a function call itself until a specific condition is met
+
+
+ex -
+
+function print(){
+
+    console.log(print)
+    print();
+}
+print();
+
+so everytime print runs, it runs the the complete function again, and the pervious function which is not completeled, get into queue
+in call stack.

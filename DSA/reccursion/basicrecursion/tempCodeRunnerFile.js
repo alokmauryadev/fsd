@@ -1,0 +1,1 @@
+ printN(i-1,num)
