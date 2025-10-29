@@ -39,3 +39,8 @@ console.log(numbers.splice(5,4, "harry"))
 console.log(numbers);
 console.log(numbers.slice(2,3));
 console.log(numbers);
+numbers[6] = "ALok"
+console.log(numbers);
+let name = "alok";
+const obj = {name};
+console.log(obj)
