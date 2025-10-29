@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Transition</title>
+    <style>
+        .container{
+            width: 80vw;
+            height: 80vh;
+            background-color: blue;
+            position: relative;
+        }
+        .box{
+            height: 100px;
+             width: 100px;
+            border-radius: 50%;
+            filter: drop-shadow(2px 1px 1px black);
+            background: red;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            animation: animateX 3s infinite linear alternate, animateY 1s infinite ease-in-out alternate;
+        }
+        @keyframes bounce {
+            0%{
+                /* transform-origin: center; */
+                transform: translateX(0px);
+                transform: translateY(0px);
+            }
+            50%{
+                 transform: translateX(10vw) translateY(-10vh);
+            }
+            100%{
+                transform: translateX(20vw) translateY(0px);
+            }
+        }
+        @keyframes animateX {
+            from{
+                left: 0;
+            }
+            from{
+                left: 80%;
+            }
+        }
+                @keyframes animateY {
+            from{
+                bottom: 0;
+            }
+            from{
+                bottom: 80%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Carousel Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .container {
+            display: flex;
+            margin: 40px;
+            overflow-x: scroll;
+            position: relative;
+            height: max-content;
+            background: white;
+            border-radius: 15px;
+            padding: 20px 0;
+        }
+
+        .slider {
+            position: absolute;
+            align-self: center;
+            font-size: 5rem;
+            z-index: 2;
+            background-color: rgb(116, 108, 108);
+            color: white;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            padding: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        .slider:hover {
+            background-color: rgb(80, 80, 80);
+        }
+
+        /* When button is disabled (at boundary) */
+        .slider.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slider.disabled:hover {
+            background-color: rgb(116, 108, 108);
+        }
+
+        #right {
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #left {
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.2s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        .images {
+            gap: 15px;
+            display: flex;
+            overflow-x: scroll;
+            scroll-behavior: smooth; /* Smooth scrolling animation */
+            padding: 0 60px; /* Space for buttons */
+        }
+
+        .images::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Tutorial info */
+        .info {
+            background: white;
+            padding: 20px;
+            margin: 20px 40px;
+            border-radius: 10px;
+            border-left: 4px solid rgb(116, 108, 108);
+        }
+
+        .info h3 {
+            margin-bottom: 10px;
+            color: rgb(116, 108, 108);
+        }
+
+        .info code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h3>🎓 Learning Points:</h3>
+        <p><strong>1. Boundary Detection:</strong> Check <code>scrollLeft</code> for left boundary, compare <code>scrollLeft + clientWidth</code> with <code>scrollWidth</code> for right boundary.</p>
+        <p><strong>2. Smooth Scrolling:</strong> Use <code>scroll-behavior: smooth</code> in CSS or <code>scrollBy({behavior: 'smooth'})</code> in JS.</p>
+        <p><strong>3. Visual Feedback:</strong> Add <code>.disabled</code> class to buttons at boundaries.</p>
+    </div>
+
+    <div class="container">
+        <div id="right" class="slider">&lt;</div>
+        <div class="images">
+            <img src="https://picsum.photos/200/200?random=1" alt="Image 1">
+            <img src="https://picsum.photos/200/200?random=2" alt="Image 2">
+            <img src="https://picsum.photos/200/200?random=3" alt="Image 3">
+            <img src="https://picsum.photos/200/200?random=4" alt="Image 4">
+            <img src="https://picsum.photos/200/200?random=5" alt="Image 5">
+            <img src="https://picsum.photos/200/200?random=6" alt="Image 6">
+            <img src="https://picsum.photos/200/200?random=7" alt="Image 7">
+            <img src="https://picsum.photos/200/200?random=8" alt="Image 8">
+        </div>
+        <div id="left" class="slider">&gt;</div>
+    </div>
+
+    <script>
+        // STEP 1: Get references to DOM elements
+        const leftButton = document.getElementById('left');
+        const rightButton = document.getElementById('right');
+        const imagesContainer = document.querySelector('.images');
+
+        // STEP 2: Define how much to scroll each time
+        // We'll scroll by one image width + gap
+        const scrollAmount = 215; // 200px (image) + 15px (gap)
+
+        // STEP 3: Function to check boundaries and update button states
+        function updateButtonStates() {
+            // Get current scroll position
+            const currentScroll = imagesContainer.scrollLeft;
+            
+            // Calculate maximum scroll (total width - visible width)
+            const maxScroll = imagesContainer.scrollWidth - imagesContainer.clientWidth;
+            
+            // Check LEFT boundary (at start?)
+            if (currentScroll <= 0) {
+                rightButton.classList.add('disabled');
+            } else {
+                rightButton.classList.remove('disabled');
+            }
+            
+            // Check RIGHT boundary (at end?)
+            // We use Math.ceil because scrollLeft can be decimal
+            if (Math.ceil(currentScroll) >= maxScroll) {
+                leftButton.classList.add('disabled');
+            } else {
+                leftButton.classList.remove('disabled');
+            }
+            
+            console.log('Current:', currentScroll, 'Max:', maxScroll);
+        }
+
+        // STEP 4: Scroll LEFT (show next images)
+        leftButton.addEventListener('click', function() {
+            // Don't scroll if we're at the boundary
+            if (leftButton.classList.contains('disabled')) {
+                return; // Exit function early
+            }
+            
+            // Scroll right by scrollAmount
+            imagesContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth' // Smooth animation
+            });
+            
+            // Update button states after a short delay
+            // (to let the scroll animation complete)
+            setTimeout(updateButtonStates, 300);
+        });
+
+        // STEP 5: Scroll RIGHT (show previous images)
+        rightButton.addEventListener('click', function() {
+            // Don't scroll if we're at the boundary
+            if (rightButton.classList.contains('disabled')) {
+                return;
+            }
+            
+            // Scroll left by scrollAmount (negative value)
+            imagesContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+            
+            setTimeout(updateButtonStates, 300);
+        });
+
+        // STEP 6: Update button states on page load
+        updateButtonStates();
+
+        // STEP 7: Also update when user manually scrolls
+        imagesContainer.addEventListener('scroll', updateButtonStates);
+
+        // BONUS: Update on window resize (in case visible area changes)
+        window.addEventListener('resize', updateButtonStates);
+    </script>
+</body>
+</html>

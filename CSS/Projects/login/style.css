@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+body{
+      font-family: "Roboto", sans-serif;
+}
+.container {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 90vw;      /* set a fixed or max width */
+  height: 60vh;     /* set a fixed or max height */
+  /* Optional styling */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+}
+
+.signin, .register{
+    display: flex;
+}
+.singinform, .registerform{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+}
+.sociallinks a{
+    color: rgb(108, 101, 101);
+    padding: .5rem;
+    border-radius: 5px;
+    border: 1px solid rgb(162, 152, 152);
+}
+.formContainer{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin: 1rem;
+}
+input{
+    background-color: #eee;
+    border: none;
+    outline: none;
+    padding: .5rem;
+    border-radius: .5rem;
+}
+form a{
+    text-decoration: none;
+    color: #333;
+    font-size: .75rem;
+}
+form button{
+    padding: .5rem;
+    background: #ff3b00;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: .5rem;
+}
+.onboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 1rem;
+    border-radius: 50px 0px 0px 50px;
+    gap: .75rem;
+    background: linear-gradient(90deg,#f36929,#d45b23);
+}
+.onboard button{
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: .5rem 2rem;
+    border-radius: .5rem;
+}
+/* Default: show sign in, hide register */
+.signin { display: flex; }
+.register { display: none; }
+
+/* When "toggle" is checked, show register, hide sign in */
+#toggle:checked ~ .container .signin { display: none; }
+#toggle:checked ~ .container .register { display: flex; }

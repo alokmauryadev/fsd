@@ -1,0 +1,21 @@
+.box{
+    width: 500px;
+    height: 600px;
+    border: 2px solid black;
+    background: aquamarine;
+}
+
+img{
+    width: 500px;
+    height: 600px;
+    object-fit: scale-down;
+    object-position: center;
+}
+.box2{
+    width: 500px;
+    height: 400px;
+    border: 2px solid black;
+    background: url(https://i.pinimg.com/236x/dd/dc/1d/dddc1df85caafe71e42dd6daf89b8921.jpg) no-repeat center;
+    background-size: cover;
+    background-clip: padding-box;
+}  
