@@ -13,4 +13,4 @@ let tesla = {
 Object.setPrototypeOf(tesla,genericCar)
 
 console.log(`tesla`, Object.getPrototypeOf(tesla))
-console.log(`tesla`,(tesla.tyre))
+console.log(`tesla`,(tesla.tyres))

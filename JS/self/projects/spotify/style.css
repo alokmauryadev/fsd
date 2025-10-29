@@ -1,0 +1,225 @@
+/* Apply this globally */
+::-webkit-scrollbar {
+  width: 6px;              /* width of vertical scrollbar */
+  height: 6px;             /* height of horizontal scrollbar */
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* prevent extra horizontal space */
+  background-color: #000; /* match Spotify dark theme */
+}
+
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #121212;     /* dark background (matches Spotify’s style) */
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1db954, #1ed760); /* Spotify green gradient */
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1ed760;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+:root {
+  --decorative-base: white;
+}
+
+body{
+    background-color:rgb(0, 0, 0);
+    color: white;
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.nav{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 1rem 0rem 1rem;
+}
+.nav img{
+    width: 25px;
+}
+.logo img{
+    width: 35px;
+}
+.nav .left{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+}
+.home, .search{
+    background: #302c2c;
+    clip-path: circle();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 1px;
+}
+.middle a{
+    color: white;
+    text-decoration: none;
+    color: white;
+}
+.middle{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
+.right{
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+    
+}
+.right .login{
+    background-color: #ffffff;
+    color: black;
+    padding: .5rem;
+    border-radius: 10px;
+}
+.mainContainer {
+  display: grid;
+  margin: 1rem;
+  grid-template-columns: 200px 200px 1fr; /* sidebar + main content */
+  grid-template-areas: 
+    "sidebar rightside rightside";
+  gap: 0.5rem;
+   
+}
+
+/* Assign grid areas */
+.sidebar {
+  grid-area: sidebar;
+}
+
+.rightside {
+  grid-area: rightside;
+}
+
+/* Responsive layout for smaller screens */
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.sidebar div:first-child{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.sidebar, .rightside{
+    background: #121212;
+    border-radius: .5rem;
+    padding: 1rem;
+    height: 80vh;
+    overflow-y: auto;
+}
+@media only screen and (max-width: 768px) {
+  .mainContainer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+    "rightside"
+      "sidebar";
+    height: auto;
+  }
+  .sidebar{
+    height: auto;
+  }
+}
+.playlistInfo{
+    display: flex;
+    gap: 2rem;
+    overflow: hidden;
+    overflow-y: scroll;
+    height: 150px;
+    flex-direction: column;
+}
+.infoCard{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background:#1f1f1f;
+    padding: .5rem;
+}
+.infoCard button{
+    border-radius: 1rem;
+    padding: 10px;
+    font-weight: 600;
+}
+.infoCard span:nth-child(2){
+    color: #bbb;
+    font-size: .75rem;
+}
+.links{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.links a{
+    color: white;
+    text-decoration: none;
+    font-size: .8rem;
+
+}
+.links a:hover{
+    color: rgb(177, 172, 172);
+
+}
+.footlinks button{
+    padding: .5rem;
+    border-radius: .5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+}
+.songsList, .artistList{
+    display: flex;
+    gap: .5rem;
+
+    overflow-x: scroll;
+}
+.songCard{
+    /* overflow: hidden; */
+    /* flex: 1 1 300px; */
+    width: 180px;
+    height: 300px;
+}
+.thumbnail{
+    border-radius: .75rem;
+    overflow: hidden;
+    width: 180px;
+}
+
+.thumbnail img{
+    object-fit: cover;
+    object-position: left;
+
+}
+
+.artist img{
+    width: 150px;
+    clip-path: circle();
+}
+.subhead{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+.subhead span:last-child{
+    color: rgb(210, 199, 199);
+}
+.subhead span:last-child:hover{
+    color: rgb(255, 255, 255);
+}

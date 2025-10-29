@@ -17,8 +17,8 @@ function Car(make, model){
 let myCar = new Car("Toyota", "Camry")
 console.log(myCar)
 
-let myNewCar = new Car("Tata", "Safari")
-console.log(myNewCar)
+// let myNewCar = new Car("Tata", "Safari")
+// console.log(myNewCar)
 
 function Tea(type, flavor){
     this.type = type;
