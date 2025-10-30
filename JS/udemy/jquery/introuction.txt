@@ -1,0 +1,9 @@
+// jquery is a library for javascript
+which make our javascript programming 
+much each
+
+foe ex, 
+
+$("h1") - document.querySelector("h1")
+// it actually saves our fingers
+
