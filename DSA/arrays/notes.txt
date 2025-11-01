@@ -1,4 +1,0 @@
-what are arrays?
-
-// arrays are unbreakable continuous memory in a location.
-
