@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    font-family: "Roboto", sans-serif;
+    background: black;
+    color: white;
+}
+.main{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.formContainer{
+    margin: 1rem auto;
+    width: 40vw;
+    border: 1px solid rgb(97, 96, 96);
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #212224;
+}
+.userContainer{
+    width: 50vw;
+}
+#userForm{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+#userForm h1{
+    text-align: center;
+}
+#userForm input,textarea,select{
+    outline: none;
+    background: #262729;
+    border-radius: .25rem;
+    color: rgb(187, 183, 183);
+    border: 1px solid rgb(184, 173, 173);
+    padding: .5rem;
+}
+#userForm button{
+    background: transparent;
+    border-radius: .25rem;
+    color: rgb(187, 183, 183);
+    border: 1px solid rgb(184, 173, 173);
+    padding: .5rem;
+}
+.users{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+.user{
+
+    display: flex;
+    width: 300px;
+    flex-direction: column;
+   align-items: center;
+   border-radius: .5rem;
+   padding: 1rem;
+   box-shadow: 1px 1px #95b0e2;
+    background: #212224;
+}
+.profilePhoto img{
+  width: 100px;
+  clip-path: circle();
+}
+.profileDetails{
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    text-align: center;
+}
+.name{
+    font-weight: 600;
+    font-size: 1.5em;
+
+}
+
+@media only screen and (max-width:600px) {
+    .main{
+        flex-direction: column;
+    }
+}

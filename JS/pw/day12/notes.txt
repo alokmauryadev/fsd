@@ -1,0 +1,5 @@
+when we use getElementsByTagName or getElementsByClassName
+
+it presents the html collection
+whereas when use we querySelector, it presents the static node list
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clock</title>
+  <style>
+    .clock {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #hour-hand, #minute, #sec {
+      position: absolute;
+      width: 20vw;
+      height: 4px;
+      background: black;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 50%; /* rotate from center of clock */
+    }
+
+    #sec {
+      background: red;
+      height: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock">
+    <div id="hour-hand"></div>
+    <div id="minute"></div>
+    <div id="sec"></div>
+  </div>
+
+  <script>
+    let div = document.createElement("div")
+    const minute = document.getElementById("minute");
+    const hour = document.getElementById("hour-hand");
+    const sec = document.getElementById("sec");
+
+    function rotateHands() {
+      setInterval(() => {
+        const now = new Date();
+        const seconds = now.getSeconds();
+        const minutes = now.getMinutes();
+        const hours = now.getHours();
+        div.textContent = "${hours}:${minutes}:${seconds}"
+        document.querySelector(".clock").append(div)
+        const secDeg = 6 * seconds;
+        const minDeg = 6 * minutes + seconds * 0.1;
+        const hourDeg = 30 * (hours % 12) + 0.5 * minutes;
+
+        sec.style.transform = `rotate(${secDeg - 90}deg)`;    // -90 to align 12 o’clock top
+        minute.style.transform = `rotate(${minDeg - 90}deg)`;
+        hour.style.transform = `rotate(${hourDeg - 90}deg)`;
+      }, 1000);
+    }
+
+    rotateHands();
+  </script>
+</body>
+</html>

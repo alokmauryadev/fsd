@@ -18,7 +18,7 @@
 
 let obj1 = {
     name: "Alice",
-    setTimeout(function greet()=>{
-
-    })
+    greet(){setTimeout(()=>{
+        
+    })}
 }

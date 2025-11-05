@@ -1,0 +1,42 @@
+what are promises?
+
+Promise means future representation of a task
+or value which can be fulfulled or rejected
+but currently it is pending
+
+why do we use promises in javascript
+
+because it help us to get out of callback hell
+how?
+
+let's understand by example, 
+
+let's say I have some users data
+first I have to get its' users, then posts and then comments
+
+so I first I'll create a function to 
+different functions  to get the specific value
+and then I'll those function inside a function, so that they will be called
+if the first function is completed
+
+
+so it'll make a pyramid of hell
+but promises help us to solve it because
+we can return a promise, and .then will be execute only
+after the promise is resolved or .catch will be executed
+
+let's see it with a example
+
+// let fetchUser = () =>{
+    return new Promise((resolve,reject)=>{
+        resolve("HELLO WORLD")
+    }).then((text)=.{
+        console.log(text)
+    })
+}
+
+// if we return a function in then, it becomes a new promise and next .then wait for it to complete
+
+javascript is a single threaded language, it means every function is executed one by one, so 
+to solve the problem to not wait till a function is completed, we use asynchronous javascript
+
