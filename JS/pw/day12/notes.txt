@@ -1,5 +1,15 @@
 when we use getElementsByTagName or getElementsByClassName
 
-it presents the html collection
+it presents the live html collection
 whereas when use we querySelector, it presents the static node list
+
+so what is the difference between this live and static, like if I get all elements in html collection, and store it in a variable, even if I change the some properties of the elements, my variable properties will change automatically
+
+whereas in querySelector node list, it takes a snapshop of that moment when the variable is declared, so it's static, even if I change the element later, variable will not be updated
+
+we can't use foreach of html collection, where we can use it on the node list
+
+
+// although both in proper sense are not arrays, but they are iterables, so we can use for loop on them
+
 

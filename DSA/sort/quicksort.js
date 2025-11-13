@@ -2,7 +2,7 @@ let n = [4,6,2,5,7,9,1,3]
 
 function quickSort(arr, lo,hi){ 
     if(lo<hi){
-    pivotIndex = helper(arr,lo,hi)
+   let pivotIndex = helper(arr,lo,hi)
     quickSort(arr, lo, pivotIndex-1)
     quickSort(arr,pivotIndex+1,hi)
     

@@ -47,7 +47,7 @@
         const seconds = now.getSeconds();
         const minutes = now.getMinutes();
         const hours = now.getHours();
-        div.textContent = "${hours}:${minutes}:${seconds}"
+        div.textContent = `${hours}:${minutes}:${seconds}`
         document.querySelector(".clock").append(div)
         const secDeg = 6 * seconds;
         const minDeg = 6 * minutes + seconds * 0.1;

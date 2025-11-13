@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Modern Calculator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* * =========================================
+         * RESET & GLOBAL STYLES
+         * =========================================
+         */
+        
+        :root {
+            /* Define our colors for easy changes */
+            --background: #222427; /* Main dark color */
+            --shadow-light: rgba(255, 255, 255, 0.07);
+            --shadow-dark: rgba(0, 0, 0, 0.4);
+            --text-primary: #FFFFFF;
+            --text-secondary: #b8b8b8;
+            --accent-orange: #FF9500; /* Professional, familiar "iOS" orange */
+            --accent-orange-hover: #ffab33;
+            --accent-orange-active: #e68600;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--background);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+        }
+
+        /* * =========================================
+         * CALCULATOR STYLES
+         * =========================================
+         */
+
+        .calculator {
+            width: 100%;
+            max-width: 340px; /* Clean, tight width */
+            background-color: var(--background);
+            border-radius: 32px;
+            padding: 24px;
+
+            /* The "Neumorphic" container shadow. It's the same color as the
+               background, so it looks like it's "extruded" from the page. */
+            box-shadow: 20px 20px 40px var(--shadow-dark), 
+                        -20px -20px 40px var(--shadow-light);
+        }
+
+        /* * --- DISPLAY ---
+         * "Pressed in" look for the display.
+         */
+        .display {
+            min-height: 120px;
+            padding: 24px;
+            margin-bottom: 24px;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            word-wrap: break-word;
+            word-break: break-all;
+            
+            border-radius: 20px;
+            /* Inset shadow makes it look "pressed in" */
+            box-shadow: inset 8px 8px 16px var(--shadow-dark), 
+                        inset -8px -8px 16px var(--shadow-light);
+        }
+
+        .display-text {
+            font-size: 4.5rem; /* Large, but not comically large */
+            font-weight: 400; /* Very readable */
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+
+        /* * --- KEYPAD ---
+         * Simple grid layout.
+         */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px; /* A comfortable gap */
+        }
+
+        /* * --- BUTTONS ---
+         * Base "extruded" button style
+         */
+        .btn {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            min-height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px; /* Slightly sharper radius than container */
+
+            /* Font */
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 500;
+            
+            /* Color */
+            background: var(--background); /* Same color as the body */
+            color: var(--text-primary);
+
+            /* The "Extruded" Shadow */
+            box-shadow: 8px 8px 16px var(--shadow-dark), 
+                        -8px -8px 16px var(--shadow-light);
+            
+            /* Interaction */
+            transition: all 0.1s ease-in-out;
+        }
+
+        /* --- Button States --- */
+
+        .btn:hover {
+            /* On hover, just a subtle text color change */
+            color: var(--accent-orange);
+        }
+
+        .btn:active {
+            /* The "Pressed" Inset Shadow */
+            box-shadow: inset 8px 8px 16px var(--shadow-dark), 
+                        inset -8px -8px 16px var(--shadow-light);
+            color: var(--text-secondary);
+            font-size: 1.45rem; /* Makes the press feel more real */
+        }
+
+
+        /* --- Button Variants --- */
+
+        /* For 'AC', '+/-', '%' */
+        .btn.btn-special {
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .btn.btn-special:hover {
+            color: var(--text-primary);
+        }
+        .btn.btn-special:active {
+            color: var(--text-secondary);
+            font-size: 1.45rem;
+        }
+
+
+        /* For '+', '-', 'x', '÷', '=' */
+        /* --- FLAT ACCENT BUTTONS --- */
+        .btn.btn-operator {
+            background: var(--accent-orange);
+            color: var(--text-primary);
+            font-size: 2rem;
+            /* We remove the neumorphic shadow for a clean, flat accent */
+            box-shadow: none; 
+        }
+        .btn.btn-operator:hover {
+            background: var(--accent-orange-hover);
+            color: var(--text-primary); /* Keep text white */
+        }
+        .btn.btn-operator:active {
+            background: var(--accent-orange-active);
+            box-shadow: none; /* No inset shadow either */
+            font-size: 2rem; /* Keep font size consistent */
+            transform: scale(0.97); /* Use a simple scale for press effect */
+        }
+
+        /* For the '0' button spanning two columns */
+        .btn.btn-zero {
+            grid-column: span 2;
+            justify-content: flex-start;
+            padding-left: 26px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+
+        <div class="display">
+            <div class="display-text">0</div>
+        </div>
+
+        <div class="keypad">
+            <button class="btn btn-special">AC</button>
+            <button class="btn btn-special">+/-</button>
+            <button class="btn btn-special">%</button>
+            <button class="btn btn-operator">÷</button>
+            
+            <button class="btn">7</button>
+            <button class="btn">8</button>
+            <button class="btn">9</button>
+            <button class="btn btn-operator">×</button>
+
+            <button class="btn">4</button>
+            <button class="btn">5</button>
+            <button class="btn">6</button>
+            <button class="btn btn-operator">-</button>
+
+            <button class="btn">1</button>
+            <button class="btn">2</button>
+            <button class="btn">3</button>
+            <button class="btn btn-operator">+</button>
+
+            <button class="btn btn-zero">0</button>
+            <button class="btn">.</button>
+            <button class="btn btn-operator">=</button>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+    currentWeight += arr[i];

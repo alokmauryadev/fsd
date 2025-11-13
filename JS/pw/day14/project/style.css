@@ -1,0 +1,26 @@
+body{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+.formContainer{
+    display: flex;
+    gap: 1rem;
+}
+#clear-btn, #resize{
+    background: rgb(171, 138, 243);
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.grid-child{
+    border: .5px solid rgb(219, 214, 214);
+}
+.grid-container{
+    display: grid;
+    width: 50vw;
+    height: 50vw;
+    margin: auto;
+}
+

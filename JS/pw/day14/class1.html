@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        
+        #grid-container {
+            margin: 20px;
+            border: 1px solid #000;
+            display: grid;
+        }
+
+        .pixel {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        #color-picker {
+            margin-right: 10px;
+        }
+
+        #controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            background-color: rgb(121, 52, 185);
+            color: white;
+            padding: 5px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 1st component -->
+    <h1>Pixel Art</h1>
+    
+    <!-- 2nd component -->
+    <div id="controls">
+        <input type="color" id="color-picker" value="#000000">
+        <button id="clear-btn">Clear Canvas</button>
+        <input type="number" id="grid-size" value="16">
+        <button id="resize-btn">Resize Grid</button>
+    </div>
+
+    <!-- 3rd component -->
+    <div id="grid-container"></div>
+
+    <script>
+
+        const gridContainer = document.getElementById('grid-container');
+        const colorPicker = document.getElementById('color-picker');
+        const clearBtn = document.getElementById('clear-btn');
+        const gridSizeInput = document.getElementById('grid-size');
+        const resizeBtn = document.getElementById('resize-btn');
+
+        let gridSize = 16;
+        let isDrawing = false;
+        
+        // add the indivisual pixel cells inside the already created grid-contrainer
+        function createGrid(size) {
+            // empties the existing gridContrainer
+            gridContainer.innerHTML = "";
+        // gridContainer.style.gridTemplateColumns = `repeat(${size},1fr)`
+
+
+            // sets the dynamic grid css property
+            gridContainer.style.gridTemplateColumns = `repeat(${size}, 20px)`
+            gridContainer.style.gridTemplateRows = `repeat(${size}, 20px)`
+
+            // now create the indivisual cell/pixel box and add the css class and eventListners to it.
+            for(let i = 0; i < size*size; i++) {
+                const pixel = document.createElement('div');
+                pixel.classList.add('pixel');
+                pixel.addEventListener('mousedown', startDrawing);
+                pixel.addEventListener('mouseover', draw);
+                pixel.addEventListener('mouseup', stopDrawing);
+                gridContainer.appendChild(pixel);
+            }
+        }
+
+        function startDrawing(event) {
+            isDrawing = true;
+            draw(event);
+        }
+
+        function rgbToHex(rgb) {
+            if(!rgb)
+                return;
+
+            const result = rgb.match(/\d+/g)?.map(Number); // extract numbers
+            const [r, g, b] = result; // ignore alpha if present
+
+            return "#" + [r, g, b]
+                ?.map(x => x.toString(16).padStart(2, "0"))
+                ?.join("")
+                ?.toUpperCase();
+        }
+
+        function draw(event) {
+            // should draw only, if mouse is down and the cursor is overed on the pixel/box
+            if(isDrawing && event.target.classList.contains('pixel')) {
+                if(!event.target.style.backgroundColor || (rgbToHex(event.target.style.backgroundColor) != colorPicker.value)) {
+                    event.target.style.backgroundColor = colorPicker.value;
+                } else {
+                    event.target.style.backgroundColor = 'transparent';
+                }
+            }
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        clearBtn.addEventListener('click', () => {
+            document.querySelectorAll('.pixel').forEach(eachPixel => {
+                eachPixel.style.backgroundColor = 'transparent';
+            });
+        });
+
+        resizeBtn.addEventListener('click', () => {
+            // add a size validation, 1 - 32
+            const newSize = parseInt(gridSizeInput.value);
+
+            if(newSize && newSize > 0 && newSize <= 32) {
+                gridSize = newSize;
+                createGrid(gridSize);
+            } else {
+                alert('Please enter a valid value between 1 and 32');
+            }
+        })
+
+        // will by default create a grid of size*size
+        createGrid(gridSize);
+
+    </script>
+
+</body>
+</html>

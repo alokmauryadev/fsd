@@ -1,0 +1,78 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #222427;
+}
+.calculator{
+    display: flex;
+    flex-direction: column;
+    border-radius: .5rem;
+    /* height: 50vh; */
+    width: max-content;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+    box-shadow: 20px 20px 40px rgba(0, 0, 0,0.4), -20px -20px 40px rgba(255,255, 255, 0.07);
+    padding: 1.2rem;
+}
+.answer{
+    padding: .5rem;
+    width: 100%;
+    min-height: 120px;
+    display: flex;
+    padding: .5rem;
+    box-shadow: inset 8px 8px 16px rgba(0, 0, 0,0.4), 
+    inset -8px -8px 16px rgba(255,255, 255, 0.07);
+    align-items: flex-end;
+    justify-content: flex-end;
+        }
+.answertext{
+    font-size: 4rem;
+    color: white;
+}
+#numbers{
+    border: 2px solid rgb(237, 231, 231);
+    outline: none;
+    padding: 1rem;
+    border-radius: .5rem;
+}
+.optinputs{
+    display: flex;
+    background: rgb(206 194 196);
+    padding: 10px;
+    color: #131313;
+    box-shadow: 1px 1px 2px #efeeee;
+  
+}
+.numbers{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 700;
+}
+.numbers div{
+    width: 50px;
+    text-align: center;
+    height: 50px;
+    place-content: center;
+    border: 1px solid rgb(242, 241, 241);
+
+}
+.operators{
+    display: flex;
+    flex-direction: column;
+    
+}
+.operators div{
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

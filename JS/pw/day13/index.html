@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript Events</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous"referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="style.css">
+</head>
+<div class="container">
+<div class="sidebar">
+  <a href="#dashboard">
+      <i class="fa-solid fa-chart-simple"></i>
+      <span id="linktitle">Dashboard</span>
+  </a>
+  <a href="#projects">
+      <i class="fa-solid fa-briefcase"></i>
+      <span id="linktitle">Projects</span>
+  </a>
+  <a href="#messages">
+      <i class="fa-solid fa-envelope"></i>
+      <span id="linktitle">Messages</span>
+  </a>
+  <a href="#users">
+      <i class="fa-solid fa-users"></i>
+      <span id="linktitle">Users</span>
+  </a>
+  <a href="#reports">
+      <i class="fa-solid fa-file-lines"></i>
+      <span id="linktitle">Reports</span>
+  </a>
+  <a href="#settings">
+      <i class="fa-solid fa-gear"></i>
+      <span id="linktitle">Settings</span>
+  </a>
+  <a href="#logout">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span id="linktitle">Logout</span>
+  </a>
+</div>
+<div class="main">
+    <h1>Title</h1>
+    <div class="spandiv" tabindex="0">
+    <span class="para">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex suscipit deleniti ipsam.
+        <span id="littlechild">
+            I am a little para
+
+            <span id="spanchild">I'm child of my parent</span>
+        </span>
+    </span>
+    </div>
+    <button id="btn">I am Cute</button>
+    <input type="text" name="username" id="username">
+</div>
+</div>
+<body>
+    <script src="eventpropagation.js"></script>
+</body>
+</html>

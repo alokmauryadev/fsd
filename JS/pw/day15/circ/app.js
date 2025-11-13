@@ -1,0 +1,5 @@
+let increment1 = require("./count")
+increment1()
+let increment2 = require("./count")
+increment2()
+console.log(increment2)

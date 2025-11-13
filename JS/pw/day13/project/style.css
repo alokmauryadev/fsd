@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container{
+    display: flex;
+    height: 100vh;
+    padding: 10px;
+    margin: auto;
+    justify-content: center;    
+    align-items: center;
+    gap: 2rem;
+}
+#formContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.colorbox{
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+#changeColor{
+    padding: .5rem;
+    border: 2px solid rgb(244, 232, 232);
+    border-radius: 10px;
+}
+#changeColor:hover{
+    cursor: pointer;
+    color: white;
+    background: rgb(197, 151, 151);
+}

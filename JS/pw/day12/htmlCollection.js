@@ -5,7 +5,7 @@ let queryList = document.querySelectorAll("li")
 console.log(queryList.length)
 console.log(queryList)
 
-console.log("queryselect ")
+console.log("queryselect returns a node list ")
 
 console.log(li.length)
 for (const eachList of list.children) {
