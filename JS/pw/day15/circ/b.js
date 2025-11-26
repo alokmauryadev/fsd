@@ -1,8 +1,6 @@
-import { funcA } from './a.js';
-export function funcB() {
+const {funcA} = require("./a.js")
+function funcB() {
   funcA();
     console.log("func B is running...")
-
 }
-
-funcA();
+module.exports = {funcB}

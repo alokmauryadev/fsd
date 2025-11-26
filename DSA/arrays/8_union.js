@@ -24,7 +24,7 @@ while(i<m && j<n){
     if(arr1[i]<=arr2[j]){
         if(union.length == 0 || union[union.length-1] !== arr1[i] ){
             union.push(arr1[i])
-        } 
+        }
         i++
       }
         else{
