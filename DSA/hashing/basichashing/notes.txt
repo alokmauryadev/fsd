@@ -1,7 +1,7 @@
 hashing means prestoring a data into an object or array form and then fetch it,
 what is we have to find how many times a number appear in an array, 
 we can do it by brute force method, where we'll go through each number, and loop it over for it, and find it's count
-but it's not the very best solution for this
+though it's not the very best solution for this
 
 for this we use technique called hashing, in this we create a array for length which is 1 increased by the highest number present in the array of the data, or highest number we have to find the data for
 
@@ -14,5 +14,5 @@ so, we can easily now fetch for a specific index, how much time a number is appe
 
 when we create a key value pair in js, it convert the key into a hash number, and store the data there,
 and when we fetch the data again, it uses the same function to get the hash number from the key and loop instantly 
-its' Time Complexity is O(1), in average and best cases, someitmes if there if collision, like story two different value in same key, 
+its' Time Complexity is O(1), in average and best cases, someitmes if there if collision, like storing two different value in same key, 
 it's time complexity becomes O(N)
