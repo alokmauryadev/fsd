@@ -1,0 +1,24 @@
+// UI/UX Matters, we don't make websites for our personal use, we make it to use by users
+
+// so our UI should response according to devices as well as how looks it can good depend on yourself
+// but try to make it look good, make it responsive, so user can browse the website in any devices without having too much problem
+
+    <!-- <div id="box">
+        <div id="inner"></div>
+    </div> -->
+    <!-- Pixels are fixed it means 4px will look same across the device itself, no matter where then element it, it means and they depend on the screen size
+     -->
+    <!-- vw and vh are screen dependend, vw -viewport width, and vh viewport height -->
+     <!-- vmin - viewport minimum(whover is minimum(either height or width))
+      vmax - viewpoer maximum(whoever is max(either height or width))
+     -->
+
+
+em - it's a value relative to the parent
+
+rem - it's value relative to root
+1rem = 16px
+
+ch - jitna size no. of characters lenge
+
+lh - jitne size no. of line lenge

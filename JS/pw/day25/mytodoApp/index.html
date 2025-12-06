@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OOP Todo App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>Todo List (OOP + LocalStorage)</h1>
+
+    <!-- Add Task -->
+    <div class="task-input">
+      <input type="text" id="task-input" placeholder="Enter new task...">
+      <button id="add-btn">Add</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button data-filter="all" class="filter-btn active">All</button>
+      <button data-filter="pending" class="filter-btn">Pending</button>
+      <button data-filter="completed" class="filter-btn">Completed</button>
+    </div>
+
+    <!-- Todo List -->
+    <ul id="task-list"></ul>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

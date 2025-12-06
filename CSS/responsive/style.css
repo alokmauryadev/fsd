@@ -1,0 +1,39 @@
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html,body{
+    height: 100%;
+    width: 100%;
+    padding: .1rem;
+}
+/* h1{
+    font-size: 10vmax;
+} */
+/* #box{
+    height: 200px;
+    width: 100px;
+    background-color: rgb(227, 136, 136);
+}
+#inner{
+    height: 100px;
+    width: 50px;
+    background: lightblue;
+} */
+
+#parent{
+    width: 300px;
+    height: 300px;
+    background-color: crimson;
+    color: rgb(222, 222, 212);
+}
+h1{
+    font-size: 2em;
+    width: 10ch;
+}
+h4{
+    margin: 1lh;
+    font-size: 1.5em;
+}

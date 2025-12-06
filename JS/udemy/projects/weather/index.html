@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main flex justify-center items-center h-full">
+        <div class="weather-app flex flex-col m-4 p-6 w-full border-gray-400 border-2 border-r-2 rounded-xl">
+            <div class="locinfo flex justify-between">
+                <div class="basicgeodata">
+                   <span><i class="mapicon">Map</i></span>
+                   <span class="city text-lg">Lucnkow, India</span>
+                 <div class="datetime text-sm font-medium">
+                    <span>Sunday, Nov 23, 05:30 PM</span>
+                </div>
+                </div>
+                <div class="unit">
+                    <button class="changeUnit rounded-3xl border-gray-500 border-2 px-4 text-center  ">
+                    °C/°F
+                    </button>
+                </div>
+            </div>
+            <div class="weatherdiv flex justify-between items-center flex-wrap">
+                <div class="weatherinfo flex flex-col gap-3">
+                         <div id="cwicon">
+                    Cloud
+                          </div>
+                     <div class="temperature flex flex-col gap-2"><span class="font-bold text-7xl" id="tempn">21°</span><span id="tempstatus">Cloudy</span></div>
+                               </div>
+                <div class="weathercards gap-2 w-auto flex-grow-0">
+                    <div class="card">
+                        <div class="windinfo">
+                            <span><i class="windicon"></i></span>
+                            <span>Wind</span>
+                        </div>
+                        <div class="winddata">3.4 km/h</div>
+                    </div>
+                                        <div class="card">
+                        <div class="humidinfo">
+                            <span><i class="humidicon"></i></span>
+                            <span>HUMIDITY</span>
+                        </div>
+                        <div class="humiddata">3.4 km/h</div>
+                    </div>
+                                        <div class="card">
+                        <div class="feelsinfo">
+                            <span><i class="feelsicon"></i></span>
+                            <span>FEELS LIKE</span>
+                        </div>
+                        <div class="humiddata">21°</div>
+                    </div>
+                                        <div class="card">
+                        <div class="uvinfo">
+                            <span><i class="uvicon"></i></span>
+                            <span>UV INDEX</span>
+                        </div>
+                        <div class="winddata">4.5</div>
+                    </div>
+                    <div class="searchbar">
+                        <span><i class="searchicon">Search</i></span>
+                        <input type="text" name="cityname" id="cityname" class="w-full" placeholder="Search city(Enter)...">
+                    </div>
+                </div>
+            </div>
+            <div class="forecast">
+                <span>HOURLY FORECAST</span>
+                <div class="forecastcards">
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                                        <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                                        <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                                        <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+                    <div class="forecard">
+                        <span>6 PM</span>
+                        <span>Sunny Icon</span>
+                        <span>19°</span>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

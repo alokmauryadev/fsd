@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Image</title>
+    <style>
+        .dog-image{
+            width: 50vw;
+            /* height: 30vh; */
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- <button id="btn">Get Image</button> -->
+    <div class="facts">
+        <span id="cat-fact"></span>
+    </div>
+    <script>
+        let  catFact = document.getElementById("cat-fact")
+        let count = 0;
+        console.log(count++)
+
+        setInterval(changeFact,5000)
+
+    //     function changeFact(){
+    //     catFact.textContent = ""
+    //     const xhr = new XMLHttpRequest
+    //    // Correct usage:
+    //     xhr.open('GET', 'https://catfact.ninja/fact');
+    //     xhr.onload = ()=>{
+    //         // let image = document.createElement("img")
+    //         let source = JSON.parse(xhr.response)
+    //         catFact.textContent = source.fact
+    //         console.log(xhr.response)
+    //     }
+    //     xhr.send()
+    // }
+    function changeFact(){
+        catFact.textContent = ""
+        fetch("https://catfact.ninja/fact").then((data)=>{
+            return data.json()
+        }).then((res)=>{
+            catFact.textContent = res.fact
+        })
+    }
+    changeFact()
+
+    </script>
+</body>
+</html>

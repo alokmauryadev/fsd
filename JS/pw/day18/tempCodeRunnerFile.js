@@ -1,0 +1,1 @@
+https://api.freeapi.app/api/v1/public/quotes/quote/random

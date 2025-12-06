@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog Image</title>
+    <style>
+        .dog-image{
+            width: 50vw;
+            /* height: 30vh; */
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        img{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">Get Image</button>
+    <div class="dog-image">
+
+    </div>
+    <script>
+        let btn = document.getElementById("btn")
+        let dogDiv = document.querySelector(".dog-image")
+
+        function changeImage(){
+        dogDiv.innerHTML = ""
+        const xhr = new XMLHttpRequest
+       // Correct usage:
+        xhr.open('GET', 'https://dog.ceo/api/breeds/image/random');
+        xhr.onload = ()=>{
+            let image = document.createElement("img")
+            let source = JSON.parse(xhr.response)
+            image.src = `${source.message}`
+            console.log(xhr.response)
+            dogDiv.appendChild(image)
+        }
+        xhr.send()
+    }
+    changeImage()
+    btn.addEventListener("click",()=>{
+        changeImage()
+    })
+
+    </script>
+</body>
+</html>

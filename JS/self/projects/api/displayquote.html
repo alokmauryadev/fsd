@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Quote</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <div class="flex justify-center items-center h-screen bg-gray-200">
+        <span class="quote m-8">
+
+        </span>
+    </div>
+    <script>
+        let quote = document.querySelector(".quote")
+        let url = "https://api.freeapi.app/api/v1/public/quotes/quote/random"
+        async function main(){
+            try{
+            let response = await fetch(url)
+            let data = await response.json()
+            let quoteMessage = data.data
+            quote.textContent = `${quoteMessage.content}`;
+            console.log(quote.data.content)
+            }catch(err){
+                console.log(err)
+            }
+        }
+        main()
+    </script>
+</body>
+</html>

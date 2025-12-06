@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern User Card</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+  <div class="w-full max-w-lg bg-white shadow-xl rounded-2xl p-6 space-y-5">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-gray-800">Users</h1>
+      <span id="status" class="px-3 py-1 text-sm rounded-full bg-gray-200 text-gray-700">Idle</span>
+    </div>
+
+    <!-- Dropdown -->
+    <select id="users" 
+      class="w-full rounded-lg border-gray-300 text-gray-700 px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <option value="">Select User</option>
+    </select>
+
+    <!-- User Card -->
+    <div id="userDetails" class="hidden">
+      <div class="p-5 bg-gray-50 rounded-xl shadow-inner">
+
+        <div class="flex items-center space-x-4">
+          <div class="w-14 h-14 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl font-bold" id="avatar">
+            U
+          </div>
+
+          <div>
+            <h2 id="name" class="text-xl font-semibold text-gray-800"></h2>
+            <p id="email" class="text-gray-600 text-sm"></p>
+          </div>
+        </div>
+
+        <div class="mt-4 border-t pt-4">
+          <p class="text-gray-700"><strong>Phone:</strong> <span id="phone"></span></p>
+          <p class="text-gray-700"><strong>City:</strong> <span id="city"></span></p>
+          <p class="text-gray-700"><strong>Company:</strong> <span id="company"></span></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let users = [];
+    let userSelect = document.getElementById("users");
+    let statusText = document.getElementById("status");
+
+    const card = {
+      box: document.getElementById("userDetails"),
+      name: document.getElementById("name"),
+      email: document.getElementById("email"),
+      phone: document.getElementById("phone"),
+      city: document.getElementById("city"),
+      company: document.getElementById("company"),
+      avatar: document.getElementById("avatar")
+    };
+
+    function fetchUsers() {
+      statusText.textContent = "Loading...";
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://jsonplaceholder.typicode.com/users");
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            let data = JSON.parse(xhr.response);
+            users = [...data];
+            statusText.textContent = "Loaded";
+
+            data.forEach(user => {
+              let opt = document.createElement("option");
+              opt.value = user.id;
+              opt.textContent = user.name;
+              userSelect.appendChild(opt);
+            });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          statusText.textContent = "Failed";
+        }
+      };
+
+      xhr.send();
+    }
+
+    userSelect.addEventListener("change", () => {
+      let id = userSelect.value;
+      if (!id) return;
+
+      let user = users.find(u => u.id == id);
+
+      if (user) {
+        card.box.classList.remove("hidden");
+
+        card.name.textContent = user.name;
+        card.email.textContent = user.email;
+        card.phone.textContent = user.phone;
+        card.city.textContent = user.address.city;
+        card.company.textContent = user.company.name;
+        card.avatar.textContent = user.name.charAt(0).toUpperCase();
+      }
+    });
+
+    fetchUsers();
+  </script>
+
+</body>
+</html>

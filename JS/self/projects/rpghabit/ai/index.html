@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Interface</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Rajdhani for that 'Tech' look -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'system-black': '#050505',
+                        'system-blue': '#00a8ff',
+                        'system-dark-blue': '#005f99',
+                        'system-alert': '#ff3333',
+                    },
+                    fontFamily: {
+                        'system': ['Rajdhani', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 10px #00a8ff, 0 0 20px #00a8ff44',
+                        'glow-alert': '0 0 10px #ff3333, 0 0 20px #ff333344',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020202;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                linear-gradient(rgba(0, 168, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 168, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* The Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #005f99; }
+
+        /* Animation for the "System" open effect */
+        @keyframes bootUp {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .system-window {
+            animation: bootUp 0.6s ease-out forwards;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 168, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="h-screen w-full flex items-center justify-center p-4 ">
+
+    <!-- MAIN CONTAINER -->
+    <div id="app" class="system-window w-full max-w-4xl h-[90vh] bg-system-black/90 shadow-glow flex flex-col md:flex-row relative">
+        
+        <!-- DECORATIVE CORNERS (The classic UI look) -->
+        <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-system-blue"></div>
+        <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-system-blue"></div>
+        <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-system-blue"></div>
+        <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-system-blue"></div>
+
+        <!-- LEFT PANEL: PLAYER STATS -->
+        <div class="w-full md:w-1/3 border-r border-system-blue/30 p-6 flex flex-col gap-6">
+            
+            <!-- AVATAR / RANK -->
+            <div class="text-center">
+                <h1 class="text-3xl font-bold tracking-widest text-system-blue drop-shadow-md">STATUS</h1>
+                <div class="mt-4 w-32 h-32 mx-auto border-2 border-system-blue rounded-full flex items-center justify-center bg-black shadow-glow relative overflow-hidden">
+                    <span id="rank-display" class="text-6xl font-bold text-white">E</span>
+                    <!-- You can add an image img tag here later -->
+                </div>
+                <h2 id="player-name" class="mt-4 text-xl tracking-wider">PLAYER UNKNOWN</h2>
+                <div class="text-sm text-system-blue/70">JOB: NONE</div>
+            </div>
+
+            <!-- HP/MP BARS (Visuals only for now, mapped to XP) -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs text-system-blue">
+                    <span>XP</span>
+                    <span id="xp-text">0 / 100</span>
+                </div>
+                <div class="w-full h-2 bg-gray-900 border border-system-blue/30">
+                    <div id="xp-bar" class="h-full bg-system-blue shadow-[0_0_10px_#00a8ff]" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- STATS GRID -->
+            <div class="grid grid-cols-2 gap-4 mt-4" id="stats-container">
+                <!-- Stats will be injected here by JS -->
+                <div class="p-2 border border-system-blue/20 bg-system-blue/5">
+                    <div class="text-xs text-gray-400">STR</div>
+                    <div class="text-xl font-bold">10</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL: QUESTS (HABITS) -->
+        <div class="w-full md:w-2/3 p-6 flex flex-col">
+            <div class="flex justify-between items-center mb-6 border-b border-system-blue/30 pb-2">
+                <h2 class="text-2xl font-bold text-system-blue">QUESTS</h2>
+                <button id="add-quest-btn" class="px-4 py-1 text-sm border border-system-blue hover:bg-system-blue hover:text-black transition-colors uppercase tracking-widest">
+                    [+] New Quest
+                </button>
+            </div>
+
+            <!-- QUEST LIST CONTAINER -->
+            <div id="quest-list" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                <!-- Javascript will populate this -->
+                <!-- Example Item structure for reference -->
+                <!-- 
+                <div class="p-4 border border-system-blue/30 bg-black/50 hover:bg-system-blue/10 transition-all cursor-pointer flex justify-between items-center group">
+                    <div>
+                        <div class="text-sm text-system-alert font-bold">[PENALTY QUEST]</div>
+                        <div class="font-bold text-lg">Running: 5km</div>
+                        <div class="text-xs text-gray-500">Rewards: +5 STR, +50 XP</div>
+                    </div>
+                    <div class="w-6 h-6 border border-system-blue flex items-center justify-center">
+                        <div class="w-4 h-4 bg-system-blue opacity-0 group-hover:opacity-50"></div>
+                    </div>
+                </div> 
+                -->
+            </div>
+
+            <!-- SYSTEM LOG (Console output style) -->
+            <div class="h-32 mt-6 border-t border-system-blue/30 pt-2 font-mono text-xs text-system-blue/80 overflow-y-hidden relative">
+                <div class="absolute top-0 left-0 bg-system-black px-2 -mt-3 text-xs border border-system-blue/30">SYSTEM LOG</div>
+                <div id="system-log" class="mt-2 space-y-1">
+                    <div>> System initialized...</div>
+                    <div>> Welcome, Player.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD QUEST MODAL (Hidden by default) -->
+    <div id="modal" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="w-96 border border-system-blue bg-system-black p-6 shadow-glow relative">
+            <h3 class="text-xl text-system-blue mb-4">NEW QUEST</h3>
+            <input id="new-quest-title" type="text" placeholder="Quest Name" class="w-full bg-gray-900 border border-system-blue/50 p-2 text-white outline-none focus:border-system-blue mb-4">
+            
+            <div class="flex gap-2 mb-4">
+                <select id="new-quest-stat" class="bg-gray-900 border border-system-blue/50 p-2 text-white outline-none w-1/2">
+                    <option value="STR">STR (Strength)</option>
+                    <option value="INT">INT (Intelligence)</option>
+                    <option value="AGI">AGI (Agility)</option>
+                </select>
+                <input id="new-quest-xp" type="number" placeholder="XP Reward" value="10" class="bg-gray-900 border border-system-blue/50 p-2 text-white outline-none w-1/2">
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button id="close-modal" class="text-gray-500 hover:text-white">CANCEL</button>
+                <button id="save-quest" class="bg-system-blue text-black px-4 py-1 font-bold hover:bg-white transition-colors">ACCEPT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC STARTS HERE -->
+    <script>
+        // --- 1. CONFIGURATION ---
+        const LEVELS_MULTIPLIER = 1.5;
+        const BASE_XP_REQ = 100;
+
+        // --- 2. DATA MODEL (The State) ---
+        // TODO: You need to implement the persistence logic (save/load from localStorage)
+        const defaultState = {
+            player: {
+                name: "Player One",
+                level: 1,
+                xp: 0,
+                nextLevelXp: 100,
+                rank: "E",
+                stats: { STR: 5, INT: 5, AGI: 5 }
+            },
+            quests: [],
+            logs: []
+        };
+
+        let appState = JSON.parse(localStorage.getItem('soloLevelingState')) || defaultState;
+
+        // --- 3. CONTROLLER (Logic) ---
+        
+        const Controller = {
+            init() {
+                Render.all();
+                this.setupEventListeners();
+                this.log("System initialized.");
+            },
+
+            saveData() {
+                localStorage.setItem('soloLevelingState', JSON.stringify(appState));
+                Render.all();
+            },
+
+            addQuest(title, stat, xp) {
+                const newQuest = {
+                    id: Date.now(),
+                    title: title,
+                    statReward: stat,
+                    xpReward: parseInt(xp),
+                    completed: false,
+                    type: "DAILY"
+                };
+                appState.quests.push(newQuest);
+                this.log(`Quest accepted: ${title}`);
+                this.saveData();
+            },
+
+            completeQuest(id) {
+                const questIndex = appState.quests.findIndex(q => q.id === id);
+                if (questIndex === -1) return;
+                
+                const quest = appState.quests[questIndex];
+                if (quest.completed) return; // Already done
+
+                // TODO: IMPLEMENT LEVEL UP LOGIC HERE
+                // 1. Add XP to player
+                // 2. Add Stat point to player
+                // 3. Check if XP > nextLevelXp. If yes, Level Up!
+                
+                // Placeholder Logic (You must fix this):
+                appState.player.xp += quest.xpReward;
+                appState.player.stats[quest.statReward] += 1;
+                quest.completed = true;
+
+                this.log(`Quest completed. +${quest.xpReward} XP.`);
+                this.checkLevelUp();
+                this.saveData();
+            },
+
+            checkLevelUp() {
+                // TODO: Implement the recursive level up check
+                // If currentXP >= requiredXP, level++, reset XP, increase requiredXP
+                if (appState.player.xp >= appState.player.nextLevelXp) {
+                    appState.player.level++;
+                    appState.player.xp = appState.player.xp - appState.player.nextLevelXp;
+                    appState.player.nextLevelXp = Math.floor(appState.player.nextLevelXp * LEVELS_MULTIPLIER);
+                    this.log(`LEVEL UP! You are now Level ${appState.player.level}`);
+                    // Trigger a sound or animation here?
+                }
+            },
+
+            log(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                appState.logs.unshift(`[${timestamp}] ${message}`);
+                if (appState.logs.length > 5) appState.logs.pop();
+                Render.logs();
+            },
+
+            setupEventListeners() {
+                // Modal Toggling
+                const modal = document.getElementById('modal');
+                document.getElementById('add-quest-btn').onclick = () => modal.classList.remove('hidden');
+                document.getElementById('close-modal').onclick = () => modal.classList.add('hidden');
+
+                // Save Quest
+                document.getElementById('save-quest').onclick = () => {
+                    const title = document.getElementById('new-quest-title').value;
+                    const stat = document.getElementById('new-quest-stat').value;
+                    const xp = document.getElementById('new-quest-xp').value;
+                    
+                    if(title) {
+                        this.addQuest(title, stat, xp);
+                        modal.classList.add('hidden');
+                        document.getElementById('new-quest-title').value = ''; // Reset
+                    }
+                };
+            }
+        };
+
+        // --- 4. VIEW (Rendering) ---
+        const Render = {
+            all() {
+                this.playerStats();
+                this.quests();
+                this.logs();
+            },
+
+            playerStats() {
+                const p = appState.player;
+                document.getElementById('player-name').innerText = p.name;
+                document.getElementById('rank-display').innerText = p.rank;
+                document.getElementById('xp-text').innerText = `${p.xp} / ${p.nextLevelXp}`;
+                
+                // Calculate percentage for CSS width
+                const xpPercent = (p.xp / p.nextLevelXp) * 100;
+                document.getElementById('xp-bar').style.width = `${xpPercent}%`;
+
+                // Render Stats Grid
+                const container = document.getElementById('stats-container');
+                container.innerHTML = '';
+                Object.keys(p.stats).forEach(key => {
+                    container.innerHTML += `
+                        <div class="p-2 border border-system-blue/20 bg-system-blue/5">
+                            <div class="text-xs text-gray-400 uppercase">${key}</div>
+                            <div class="text-xl font-bold">${p.stats[key]}</div>
+                        </div>
+                    `;
+                });
+            },
+
+            quests() {
+                const list = document.getElementById('quest-list');
+                list.innerHTML = '';
+                
+                appState.quests.forEach(q => {
+                    const statusColor = q.completed ? 'text-gray-500 border-gray-700' : 'border-system-blue/30 text-white';
+                    const opacity = q.completed ? 'opacity-50' : 'opacity-100';
+
+                    list.innerHTML += `
+                        <div onclick="Controller.completeQuest(${q.id})" class="${statusColor} ${opacity} p-4 border bg-black/50 hover:bg-system-blue/10 transition-all cursor-pointer flex justify-between items-center group mb-2">
+                            <div>
+                                <div class="font-bold text-lg">${q.title}</div>
+                                <div class="text-xs text-system-blue/70">Rewards: +1 ${q.statReward}, +${q.xpReward} XP</div>
+                            </div>
+                            <div class="w-6 h-6 border ${q.completed ? 'border-gray-500 bg-gray-500' : 'border-system-blue'} flex items-center justify-center">
+                                ${q.completed ? '✓' : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            },
+
+            logs() {
+                const logContainer = document.getElementById('system-log');
+                logContainer.innerHTML = appState.logs.map(l => `<div>> ${l}</div>`).join('');
+            }
+        };
+
+        // Boot the System
+        window.onload = () => Controller.init();
+
+    </script>
+</body>
+</html>

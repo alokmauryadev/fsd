@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atmosphere | Real Weather API</title>
+    
+    <!-- Fonts: Inter for that clean, modern tech look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Phosphor Icons (Clean, consistent line icons) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS (for rapid styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles for Animations & Glassmorphism -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6); 
+            transition: background 1s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- Glassmorphism Utilities --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* --- Animations --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes sun-pulse {
+            0% { box-shadow: 0 0 20px rgba(253, 186, 116, 0.4); }
+            50% { box-shadow: 0 0 60px rgba(253, 186, 116, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(253, 186, 116, 0.4); }
+        }
+        .sun-glow {
+            animation: sun-pulse 3s infinite;
+        }
+
+        @keyframes rain-fall {
+            0% { transform: translateY(-20px); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(100px); opacity: 0; }
+        }
+        .rain-drop {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            width: 2px;
+            height: 10px;
+            border-radius: 2px;
+            animation: rain-fall 1s linear infinite;
+        }
+
+        /* Loading Spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Dynamic Background States */
+        .bg-sunny { background: linear-gradient(135deg, #38bdf8, #2563eb); }
+        .bg-cloudy { background: linear-gradient(135deg, #94a3b8, #475569); }
+        .bg-rainy { background: linear-gradient(135deg, #334155, #0f172a); }
+        .bg-stormy { background: linear-gradient(135deg, #1e1b4b, #312e81); }
+        .bg-snowy { background: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1e293b; } /* Dark text for snow */
+        .bg-snowy .text-white { color: #1e293b; } /* Override text color for snow theme */
+        .bg-snowy .glass { background: rgba(255, 255, 255, 0.4); border: 1px solid rgba(255, 255, 255, 0.6); }
+
+    </style>
+</head>
+<body class="text-white min-h-screen flex items-center justify-center p-4 selection:bg-white/30">
+
+    <main class="w-full max-w-[400px] sm:max-w-[800px] h-auto min-h-[600px] glass rounded-3xl p-6 sm:p-8 relative overflow-hidden transition-all duration-500">
+        
+        <!-- Decorative Orbs -->
+        <div class="absolute -top-20 -left-20 w-64 h-64 bg-white/20 rounded-full blur-[80px] pointer-events-none"></div>
+        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-500/30 rounded-full blur-[80px] pointer-events-none"></div>
+
+        <!-- Header -->
+        <header class="flex justify-between items-start relative z-10 mb-8">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="ph-fill ph-map-pin text-xl text-white/80"></i>
+                    <h1 class="text-2xl font-bold tracking-tight" id="location-name">New York, US</h1>
+                </div>
+                <p class="text-sm text-white/70 font-medium" id="current-date">Loading...</p>
+            </div>
+            <button onclick="toggleUnit()" class="glass-panel px-3 py-1 rounded-full text-xs font-bold hover:bg-white/20 transition cursor-pointer">
+                °C / °F
+            </button>
+        </header>
+
+        <!-- Error Message Banner (Hidden by default) -->
+        <div id="error-banner" class="hidden mb-4 p-3 bg-red-500/80 rounded-xl text-sm font-medium text-white text-center">
+            City not found. Please try again.
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 relative z-10">
+            
+            <!-- Left: Icon & Temp -->
+            <div class="flex flex-col items-center sm:items-start justify-center text-center sm:text-left">
+                <div id="weather-icon-container" class="w-40 h-40 relative mb-4 animate-float flex items-center justify-center">
+                    <!-- Icon Injected Here -->
+                </div>
+                <div class="relative">
+                    <h2 class="text-8xl font-bold tracking-tighter" id="temp-display">--°</h2>
+                    <p class="text-xl text-white/90 font-medium mt-2 capitalize" id="weather-desc">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Right: Bento Details -->
+            <div class="flex flex-col gap-4 justify-center">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col gap-2 hover:bg-white/10 transition">
+                        <div class="flex items-center gap-2 text-white/60 text-xs uppercase font-bold tracking-wider">
+                            <i class="ph ph-wind text-lg"></i> Wind
+                        </div>
+                        <span class="text-xl font-semibold" id="wind-speed">--</span>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col gap-2 hover:bg-white/10 transition">
+                        <div class="flex items-center gap-2 text-white/60 text-xs uppercase font-bold tracking-wider">
+                            <i class="ph ph-drop text-lg"></i> Humidity
+                        </div>
+                        <span class="text-xl font-semibold" id="humidity">--</span>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col gap-2 hover:bg-white/10 transition">
+                        <div class="flex items-center gap-2 text-white/60 text-xs uppercase font-bold tracking-wider">
+                            <i class="ph ph-thermometer text-lg"></i> Feels Like
+                        </div>
+                        <span class="text-xl font-semibold" id="feels-like">--</span>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl flex flex-col gap-2 hover:bg-white/10 transition">
+                        <div class="flex items-center gap-2 text-white/60 text-xs uppercase font-bold tracking-wider">
+                            <i class="ph ph-sun-dim text-lg"></i> UV Index
+                        </div>
+                        <span class="text-xl font-semibold" id="uv-index">--</span>
+                    </div>
+                </div>
+
+                <!-- Search Input -->
+                <div class="mt-2 relative">
+                    <input type="text" id="city-input" placeholder="Search city (Enter)..." 
+                        class="w-full glass-panel bg-transparent text-white placeholder-white/50 px-4 py-3 pl-10 rounded-2xl focus:outline-none focus:bg-white/20 transition shadow-inner">
+                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-white/60" id="search-icon"></i>
+                    <!-- Loading Spinner (Hidden initially) -->
+                    <div id="loading-spinner" class="spinner absolute right-3 top-1/2 -translate-y-1/2 hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full h-px bg-white/20 my-8 relative z-10"></div>
+
+        <!-- Weekly Forecast -->
+        <div class="relative z-10">
+            <h3 class="text-sm font-bold text-white/60 mb-4 uppercase tracking-wider">Hourly Forecast</h3>
+            <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2" id="forecast-container">
+                <!-- Forecast Items Injected Here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const appState = {
+            unit: 'C',
+            city: 'New York',
+            weatherData: null,
+            geoData: null
+        };
+
+        const els = {
+            location: document.getElementById('location-name'),
+            date: document.getElementById('current-date'),
+            temp: document.getElementById('temp-display'),
+            desc: document.getElementById('weather-desc'),
+            wind: document.getElementById('wind-speed'),
+            humidity: document.getElementById('humidity'),
+            feelsLike: document.getElementById('feels-like'),
+            uv: document.getElementById('uv-index'),
+            iconContainer: document.getElementById('weather-icon-container'),
+            forecastContainer: document.getElementById('forecast-container'),
+            input: document.getElementById('city-input'),
+            searchIcon: document.getElementById('search-icon'),
+            spinner: document.getElementById('loading-spinner'),
+            errorBanner: document.getElementById('error-banner'),
+            body: document.body
+        };
+
+        // --- 1. Helper: Map WMO Codes to Conditions ---
+        // Open-Meteo returns numbers (0, 1, 45, etc.). We need to translate them.
+        function getWeatherCondition(code) {
+            if (code === 0) return 'Sunny';
+            if ([1, 2, 3, 45, 48].includes(code)) return 'Cloudy';
+            if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) return 'Rainy';
+            if ([71, 73, 75, 77, 85, 86].includes(code)) return 'Snowy';
+            if ([95, 96, 99].includes(code)) return 'Stormy';
+            return 'Sunny'; // Default
+        }
+
+        // --- 2. Async API Fetching ---
+        
+        async function fetchWeatherData(city) {
+            try {
+                // UI: Start Loading
+                setLoading(true);
+                els.errorBanner.classList.add('hidden');
+
+                // Step 1: Geocoding (Convert City Name -> Lat/Lon)
+                // We use 'await' to pause execution until the promise resolves.
+                const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`;
+                const geoRes = await fetch(geoUrl);
+                const geoData = await geoRes.json();
+
+                // BLIND SPOT CHECK: Check if results exist! 
+                // A 200 OK doesn't mean we found the city.
+                if (!geoData.results || geoData.results.length === 0) {
+                    throw new Error('City not found');
+                }
+
+                const { latitude, longitude, name, country } = geoData.results[0];
+                appState.geoData = { name, country };
+
+                // Step 2: Weather Data (Use Lat/Lon)
+                const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,weather_code&daily=uv_index_max&timezone=auto`;
+                
+                const weatherRes = await fetch(weatherUrl);
+                const weatherData = await weatherRes.json();
+                
+                appState.weatherData = weatherData;
+                
+                render();
+
+            } catch (error) {
+                console.error("Error fetching weather:", error);
+                els.errorBanner.textContent = error.message === 'City not found' ? "City not found." : "Network error. Try again.";
+                els.errorBanner.classList.remove('hidden');
+            } finally {
+                // UI: Stop Loading (Runs whether success or fail)
+                setLoading(false);
+            }
+        }
+
+        // --- 3. Rendering ---
+
+        function render() {
+            if (!appState.weatherData || !appState.geoData) return;
+
+            const current = appState.weatherData.current;
+            const daily = appState.weatherData.daily;
+            const hourly = appState.weatherData.hourly;
+
+            // 1. Location & Date
+            els.location.textContent = `${appState.geoData.name}, ${appState.geoData.country}`;
+            const now = new Date();
+            els.date.textContent = now.toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+            // 2. Main Stats (Unit Conversion Logic)
+            const isMetric = appState.unit === 'C';
+            const temp = isMetric ? current.temperature_2m : (current.temperature_2m * 9/5) + 32;
+            const feelsLike = isMetric ? current.apparent_temperature : (current.apparent_temperature * 9/5) + 32;
+            
+            els.temp.textContent = `${Math.round(temp)}°`;
+            els.feelsLike.textContent = `${Math.round(feelsLike)}°`;
+            els.wind.textContent = `${current.wind_speed_10m} km/h`; // API defaults to km/h
+            els.humidity.textContent = `${current.relative_humidity_2m}%`;
+            els.uv.textContent = daily.uv_index_max[0] || 'N/A';
+
+            // 3. Condition & Background
+            const condition = getWeatherCondition(current.weather_code);
+            els.desc.textContent = condition;
+            updateBackground(condition, current.is_day);
+            renderIcon(condition, current.is_day);
+
+            // 4. Forecast (Next 24 Hours)
+            renderForecast(hourly, current.time);
+        }
+
+        function renderForecast(hourly, currentTimeISO) {
+            els.forecastContainer.innerHTML = '';
+            
+            // Find index of current hour to start forecast from now
+            // API returns ISO strings (e.g., "2023-10-14T14:00")
+            const currentIndex = hourly.time.findIndex(t => t >= currentTimeISO);
+            const start = currentIndex === -1 ? 0 : currentIndex;
+            
+            // Take next 24 slices (every 3rd hour to save space)
+            for(let i = start; i < start + 24; i += 3) {
+                if (!hourly.time[i]) break;
+                
+                const timeStr = hourly.time[i]; // "2023-10-14T14:00"
+                const dateObj = new Date(timeStr);
+                const hourLabel = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+                
+                const code = hourly.weather_code[i];
+                const tempVal = hourly.temperature_2m[i];
+                const temp = appState.unit === 'C' ? tempVal : (tempVal * 9/5) + 32;
+                
+                // Simple icon mapping for forecast
+                let iconClass = 'ph-sun';
+                const cond = getWeatherCondition(code);
+                if(cond === 'Cloudy') iconClass = 'ph-cloud';
+                if(cond === 'Rainy') iconClass = 'ph-cloud-rain';
+                if(cond === 'Stormy') iconClass = 'ph-cloud-lightning';
+                if(cond === 'Snowy') iconClass = 'ph-snowflake';
+
+                const html = `
+                    <div class="glass-panel min-w-[80px] p-3 rounded-2xl flex flex-col items-center gap-2 hover:bg-white/20 transition cursor-pointer">
+                        <span class="text-xs text-white/70">${hourLabel}</span>
+                        <i class="ph-fill ${iconClass} text-2xl text-white"></i>
+                        <span class="font-bold">${Math.round(temp)}°</span>
+                    </div>
+                `;
+                els.forecastContainer.insertAdjacentHTML('beforeend', html);
+            }
+        }
+
+        function updateBackground(condition, isDay) {
+            els.body.classList.remove('bg-sunny', 'bg-cloudy', 'bg-rainy', 'bg-stormy', 'bg-snowy', 'bg-night');
+            
+            if (condition === 'Snowy') {
+                els.body.classList.add('bg-snowy');
+            } else if (!isDay) {
+                els.body.classList.add('bg-night');
+            } else {
+                switch(condition) {
+                    case 'Sunny': els.body.classList.add('bg-sunny'); break;
+                    case 'Cloudy': els.body.classList.add('bg-cloudy'); break;
+                    case 'Rainy': els.body.classList.add('bg-rainy'); break;
+                    case 'Stormy': els.body.classList.add('bg-stormy'); break;
+                    default: els.body.classList.add('bg-sunny');
+                }
+            }
+        }
+
+        function renderIcon(condition, isDay) {
+            let html = '';
+            if (condition === 'Sunny') {
+                html = isDay 
+                    ? `<i class="ph-fill ph-sun text-8xl text-yellow-300 sun-glow drop-shadow-lg"></i>`
+                    : `<i class="ph-fill ph-moon-stars text-8xl text-gray-100 sun-glow drop-shadow-lg"></i>`;
+            } else if (condition === 'Cloudy') {
+                html = `
+                    <div class="relative">
+                        <i class="ph-fill ph-cloud text-8xl text-gray-200 drop-shadow-lg relative z-10"></i>
+                        ${isDay ? '<i class="ph-fill ph-sun text-6xl text-yellow-300 absolute -top-4 -right-4 sun-glow z-0"></i>' : ''}
+                    </div>`;
+            } else if (condition === 'Rainy') {
+                html = `
+                    <div class="relative">
+                        <i class="ph-fill ph-cloud-rain text-8xl text-gray-300 drop-shadow-lg relative z-10"></i>
+                        <div class="rain-drop" style="left: 20%; animation-delay: 0s;"></div>
+                        <div class="rain-drop" style="left: 50%; animation-delay: 0.4s;"></div>
+                        <div class="rain-drop" style="left: 70%; animation-delay: 0.2s;"></div>
+                    </div>`;
+            } else if (condition === 'Snowy') {
+                html = `<i class="ph-fill ph-snowflake text-8xl text-blue-200 drop-shadow-lg animate-float"></i>`;
+            } else {
+                html = `<i class="ph-fill ph-cloud-lightning text-8xl text-purple-300 drop-shadow-lg animate-float"></i>`;
+            }
+            els.iconContainer.innerHTML = html;
+        }
+
+        function setLoading(isLoading) {
+            if (isLoading) {
+                els.searchIcon.classList.add('hidden');
+                els.spinner.classList.remove('hidden');
+                els.input.disabled = true;
+                els.location.textContent = "Searching...";
+            } else {
+                els.searchIcon.classList.remove('hidden');
+                els.spinner.classList.add('hidden');
+                els.input.disabled = false;
+                els.input.focus();
+            }
+        }
+
+        // --- 4. Event Listeners ---
+        
+        function toggleUnit() {
+            appState.unit = appState.unit === 'C' ? 'F' : 'C';
+            render();
+        }
+
+        els.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.value.trim()) {
+                fetchWeatherData(e.target.value.trim());
+            }
+        });
+
+        // Initial Load
+        fetchWeatherData('New York');
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dropdown</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="usersDiv">
+        
+        <select name="users" id="users">
+            <option value="">Select Users</option>
+        </select>
+        <span id="status">Idle</span>
+        <div class="userDetails">
+
+        </div>
+    </div>
+    <script>
+        let users = []
+        let userSelect = document.getElementById("users");
+        let userDetails = document.querySelector(".userDetails")
+        let statusText = document.getElementById("status")
+         function fetchUsers(){
+        statusText.textContent = "Loading"
+            const xhr = new XMLHttpRequest
+            xhr.open("GET","https://jsonplaceholder.typicode.com/users")
+            xhr.onload = ()=>{
+                console.log(xhr)
+                if(xhr.status >= 200 && xhr.status<300){
+                    try{
+                        statusText.textContent = "Users Loaded"
+                let data = JSON.parse(xhr.response)
+                users = [...data]
+                data.forEach(e => {
+            let option = document.createElement("option")
+
+                   option.value = e.id
+                   option.textContent = e.name
+                   userSelect.appendChild(option)
+                   userDetails.textContent = "Choose a User"
+                });
+                console.log(data)
+         } catch(e){
+            console.log(e)
+         }
+                }
+                else{
+                    statusText.textContent = `Failed to load User ${xhr.status}`
+                }
+            }
+            console.log(xhr)
+            xhr.send()
+        }
+
+            userSelect.addEventListener("change",()=>{
+                let userId = userSelect.value
+    
+                if(!userId){
+                    userDetails.textContent = "Choose a User"
+                }
+                else{}
+        if(users.length!==0){
+
+                let userData = users.filter((e)=>{
+                   return e.id == userId
+                })
+                userDetails.textContent = `${JSON.stringify(userData)}`
+                console.log(userData)
+            }
+                // userDetails.textContent = users
+            })
+
+        fetchUsers()
+       
+    </script>
+</body>
+</html>

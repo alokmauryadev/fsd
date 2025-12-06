@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            height: 100vh;
+            width: 100vw;
+        }
+        .container{
+            height: 50%;
+            width: 50%;
+            display: grid;
+            /* grid-template-columns: 2fr 1fr 1fr 1fr; */
+            /* grid-auto-flow: dense; */
+            /* grid-template-rows: 1fr 1fr; */
+            grid-template-columns: 1fr 1fr;
+            /* grid-auto-flow: column; */
+            grid-template-rows: 1fr 1fr 1fr 1fr;
+            background-color: black;
+            /* align-content: center; */
+            /* justify-content: center; */
+            /* align-items: center; */
+            align-items: center;
+            justify-items: center;
+            /* place-content: center; */
+            /* justify-content: center; */
+
+
+        }
+        .container div{
+            width: 50%;
+            height: 50%;
+        }
+        .box1{
+            border: 2px solid blueviolet;
+            background-color: lightcoral;
+            box-sizing: border-box;
+
+            /* align-items: center; */
+            /* align-self: center; */
+            /* justify-self: center; */
+        }
+        .box2{
+                box-sizing: border-box;
+                border: 2px solid blueviolet;
+                background-color: lightblue;
+            }
+            .box3{
+                box-sizing: border-box;
+                border: 2px solid blueviolet;
+                background-color: lightgrey;
+            }
+            .box4{
+                box-sizing: border-box;
+                     border: 2px solid blueviolet;
+            background-color: lightgoldenrodyellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="box box1"></div>
+    <div class="box box2"></div>
+    <div class="box box3"></div>
+    <div class="box box4"></div>
+    <div class="box box1"></div>
+    <div class="box box2"></div>
+    <div class="box box3"></div>
+    <div class="box box4"></div>
+    </div>
+</body>
+</html>
