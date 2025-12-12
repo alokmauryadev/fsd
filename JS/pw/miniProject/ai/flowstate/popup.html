@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowState</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>FlowState</span>
+            </div>
+            <div class="status-badge" id="statusBadge">Idle</div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="timer">Timer</button>
+            <button class="tab-btn" data-tab="blocker">Blocker</button>
+            <button class="tab-btn" data-tab="stats">Stats</button>
+        </nav>
+
+        <div id="timer" class="tab-content active">
+            <div class="timer-circle">
+                <svg class="progress-ring" width="160" height="160">
+                    <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="transparent" r="70" cx="80" cy="80"/>
+                    <circle class="progress-ring__circle" stroke="#6366f1" stroke-width="8" fill="transparent" r="70" cx="80" cy="80"/>
+                </svg>
+                <div class="time-display">
+                    <span id="minutes">25</span>:<span id="seconds">00</span>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button id="startBtn" class="primary-btn">Start Focus</button>
+                <button id="resetBtn" class="secondary-btn">Reset</button>
+            </div>
+        </div>
+
+        <div id="blocker" class="tab-content">
+            <h3>Distraction Blocker</h3>
+            <p class="subtitle">Sites listed below are blocked while Timer is running.</p>
+            
+            <div class="input-group">
+                <input type="text" id="siteInput" placeholder="e.g. facebook.com">
+                <button id="addSiteBtn">+</button>
+            </div>
+
+            <ul id="blockedList" class="site-list">
+                </ul>
+        </div>
+
+        <div id="stats" class="tab-content">
+            <h3>Today's Usage</h3>
+            <div class="stats-container" id="statsList">
+                <div class="empty-state">Start browsing to see data</div>
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>

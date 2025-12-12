@@ -1,0 +1,50 @@
+#flowstate-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0f172a;
+    z-index: 2147483647; /* Max z-index */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: -apple-system, sans-serif;
+}
+
+#flowstate-overlay .msg-container {
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+#flowstate-overlay h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #6366f1;
+}
+
+#flowstate-overlay p {
+    font-size: 1.5rem;
+    color: #94a3b8;
+}
+
+.pulse-circle {
+    width: 50px;
+    height: 50px;
+    background: #6366f1;
+    border-radius: 50%;
+    margin: 20px auto;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

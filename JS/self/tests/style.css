@@ -1,0 +1,200 @@
+:root {
+  /* Color Palette */
+  --bg-color: #0f172a;       /* Dark Blue/Slate background */
+  --card-bg: #1e293b;        /* Lighter Slate for card */
+  --primary: #3b82f6;        /* Bright Blue action color */
+  --primary-hover: #2563eb;  /* Darker Blue for hover */
+  --text-main: #f8fafc;      /* Almost White text */
+  --text-muted: #94a3b8;     /* Gray text for secondary info */
+  --accent: #10b981;         /* Green for success/strength */
+  --input-bg: #020617;       /* Very dark for input fields */
+  
+  /* Spacing & Radius */
+  --radius: 12px;
+  --transition: all 0.2s ease-in-out;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Main Container */
+.container {
+  width: 100%;
+  max-width: 450px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-main);
+  letter-spacing: 0.5px;
+}
+
+/* Card Styling */
+.card {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Password Display Area */
+.result-wrap {
+  background-color: var(--input-bg);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  position: relative;
+}
+
+#passwordOutput {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-size: 1.25rem;
+  font-family: 'Courier New', monospace; /* Monospace for passwords is clearer */
+  width: 100%;
+  outline: none;
+  letter-spacing: 1px;
+}
+
+#copyBtn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+#copyBtn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* Range Slider */
+label[for="length"] {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+#lengthVal {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 6px;
+  background: var(--input-bg);
+  border-radius: 5px;
+  outline: none;
+  margin-bottom: 1.5rem;
+  accent-color: var(--primary); /* Modern browser support for slider color */
+  cursor: pointer;
+}
+
+/* Checkbox Options Grid */
+.options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.options label:hover {
+  color: var(--text-main);
+}
+
+.options input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* Generate Button & Strength */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#generateBtn {
+  width: 100%;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+#generateBtn:hover {
+  background-color: var(--primary-hover);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); 
+}
+
+#strength {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+#strengthVal {
+  color: var(--text-main);
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Hint Text */
+.hint {
+  display: block;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.4;
+  opacity: 0.7;
+}

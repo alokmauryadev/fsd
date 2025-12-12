@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           height: 100vh;
+        }
+        .calendar{
+            width: 60vw;
+            height: 50vh;
+            display: grid;
+            grid-template-columns: repeat(7,1fr);
+            /* grid-template-rows: repeat(); */
+            border: 1px solid black;
+            gap: .5rem;
+            padding: .5rem;
+        }
+        .box{
+            border: .1rem solid black;
+            background-color: rgb(206, 206, 209);
+            /* gap: 1rem; */
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <input type="month" name="month" id="month">
+        <div class="calendar">
+        </div>
+    </div>
+    <div class="consoleOutput">
+
+    </div>
+
+</body>
+<script>
+let blocks = []
+  const monthInput = document.getElementById("month");
+  let calendarDiv = document.querySelector(".calendar")
+  let consoleOutput = document.querySelector(".consoleOutput");
+  function populateMonth(){
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0"); // 1–12
+      monthInput.value = `${year}-${month}`;
+  }
+  populateMonth();
+    
+    for (let i = 0; i < 6; i++) {
+        for(let j=0;j<7;j++){
+            const childDiv = document.createElement("div")
+            childDiv.className = "box"
+            calendarDiv.append(childDiv)
+            blocks[`${i}-${j}`] = childDiv;
+        }
+    }
+    function addDate(){
+        const currentYear = parseInt(monthInput.value.slice(0,4))
+        const currentMonth = parseInt(monthInput.value.slice(-2))-1
+        let startDay = new Date(currentYear,currentMonth,1).getDay()
+        let totalDays = new Date(currentYear,currentMonth+1,0).getDate()
+        let day = 1;
+        for(let i=1;i<6;i++){
+            for(let j=0;j<7;j++){
+                let cBLock = blocks[`${i}-${j}`]
+                cBLock.textContent = ""
+                if(i==1 && j<startDay){
+                    continue
+                }
+                if(day>totalDays) break;
+                cBLock.textContent = `${day}`
+                day++
+            }
+        }
+    }
+    monthInput.addEventListener("change",()=>{
+        addDate();
+    })
+    addDate();
+    function addWeekDays(){
+        let date = new Date(2025,10,30);
+        for(let i=0;i<7;i++){
+            let cBLock = blocks[`0-${i}`]
+            console.log(cBLock)
+            cBLock.textContent = date.toDateString().slice(0,3)
+            date.setDate(date.getDate()+1)
+        }
+    }
+    addWeekDays()
+
+</script>
+</html>

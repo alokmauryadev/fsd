@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "FlowState: Ultimate Focus",
+  "version": "1.0",
+  "description": "A modern Pomodoro timer with site blocking and usage analytics.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "alarms"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Open FlowState"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+
+}

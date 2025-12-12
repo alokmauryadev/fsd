@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Law: Recursion Visualizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "sys-black": "#050505",
+                        "sys-blue": "#00a8ff",
+                        "sys-green": "#00ff9d",
+                        "sys-red": "#ff3333",
+                        "sys-dark": "#0a1520"
+                    },
+                    fontFamily: {
+                        sans: ["Rajdhani", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .stack-item { transition: all 0.3s ease; }
+        .node { transition: all 0.3s ease; }
+        .glow { box-shadow: 0 0 10px #00a8ff44; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #005f99; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-sys-black text-white h-screen w-full overflow-hidden font-sans p-4">
+
+    <div class="grid grid-cols-12 gap-4 h-full max-w-7xl mx-auto">
+        
+        <div class="col-span-8 flex flex-col gap-4">
+            <div class="border border-sys-blue/30 bg-sys-dark/80 p-4 rounded-lg h-2/3 overflow-y-auto glow relative">
+                <div class="absolute top-2 right-4 text-sys-blue text-xs tracking-widest font-bold">DECISION TREE (HISTORY)</div>
+                <div id="tree-container" class="font-mono text-sm pt-4">
+                    </div>
+            </div>
+
+            <div class="border border-sys-blue/30 bg-sys-dark/80 p-4 rounded-lg h-1/3 font-mono text-sm relative">
+                <div class="absolute top-2 right-4 text-sys-blue text-xs tracking-widest font-bold">SOURCE CODE</div>
+                <pre class="text-gray-400 mt-2">
+function solve(str, open, close) {
+  <span id="line-base" class="opacity-30">if (str.length === n*2) return;</span>
+  
+  <span id="line-open" class="opacity-30">if (open < n) solve(str + "(", open+1, close);</span>
+  
+  <span id="line-close" class="opacity-30">if (close < open) solve(str + ")", open, close+1);</span>
+}
+                </pre>
+                <div id="log-message" class="mt-4 text-sys-green font-bold text-lg border-t border-gray-700 pt-2">
+                    System Ready. N = 2
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-4 flex flex-col gap-4 h-full">
+            
+            <div class="border border-sys-blue/30 bg-sys-dark p-4 rounded-lg flex flex-col gap-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-xl font-bold text-sys-blue">CONTROLLER</span>
+                    <span class="text-xs text-gray-400">N=2</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="visualizer.reset()" class="px-4 py-2 border border-sys-red text-sys-red hover:bg-sys-red/10 rounded w-1/3">RESET</button>
+                    <button onclick="visualizer.next()" class="px-4 py-2 bg-sys-blue text-black font-bold hover:bg-sys-blue/80 rounded w-2/3">NEXT STEP [SPACE]</button>
+                </div>
+            </div>
+
+            <div class="border border-sys-blue/30 bg-sys-dark/80 p-4 rounded-lg flex-1 overflow-hidden relative flex flex-col">
+                <div class="text-sys-blue text-xs tracking-widest font-bold mb-4 border-b border-gray-700 pb-2">RAM (CALL STACK)</div>
+                <div id="stack-container" class="flex flex-col-reverse gap-2 overflow-y-auto h-full p-2">
+                    </div>
+            </div>
+
+            <div class="border border-sys-blue/30 bg-sys-dark p-4 rounded-lg">
+                <div class="text-gray-400 text-xs mb-2">CURRENT STATE</div>
+                <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="bg-black border border-gray-700 rounded p-2">
+                        <div class="text-xs text-gray-500">String</div>
+                        <div id="disp-str" class="text-xl font-bold text-white">""</div>
+                    </div>
+                    <div class="bg-black border border-gray-700 rounded p-2">
+                        <div class="text-xs text-gray-500">Open</div>
+                        <div id="disp-open" class="text-xl font-bold text-sys-blue">0</div>
+                    </div>
+                    <div class="bg-black border border-gray-700 rounded p-2">
+                        <div class="text-xs text-gray-500">Close</div>
+                        <div id="disp-close" class="text-xl font-bold text-sys-green">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+class ParenthesisVisualizer {
+    constructor(n) {
+        this.n = n;
+        this.steps = [];
+        this.currentStep = -1;
+        this.generateSteps(n, "", 0, 0, 0); // Pre-calculate all steps
+    }
+
+    // This simulates the recursion and records every "frame" of action
+    generateSteps(n, currentString, open, close, depth) {
+        // RECORD ENTRY
+        this.steps.push({
+            type: 'enter',
+            str: currentString,
+            open, close, depth,
+            msg: `Called generate("${currentString}")`,
+            line: 'start'
+        });
+
+        // BASE CASE
+        if (currentString.length === n * 2) {
+            this.steps.push({
+                type: 'success',
+                str: currentString, open, close, depth,
+                msg: `Base Case Reached! "${currentString}" is valid.`,
+                line: 'line-base'
+            });
+            this.steps.push({ type: 'return', depth, msg: "Returning to previous caller...", str: currentString });
+            return;
+        }
+
+        // BRANCH 1: OPEN
+        if (open < n) {
+            this.steps.push({
+                type: 'check', str: currentString, open, close, depth,
+                msg: `Checking Open: ${open} < ${n} (TRUE) -> Branching Left`,
+                line: 'line-open'
+            });
+            this.generateSteps(n, currentString + "(", open + 1, close, depth + 1);
+        } else {
+            this.steps.push({
+                type: 'block', str: currentString, open, close, depth,
+                msg: `Checking Open: ${open} == ${n} (MAX REACHED) -> Blocked`,
+                line: 'line-open'
+            });
+        }
+
+        // BRANCH 2: CLOSE
+        if (close < open) {
+            this.steps.push({
+                type: 'check', str: currentString, open, close, depth,
+                msg: `Checking Close: ${close} < ${open} (TRUE) -> Branching Right`,
+                line: 'line-close'
+            });
+            this.generateSteps(n, currentString + ")", open, close + 1, depth + 1);
+        } else {
+            this.steps.push({
+                type: 'block', str: currentString, open, close, depth,
+                msg: `Checking Close: ${close} >= ${open} (NO DEBT) -> Blocked`,
+                line: 'line-close'
+            });
+        }
+
+        // RETURN (Backtracking)
+        if (depth > 0) {
+            this.steps.push({ type: 'return', depth, msg: "Function finished. Popping from stack.", str: currentString });
+        }
+    }
+
+    next() {
+        if (this.currentStep < this.steps.length - 1) {
+            this.currentStep++;
+            this.render();
+        }
+    }
+
+    reset() {
+        this.currentStep = -1;
+        document.getElementById('tree-container').innerHTML = '';
+        document.getElementById('stack-container').innerHTML = '';
+        this.render();
+    }
+
+    render() {
+        if (this.currentStep === -1) {
+            document.getElementById('log-message').innerText = "System Ready. Press Next.";
+            return;
+        }
+
+        const step = this.steps[this.currentStep];
+        const prevStep = this.steps[this.currentStep - 1];
+
+        // 1. Update Log
+        const logEl = document.getElementById('log-message');
+        logEl.innerText = step.msg;
+        logEl.className = step.type === 'success' ? "mt-4 text-sys-green font-bold text-lg border-t border-gray-700 pt-2" : 
+                          step.type === 'block' ? "mt-4 text-sys-red font-bold text-lg border-t border-gray-700 pt-2" :
+                          "mt-4 text-sys-blue font-bold text-lg border-t border-gray-700 pt-2";
+
+        // 2. Highlight Code Line
+        ['line-base', 'line-open', 'line-close'].forEach(id => document.getElementById(id).classList.add('opacity-30'));
+        ['line-base', 'line-open', 'line-close'].forEach(id => document.getElementById(id).classList.remove('text-sys-green', 'font-bold'));
+        if (step.line && step.line !== 'start') {
+            const el = document.getElementById(step.line);
+            if(el) {
+                el.classList.remove('opacity-30');
+                el.classList.add('text-sys-green', 'font-bold');
+            }
+        }
+
+        // 3. Update Stack Visualization
+        const stackContainer = document.getElementById('stack-container');
+        if (step.type === 'enter') {
+            const frame = document.createElement('div');
+            frame.id = `frame-${step.depth}`;
+            frame.className = "bg-gray-800 border-l-4 border-sys-blue p-2 text-xs font-mono mb-1 animate-pulse";
+            frame.innerHTML = `<span class="text-sys-blue">solve</span>("${step.str}", ${step.open}, ${step.close})`;
+            stackContainer.appendChild(frame);
+            
+            // Update Dashboard Stats
+            document.getElementById('disp-str').innerText = `"${step.str}"`;
+            document.getElementById('disp-open').innerText = step.open;
+            document.getElementById('disp-close').innerText = step.close;
+
+            // Add to Tree
+            this.addToTree(step);
+
+        } else if (step.type === 'return') {
+            const frame = document.getElementById(`frame-${step.depth}`);
+            if (frame) {
+                frame.classList.remove('border-sys-blue', 'bg-gray-800');
+                frame.classList.add('border-sys-red', 'bg-red-900/30', 'opacity-50');
+                setTimeout(() => frame.remove(), 500); // Visual pop effect
+            }
+            // Restore stats from current context if stepping back
+             if (prevStep) {
+                // Approximate state restoration for visual clarity
+            }
+        } else if (step.type === 'success') {
+            this.addToTree(step);
+        }
+
+        // 4. Scroll Tree to bottom
+        const treeC = document.getElementById('tree-container');
+        treeC.scrollTop = treeC.scrollHeight;
+    }
+
+    addToTree(step) {
+        const tree = document.getElementById('tree-container');
+        const div = document.createElement('div');
+        const indent = "&nbsp;".repeat(step.depth * 4);
+        
+        let content = "";
+        if (step.type === 'enter') {
+            content = `${indent} ↳ <span class="text-white">"${step.str}"</span>`;
+        } else if (step.type === 'success') {
+            content = `${indent} ✅ <span class="text-sys-green font-bold">"${step.str}" FOUND</span>`;
+        } else if (step.type === 'block') {
+           // content = `${indent} ❌ <span class="text-gray-500 text-xs">Blocked</span>`;
+           return; // Don't clutter tree with blocks
+        } else {
+            return;
+        }
+
+        div.innerHTML = content;
+        tree.appendChild(div);
+    }
+}
+
+const visualizer = new ParenthesisVisualizer(2); // Start with N=2 for clarity
+
+// Spacebar support
+document.addEventListener('keydown', (e) => {
+    if (e.code === "Space") visualizer.next();
+});
+
+</script>
+</body>
+</html>

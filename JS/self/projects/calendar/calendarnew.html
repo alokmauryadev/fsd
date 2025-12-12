@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Calendar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet"/>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "system-black": "#050505",
+              "system-blue": "#00a8ff",
+              "system-dark-blue": "#005f99",
+              "system-alert": "#ff3333",
+            },
+            fontFamily: {
+              system: ["Rajdhani", "sans-serif"],
+            },
+            boxShadow: {
+              glow: "0 0 10px #00a8ff, 0 0 20px #00a8ff44",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px; 
+            padding: 1rem;
+            width: 100%;
+            height: 100%;
+        }
+
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #060d12;
+            border: 1px solid #005f99;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .box:hover {
+            border-color: #00a8ff;
+            box-shadow: 0 0 10px #00a8ff44;
+            background-color: #0a1520;
+            cursor: pointer;
+            z-index: 10;
+        }
+        input[type="month"] {
+            background: #050505;
+            border: 1px solid #005f99;
+            color: #00a8ff;
+            padding: 0.5rem 1rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+                input[type="month"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-system-black h-screen w-full flex justify-center items-center font-system">
+
+    <div class="main-container relative w-[60vw] h-[60vh] border border-system-dark-blue bg-system-black/90 shadow-glow flex flex-col p-4">
+        
+        <div class="header flex justify-between items-center mb-4 border-b border-system-dark-blue pb-2">
+            <h1 class="text-2xl text-white font-bold tracking-widest">SYSTEM <span class="text-system-blue">CALENDAR</span></h1>
+            
+            <input type="month" name="month" id="month">
+        </div>
+
+<div class="calendar-header grid grid-cols-7 mb-2 border-b border-system-dark-blue pb-2 text-system-blue font-bold text-center">
+    <div>SUN</div>
+    <div>MON</div>
+    <div>TUE</div>
+    <div>WED</div>
+    <div>THU</div>
+    <div>FRI</div>
+    <div>SAT</div>
+</div>
+
+<div id="calendar-grid" class="grid grid-cols-7 gap-1 h-full">
+    </div>
+    </div>
+
+    <div class="consoleOutput hidden"></div>
+
+</body>
+
+<script>
+const monthInput = document.getElementById("month");
+const calendarGrid = document.getElementById("calendar-grid");
+
+function initCalendar() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    monthInput.value = `${year}-${month}`;
+    renderCalendar();
+}
+function renderCalendar() {
+    calendarGrid.innerHTML = "";
+    const [year, month] = monthInput.value.split("-").map(Number);
+    
+    const firstDayIndex = new Date(year, month - 1, 1).getDay(); 
+    const daysInMonth = new Date(year, month, 0).getDate(); 
+    for (let i = 0; i < 42; i++) {
+        const dayBox = document.createElement("div");
+        dayBox.className = "box flex justify-center items-center border border-system-dark-blue bg-system-black/50 text-white hover:border-system-blue hover:shadow-glow transition-all cursor-pointer h-16";
+        if (i < firstDayIndex || i >= firstDayIndex + daysInMonth) {
+            dayBox.classList.add("opacity-30");
+            calendarGrid.appendChild(dayBox);
+        } else {
+            const currentDay = i - firstDayIndex + 1;
+            dayBox.textContent = currentDay;
+            const today = new Date();
+            if (currentDay === today.getDate() && 
+                month - 1 === today.getMonth() && 
+                year === today.getFullYear()) {
+                dayBox.classList.add("bg-system-blue", "text-black", "font-bold");
+            }
+            
+            calendarGrid.appendChild(dayBox);
+        }
+    }
+}
+monthInput.addEventListener("change", renderCalendar);
+initCalendar();
+</script>
+</html>

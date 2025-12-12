@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productivity Tracker</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <section id="timer">
+        <h3>Timer</h3>
+        <input type="number" name="timerDuration" id="duration" value="25" />
+        <div id="buttons">
+          <button id="start-timer">Start Timer</button>
+          <button id="stop-timer">Stop Timer</button>
+        </div>
+        <div id="time-left">
+          <p>Time Left: <span id="timeleft"></span></p>
+        </div>
+      </section>
+      <section id="block-sites">
+        <h3>Stop your Distractions</h3>
+        <div class="addSite">
+          <input
+            type="text"
+            name="site-name"
+            id="site-name"
+            placeholder="e.g. instagram.com"
+          />
+          <button id="addSite">Add</button>
+        </div>
+        <div id="blocked-sites-list">
+          <ul>
+            <li><span>facebook.com</span><span class="deleteSite">X</span></li>
+            <li><span>facebook.com</span><span class="deleteSite">X</span></li>
+          </ul>
+        </div>
+      </section>
+      <section id="usage-stats">
+        <h3>Usage Stats</h3>
+        <div id="usage-history">
+          <ul>
+            <li><span>facebook.com</span><span class="usage-time">2 minutes</span></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+  <script src="utils.js"></script>
+  <script src="popup2.js"></script>
+</html>
