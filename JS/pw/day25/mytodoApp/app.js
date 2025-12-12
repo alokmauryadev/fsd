@@ -81,14 +81,15 @@ class UIHandler{
    init(){
     this.addBtn.addEventListener('click',()=>this.addTask())
     this.taskInput.addEventListener("keyup",(e)=>{
-        if(e.key==="enter"){
+        console.log(e)
+        if(e.key==="Enter"){
             this.addTask()
         }
     })
     this.filterButtons.forEach(btn=>{
         btn.addEventListener("click",(e)=>{
             this.filterOn = btn.dataset.filter;
-            this.taskManager.filterTasks(this.filterButtons)
+            this.taskManager.filterTasks(this.filterOn)
             this.renderTasks();
             this.updateFilterButton();
         })
