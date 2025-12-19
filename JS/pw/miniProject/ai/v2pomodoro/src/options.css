@@ -1,0 +1,9 @@
+/* options.css - simple but consistent with popup */
+body{font-family:Inter,system-ui;background:#071033;color:#eaf2ff;padding:20px}
+.options-app{max-width:900px;margin:0 auto}
+.card{background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center}
+input{flex:1;padding:8px;border-radius:6px;border:0;background:rgba(255,255,255,0.02);color:#eaf2ff}
+.btn{padding:8px 10px;border-radius:8px;border:0;background:#2dd4bf;color:#052018;cursor:pointer}
+.list{margin-top:8px}
+.list .item{padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}

@@ -1,21 +1,29 @@
 {
-    "manifest_version":3,
-    "name":"Productivity Tracker",
-    "version":"1.0",
-    "permissions":["storage","alarms","notifications","tabs"],
-    "description":"Track Your Time",
-    "action":{
-        "default_popup":"popup.html",
+    "manifest_version": 3,
+    "name": "Productivity Tracker",
+    "version": "1.0",
+    "permissions": [
+        "storage",
+        "alarms",
+        "notifications",
+        "tabs",
+        "declarativeNetRequest" 
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "description": "Track Your Time",
+    "action": {
+        "default_popup": "popup.html",
         "default_icon": "icons/icon.png"
     },
-    "background":{
-        "service_worker":"background.js"
+    "background": {
+        "service_worker": "background.js"
     },
-    "content_scripts":[
+    "web_accessible_resources": [
         {
-            "matches":["<all_urls>"],
-            "js":["content.js"],
-            "run_at":"document_start"
+            "resources": ["blocked.html"],
+            "matches": ["<all_urls>"]
         }
     ]
 }

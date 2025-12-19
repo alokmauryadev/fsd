@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Counter</title>
+    <style>
+        nav .menu{
+            display: flex;
+            justify-content: space-around;
+             background: #222;
+             padding: 10px ;
+        }
+        nav a{
+            text-decoration: none;
+            color: lightcyan;
+        }
+        nav i{
+            display: none;
+        }
+        @media screen and (max-width:600px) {
+            nav .menu{
+                display: none;
+            }
+            nav i{
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="menu">
+            <a href="">Home</a>
+            <a href="">Shop Now</a>
+            <a href="">Contact Us</a>
+        </div>
+        <i>Ham</i> <!-- Icon for Hamburger Menu -->
+    </nav>
+    <h3>Counter</h3>
+    <p id="count">0</p>
+    <button id="increase">
+     +   
+    </button><button id="decrease">-</button><button id="reset">Reset</button>
+    <input type="text">
+    <input type="text">
+    <script>
+        let countValue = document.getElementById("count")
+        count=0
+        function displayCount(){
+            countValue.innerText = `${count}`
+        }
+        document.getElementById("increase").addEventListener("click",()=>{
+            if(count>=0){
+                count++
+                displayCount();
+            }
+        })
+                document.getElementById("decrease").addEventListener("click",()=>{
+            if(count>0){
+                count--
+                displayCount()
+            }
+        document.getElementById("reset").addEventListener("click",()=>{
+            count=0
+            displayCount()
+        })
+        })
+        document.getElementsByTagName
+    </script>
+</body>
+</html>

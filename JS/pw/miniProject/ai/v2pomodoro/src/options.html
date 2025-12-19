@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pomodoro Pro — Options</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-app">
+    <h1>Pomodoro Pro — Settings</h1>
+    <section class="card">
+      <h3>Blocked Sites</h3>
+      <div class="row">
+        <input id="optBlockInput" placeholder="example.com">
+        <button id="optAddBlock" class="btn">Block</button>
+      </div>
+      <div id="optBlockedList" class="list"></div>
+    </section>
+
+    <section class="card">
+      <h3>Usage</h3>
+      <button id="optResetUsage" class="btn">Reset All Usage Data</button>
+    </section>
+
+    <footer><small>Pomodoro Pro — built for attention</small></footer>
+  </div>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

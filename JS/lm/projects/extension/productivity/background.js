@@ -5,6 +5,7 @@ try{
 }
 
 const USAGE_KEY = "siteUsageData"
+const BLOCK_KEY = "blockedSites"
 
 class PomodoroManager{
     // save target time and status
@@ -36,6 +37,7 @@ class UsageTracker{
         this.lastActiveUrl = null;
         this.lastActiveTime = null;
         this.init();
+        this.interval = null;
     }
 
     async init(){
@@ -56,12 +58,21 @@ class UsageTracker{
 
         this.lastActiveUrl = null;
         this.lastActiveTime = null;
+        clearInterval(this.interval)
+        this.interval = null
     }
+    
     async startTracking(hostname){
        await this.trackAndReset();
         this.lastActiveUrl = hostname;
         this.lastActiveTime = Date.now();
         console.log(`Tracking started for: ${this.lastActiveUrl}`)
+    }
+    async consoleData(){
+        console.log("Function called")
+        this.interval = setInterval(()=>{
+            console.log(this.lastActiveUrl,Math.floor(this.lastActiveTime/(1000*60)),Math.floor(this.lastActiveTime/1000)%60)
+        },1000)
     }
     async findActiveTab(){
         try{
@@ -154,59 +165,13 @@ chrome.alarms.onAlarm.addListener((alarm)=>{
         StorageService.save("timerStatus","finished")
     }
 })
-// usage object, it'll save all the websites and the time
 
-// lastActiveUrl and lastActiveTime
-
-// whenever a tab is changed or the window is changed, we'll update the usage data
-// saved time + date.now()-lastActiveTime
-
-// track and reset - it'll save the current data, and reset it 
-
-
-// start tracking
-//  track and reset call - 
-// last activeUrl 
-// last activetime 
-
-
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    if (msg.cmd === "APPLY_BLOCKING") {
-        applyBlocking();
-    }
-});
-
-// Apply URL blocking rules to DNR
-async function applyBlocking() {
-    const result = await chrome.storage.local.get(["blockedSites"]);
-    const blockedSites = result.blockedSites || [];
-
-    // Remove old rules
-    const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
-    const idsToRemove = existingRules.map(r => r.id);
-
-    if (idsToRemove.length > 0) {
-        await chrome.declarativeNetRequest.updateDynamicRules({
-            removeRuleIds: idsToRemove
-        });
-    }
-
-    // Create new rules
-    const newRules = blockedSites.map((site, index) => ({
-        id: index + 1,
-        priority: 1,
-        action: { type: "block" },
-        condition: {
-            urlFilter: `||${site}^`,
-            resourceTypes: ["main_frame"]
-        }
-    }));
-
-    if (newRules.length > 0) {
-        await chrome.declarativeNetRequest.updateDynamicRules({
-            addRules: newRules
-        });
-    }
-
-    console.log("Updated DNR rules:", newRules);
-}
+// class WebsiteBlocker{
+//     constructor(){
+//         this.blockSites = StorageService.get(BLOCK_KEY)
+//     }
+//     applyBlocking(){
+//         this.blockSites.forEach((site)=>{
+//         })
+//     }
+// }

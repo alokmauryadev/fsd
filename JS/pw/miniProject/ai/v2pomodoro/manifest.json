@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Pomodoro Pro — Timers, Tracker & Blocker",
+  "version": "1.0.0",
+  "description": "Modern Pomodoro timers, site time tracking, and site blocking.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "src/popup.html",
+    "default_title": "Pomodoro Pro"
+  },
+  "options_page": "src/options.html",
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "alarms",
+    "notifications",
+    "activeTab",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}

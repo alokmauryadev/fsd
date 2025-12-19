@@ -1,9 +1,10 @@
 (async function (){
-    console.log("function is called")
     const result = await chrome.storage.local.get(["blockedSites"]);
     const blockedSites = result.blockedSites || [];
+    console.log(blockedSites)
     const currentHost = window.location.hostname.toLowerCase();
-    const isBlocked = blockedSites.some(site=> currentHost.includes(site));
+    console.log(currentHost)
+    const isBlocked = blockedSites.some(site=> currentHost.includes(site.domain.toLowerCase()));
     if(isBlocked){
         document.documentElement.innerHTML = `<div style="
                 height: 100vh;

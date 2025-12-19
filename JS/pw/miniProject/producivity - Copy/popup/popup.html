@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Dashboard</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <h2>Productivity Dashboard</h2>
+    <main>
+        <section class="pomodoro" id="pomodoro">
+            <h3>Pomodoro</h3>
+            <input type="number" name="" id="duration" value="25">
+            <div class="buttons">
+
+                <button id="timer-start">Start</button>
+                <button id="timer-stop">Stop</button>
+
+            </div>
+            <p id="timer-display">Time Left: 04:30</p>
+        </section>
+
+        <!-- Blocked Sites Section -->
+        <section id="blockedSites">
+            <h3>Block Sites</h3>
+            <input type="text" name="" id="siteURL" placeholder="e.g. instagram.com">
+            <div class="buttons">
+
+            </div>
+            <button id="block-add-btn">Add</button>
+            <ul id="blocked-website-list">
+                <li>facebook.com</li>
+
+            </ul>
+
+        </section>
+        <!-- usage stats section -->
+        <section id="usage">
+            <h3>Usage Stats</h3>
+            <ul id="usage-list">
+                <li>adddasdf</li>
+            </ul>
+        </section>
+    </main>
+    <script src="popup.js"></script>
+</body>
+
+</html>

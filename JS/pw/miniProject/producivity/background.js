@@ -1,90 +1,106 @@
 // storageservice (storage need)
 const localStorageKeys = {
-    SITE_USAGE:"siteUsage",
-    BLOCKED_SITES: "localStorageKeys.BLOCKED_SITES"
+    SITE_USAGE: "siteUsage",
+    BLOCKED_SITES: "blockedSitesKey"
 }
-// const localStorageKeys.BLOCKED_SITES = "BLOCKED_SITES"
-class StorageService{
-    static async save(key,value){
-        await chrome.storage.local.set({[key]: value})
+
+class StorageService {
+    static async save(key, value) {
+        await chrome.storage.local.set({ [key]: value })
     }
-    static async load(key){
+    static async load(key) {
         const data = await chrome.storage.local.get([key])
-        return data[key] ?? {};
-
+        return data[key] ?? [];
     }
 }
+
 // features
-
-
-class SiteBlocker{
-    constructor(){
+class SiteBlocker {
+    constructor() {
         this.blockList;
         this.load();
     }
-    async load(){
+    async load() {
+        console.log("📥 Loading blocked sites from storage...");
         let blockedList = await StorageService.load(localStorageKeys.BLOCKED_SITES)
         this.blockList = new Set(blockedList)
-    }
-    async addSite(url){
-        if(!this.blockList.has(url)){
-            this.blockList.add(url)
-            await StorageService.save(localStorageKeys.BLOCKED_SITES,[...this.blockList])
-        }
-    }
-    async removeSite(url){
-        if(this.blockList.has(url))
-            this.blockList.delete(url)
-        await StorageService.save(localStorageKeys.BLOCKED_SITES,[...this.blockList])
+        console.log("📋 Loaded sites:", [...this.blockList]);
         await this.applyBlocking();
     }
-    isBlocked(url){
-        for(let subURL of this.blockList){
-            if(url.toLowerCase().includes(subURL.toLowerCase()))
+    async addSite(url) {
+        if (!this.blockList.has(url)) {
+            this.blockList.add(url)
+            await StorageService.save(localStorageKeys.BLOCKED_SITES, [...this.blockList])
+            await this.applyBlocking();
+        }
+    }
+    async removeSite(url) {
+        if (this.blockList.has(url))
+            this.blockList.delete(url)
+        await StorageService.save(localStorageKeys.BLOCKED_SITES, [...this.blockList])
+        await this.applyBlocking();
+    }
+    isBlocked(url) {
+        for (let subURL of this.blockList) {
+            if (url.toLowerCase().includes(subURL.toLowerCase()))
                 return true;
         }
         return false;
     }
-    async applyBlocking(){
+    async applyBlocking() {
         const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
-        const ruleIdsToRemove = existingRules.map(rule=>rule.id)
-        if(ruleIdsToRemove.length>0){
-            await chrome.declarativeNetRequest.updateDynamicRule({
-                ruleIdsToRemove: ruleIdsToRemove
-            });
-        }
-        const newRules = [...this.blockList].map((site,index)=>{
-            return {
-                id: index+1,
+        const ruleIdsToRemove = existingRules.map(rule => rule.id)
+        console.log("🗑️ Removing existing rules:", ruleIdsToRemove);
+        
+        const newRules = [];
+        let ruleId = 1;
+        
+        // Use simple blocking pattern
+        [...this.blockList].forEach((site) => {
+            console.log("🚫 Creating rule for site:", site);
+            
+            newRules.push({
+                id: ruleId++,
                 priority: 1,
-                action: {type: "block"},
-                condition:{
-                    urlFilter: `*://*.${site}/*`,
-                    resourceTypes: ["main_frame","sub_frame","stylesheet","script","image","font","object","xmlhttprequest","ping","media","websocket","webtransport","csp_report","other"]
+                action: { type: "block" },
+                condition: {
+                  urlFilter: `||${site}`,
+                  resourceTypes: ["main_frame"]
                 }
-            }
+            });
         });
-        if(newRules.length>0){
-            await chrome.declarativeNetRequest.updateDynamicRule({
-                addRules:newRules
-            })
+        
+        console.log("✅ Total new rules to add:", newRules.length, newRules);
+        
+        try {
+            await chrome.declarativeNetRequest.updateDynamicRules({
+                removeRuleIds: ruleIdsToRemove,
+                addRules: newRules
+            });
+            
+            // Verify rules were applied
+            const verifyRules = await chrome.declarativeNetRequest.getDynamicRules();
+            console.log("✔️ Rules after update:", verifyRules);
+        } catch (error) {
+            console.error("❌ Error updating rules:", error);
         }
     }
 }
 
-class pomodoroManager{
-    constructor(){
+class pomodoroManager {
+    constructor() {
         this.timeLeft = 0;
         this.interval = null
     }
-    
-    start(minutes){
-        this.timeLeft = minutes*60
-         chrome.storage.local.set({pomodoroTime: this.timeLeft})
-       this.interval =  setInterval(()=>{
+
+    start(minutes) {
+        this.timeLeft = minutes * 60
+        chrome.storage.local.set({ pomodoroTime: this.timeLeft })
+        if (this.interval) clearInterval(this.interval)
+        this.interval = setInterval(() => {
             this.timeLeft--;
-            chrome.storage.local.set({pomodoroTime: this.timeLeft})
-            if(this.timeLeft<=0){
+            chrome.storage.local.set({ pomodoroTime: this.timeLeft })
+            if (this.timeLeft <= 0) {
                 this.stop();
                 chrome.notifications.create({
                     type: "basic",
@@ -93,45 +109,108 @@ class pomodoroManager{
                     message: "Take a break"
                 })
             }
-        },1000)
+        }, 1000)
     }
 
-    stop(){
+    stop() {
         clearInterval(this.interval)
         this.interval = null;
         this.timeLeft = 0;
+        chrome.storage.local.set({ pomodoroTime: 0 })
     }
-
 }
-// siteBlocker
 
 // usageTracker
-class usageTracker{
-    constructor(){
+class usageTracker {
+    constructor() {
         this.usage = {}
-        init();
+        this.currentHost = null
+        this.init();
+        this.interval = null;
     }
-    async init(){
+    async init() {
         this.usage = await StorageService.load(localStorageKeys.SITE_USAGE);
-        chrome.tabs.onActivated.addListener(tabsInfo =>{this.track(tabsInfo)})
+
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+            if (tabs.length && tabs[0].url) {
+                this.updateCurrentHost(tabs[0].url)
+            }
+        })
+        chrome.tabs.onActivated.addListener(async (activeInfo) => {
+            chrome.tabs.get(activeInfo.tabId, (tab) => {
+                this.updateCurrentHost(tab?.url)
+            })
+        });
+
+        chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+            if (tab.active && changeInfo.url) {
+                this.updateCurrentHost(changeInfo.url)
+            }
+        })
+        this.startTimer()
     }
 
-    async track(tabsInfo){
-        chrome.tabs.get(tabsInfo.tabId,async (tab)=>{
-            if(!tab?.url)
-                return;
-            let hostName = new URL(tab.url).hostname;
-            let currentTime = this.usage[hostName] ?? 0;
-            this.usage[hostName] = currentTime +1;
-            await StorageService.save(localStorageKeys.SITE_USAGE,this.usage)
-            
-        })
-
+    startTimer() {
+        if (this.interval) clearInterval(this.interval);
+        setInterval(async () => {
+            if (this.currentHost) {
+                const currentTime = this.usage[this.currentHost] ?? 0;
+                this.usage[this.currentHost] = currentTime + 1;
+                await StorageService.save(localStorageKeys.SITE_USAGE, this.usage)
+            }
+        }, 1000)
+    }
+    async updateCurrentHost(url) {
+        if (!url) return;
+        try {
+            const host = new URL(url)
+            this.currentHost = host.hostname
+        } catch (e) {
+            this.currentHost = null;
+        }
     }
 }
-// pomodoro Manger
 
 // busineslogic
+const usageTrackerInstance = new usageTracker();
+const blocker = new SiteBlocker();
+const pomodoro = new pomodoroManager();
 
 
-// singleton desgin pattern
+chrome.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
+    // 1. Wrap logic in an async function
+    (async () => {
+        try {
+            switch (msgObj.action) {
+                case "ADD_BLOCK":
+                    await blocker.addSite(msgObj.site);
+                    sendResponse({ success: true });
+                    break;
+
+                case "REMOVE_BLOCK":
+                    await blocker.removeSite(msgObj.site);
+                    sendResponse({ success: true });
+                    break;
+
+                case "STOP_POMODORO":
+                    pomodoro.stop();
+                    sendResponse({ success: true });
+                    break;
+
+                case "START_POMODORO":
+                    pomodoro.start(msgObj.minutes);
+                    sendResponse({ success: true });
+                    break;
+
+                default:
+                    console.warn(`Unknown action: ${msgObj.action}`);
+                    sendResponse({ success: false, error: "Unknown action" });
+            }
+        } catch (error) {
+            console.error("Background script error:", error);
+            sendResponse({ success: false, error: error.message });
+        }
+    })();
+
+    return true;
+});
